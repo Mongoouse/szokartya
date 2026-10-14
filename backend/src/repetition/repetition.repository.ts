@@ -105,7 +105,7 @@ export class RepetitionRepository {
   setSuspended(userId: string, progressId: string, isSuspended: boolean): Promise<Prisma.BatchPayload> {
     return this.prisma.userProgress.updateMany({
       where: { id: progressId, userId, deletedAt: null },
-      data: { isSuspended },
+      data: { isSuspended, flagsChangedAt: new Date() },
     });
   }
 

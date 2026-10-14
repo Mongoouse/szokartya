@@ -16,7 +16,7 @@ Keresztplatformos, offline-first szókincsfejlesztő alkalmazás német nyelvtan
 | 1 | Adatbázis-séma, migrációk, indexek | ✅ kész – [docs/01-adatbazis-terv.md](docs/01-adatbazis-terv.md) |
 | 2 | Auth, `RepetitionService`, REST API + OpenAPI | ✅ kész – [docs/02-backend.md](docs/02-backend.md) |
 | 3 | Offline szinkronizáció, Flutter kliens | ✅ kész – [docs/03-szinkronizacio-es-kliens.md](docs/03-szinkronizacio-es-kliens.md) |
-| 4 | Egység-, integrációs és szinkron tesztek | ⏳ |
+| 4 | Egység-, integrációs és szinkron tesztek, CI | ✅ kész – [docs/04-teszteles.md](docs/04-teszteles.md) |
 
 ## Könyvtárszerkezet
 
@@ -42,6 +42,9 @@ docs/
   01-adatbazis-terv.md     # ER-diagram, architekturális döntések, indexstratégia
   02-backend.md            # rétegek, hitelesítés, SM-2 ütemező, tranzakciók
   03-szinkronizacio-es-kliens.md  # offline-first szinkron, konfliktuskezelés, Flutter kliens
+  04-teszteles.md          # tesztstratégia, lefedettség, talált hibák
+shared/fixtures/           # közös SM-2 golden referencia (TS + Dart tesztek)
+.github/workflows/ci.yml   # CI: backend, mobil, többeszközös szinkron e2e
 docker-compose.yml         # fejlesztői PostgreSQL
 ```
 
@@ -67,3 +70,11 @@ cd ../mobile && flutter pub get && flutter run
 ```
 
 Előfeltétel a klienshez: Flutter ≥ 3.47 (Dart ≥ 3.13).
+
+## Tesztek
+
+```bash
+cd backend && npm test && npm run test:e2e        # egység + integráció (szokartya_test adatbázis)
+cd mobile && flutter test                         # kliens
+SZOKARTYA_E2E_API=http://localhost:3000/api/v1 flutter test --tags e2e   # többeszközös szinkron
+```

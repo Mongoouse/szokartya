@@ -459,6 +459,11 @@ model UserProgress {
   /// A következő esedékes ismétlés időpontja. NEW állapotban NULL.
   nextReviewAt   DateTime? @map("next_review_at") @db.Timestamptz(3)
   isSuspended    Boolean   @default(false) @map("is_suspended")
+  /// A felhasználói jelzők (felfüggesztés, törlés) utolsó módosításának ideje a
+  /// MÓDOSÍTÓ eszköz (korrigált) órája szerint – a „last write wins” ütközés-
+  /// feloldás alapja. Nem az updated_at: az a szerverre érkezés ideje, ami egy
+  /// később szinkronizáló, de korábban módosító eszköznek jogtalanul nyerne.
+  flagsChangedAt DateTime? @map("flags_changed_at") @db.Timestamptz(3)
 
   version   Int       @default(1)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)

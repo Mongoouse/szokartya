@@ -7,8 +7,9 @@
 // újraszámolja, és a pull felülírja a helyi értéket. A két implementáció
 // egyezése miatt ez a felülírás normál esetben nem okoz látható változást.
 //
-// Bármely módosítást MINDKÉT implementáción el kell végezni (a Fázis 4
-// paritástesztje ezt ellenőrzi).
+// Bármely módosítást MINDKÉT implementáción el kell végezni: mindkét
+// tesztkészlet a közös `shared/fixtures/sm2-golden.json` referenciához
+// hasonlít (újragenerálás: `npm run test:golden:update` a backendben).
 
 import 'dart:math' as math;
 

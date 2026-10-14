@@ -3,7 +3,10 @@
  *
  * Nincs keretrendszer-, adatbázis- vagy órafüggősége: minden bemenet (beleértve
  * az értékelés időpontját) paraméter, ezért determinisztikus és önállóan
- * tesztelhető, a Flutter kliens pedig 1:1-ben portolhatja offline ütemezéshez.
+ * tesztelhető. A Flutter kliens 1:1-es portja (`mobile/lib/domain/sm2_scheduler.dart`)
+ * offline ütemez; a két implementáció egyezését a közös golden fájl
+ * (`shared/fixtures/sm2-golden.json`) biztosítja – módosításkor mindkettőt
+ * frissíteni kell, majd: `npm run test:golden:update`.
  *
  * Eltérések az eredeti SM-2-től (SuperMemo, 1987) és indoklásuk:
  *  1. Tanulási lépcsők (LEARNING / RELEARNING): az új vagy elfelejtett kártya

@@ -4,6 +4,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { AppConfigService } from './config/app-config.service';
 import { AppConfigModule } from './config/config.module';
 import { HealthController } from './health.controller';
 import { PrismaModule } from './prisma/prisma.module';
@@ -17,7 +18,13 @@ import { WordsModule } from './words/words.module';
     AppConfigModule,
     PrismaModule,
     // Általános korlát IP-nként; az auth végpontok szigorúbbat kapnak (@Throttle).
-    ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 300 }]),
+    ThrottlerModule.forRootAsync({
+      inject: [AppConfigService],
+      useFactory: (config: AppConfigService) => ({
+        throttlers: [{ name: 'default', ttl: 60_000, limit: 300 }],
+        skipIf: () => !config.throttleEnabled,
+      }),
+    }),
     AuthModule,
     UsersModule,
     WordsModule,

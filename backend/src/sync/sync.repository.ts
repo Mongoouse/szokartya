@@ -78,7 +78,7 @@ export class SyncRepository {
   async updateCardIfVersion(
     id: string,
     expectedVersion: number,
-    data: { isSuspended?: boolean; deletedAt?: Date | null },
+    data: { isSuspended?: boolean; deletedAt?: Date | null; flagsChangedAt: Date },
   ): Promise<boolean> {
     const { count } = await this.prisma.userProgress.updateMany({ where: { id, version: expectedVersion }, data });
     return count === 1;

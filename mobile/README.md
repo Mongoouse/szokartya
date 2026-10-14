@@ -11,7 +11,6 @@ lib/
   sync/        szinkronizációs motor (push → pull)
   features/    auth, home, study (szókártya-állapotgép), sync – Riverpod kontrollerek + UI
   providers.dart  függőségi gráf
-tool/parity_dump.dart   ütemező-kimenet a TS implementációval való összevetéshez
 ```
 
 ## Futtatás
@@ -24,4 +23,11 @@ flutter run
 flutter run --dart-define=API_BASE_URL=https://api.example.hu/api/v1
 ```
 
-Ellenőrzés: `flutter analyze`.
+## Ellenőrzés
+
+```sh
+flutter analyze
+flutter test                                   # egység- és komponenstesztek
+SZOKARTYA_E2E_API=http://localhost:3000/api/v1 \
+  flutter test --tags e2e                      # többeszközös szinkron valódi backenddel
+```

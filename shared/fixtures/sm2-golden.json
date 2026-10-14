@@ -1,0 +1,2711 @@
+{
+  "description": "SM-2 ütemező referenciaadatok. GENERÁLT fájl (backend/scripts/generate-sm2-golden.ts) – kézzel ne szerkeszd.",
+  "initial": {
+    "state": "NEW",
+    "easeFactor": 2.5,
+    "intervalDays": 0,
+    "repetitions": 0,
+    "learningStep": 0,
+    "lapses": 0,
+    "totalReviews": 0,
+    "correctReviews": 0,
+    "avgResponseMs": null,
+    "stabilityDays": null,
+    "lastReviewedAt": null,
+    "nextReviewAt": null
+  },
+  "cases": [
+    {
+      "name": "happy_path",
+      "description": "Mindig „jó” (4), időben: 1 perc → 10 perc → 1 → 6 → 15 → 38 → 95 nap",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 15,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2000,
+              "stabilityDays": 142.3683,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-23T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 38,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 2000,
+              "stabilityDays": 360.6664,
+              "lastReviewedAt": "2026-01-23T08:10:00.000Z",
+              "nextReviewAt": "2026-03-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 15,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-03-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 95,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 2000,
+              "stabilityDays": 901.6661,
+              "lastReviewedAt": "2026-03-02T08:10:00.000Z",
+              "nextReviewAt": "2026-06-05T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 38,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-06-05T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 238,
+              "repetitions": 6,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 7,
+              "correctReviews": 7,
+              "avgResponseMs": 2000,
+              "stabilityDays": 2258.9107,
+              "lastReviewedAt": "2026-06-05T08:10:00.000Z",
+              "nextReviewAt": "2027-01-29T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 95,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "lapse_and_relearn",
+      "description": "Felejtés REVIEW állapotban, majd újratanulás és visszatérés",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 15,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2000,
+              "stabilityDays": 142.3683,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-23T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 38,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 2000,
+              "stabilityDays": 360.6664,
+              "lastReviewedAt": "2026-01-23T08:10:00.000Z",
+              "nextReviewAt": "2026-03-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 15,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 1,
+            "responseTimeMs": 5000,
+            "reviewedAt": "2026-03-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "RELEARNING",
+              "easeFactor": 1.96,
+              "intervalDays": 19,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 6,
+              "correctReviews": 5,
+              "avgResponseMs": 2900,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-03-02T08:10:00.000Z",
+              "nextReviewAt": "2026-03-02T08:20:00.000Z"
+            },
+            "effectiveGrade": 1,
+            "elapsedDays": 38,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 2,
+            "responseTimeMs": 4000,
+            "reviewedAt": "2026-03-02T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "RELEARNING",
+              "easeFactor": 1.96,
+              "intervalDays": 19,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 7,
+              "correctReviews": 5,
+              "avgResponseMs": 3230,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-03-02T08:20:00.000Z",
+              "nextReviewAt": "2026-03-02T08:30:00.000Z"
+            },
+            "effectiveGrade": 2,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-03-02T08:30:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.96,
+              "intervalDays": 19,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 8,
+              "correctReviews": 6,
+              "avgResponseMs": 2861,
+              "stabilityDays": 180.3332,
+              "lastReviewedAt": "2026-03-02T08:30:00.000Z",
+              "nextReviewAt": "2026-03-21T08:30:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-03-21T08:30:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.96,
+              "intervalDays": 37,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 9,
+              "correctReviews": 7,
+              "avgResponseMs": 2603,
+              "stabilityDays": 351.1752,
+              "lastReviewedAt": "2026-03-21T08:30:00.000Z",
+              "nextReviewAt": "2026-04-27T08:30:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 19,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "slow_responses",
+      "description": "Helyes, de lassú válaszok: a minőség eggyel csökken (5→4, 4→3), 3 alatt nem",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 20000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 7400,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 15001,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.36,
+              "intervalDays": 14,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 9680,
+              "stabilityDays": 132.8771,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-22T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 15000,
+            "reviewedAt": "2026-01-22T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.36,
+              "intervalDays": 33,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 11276,
+              "stabilityDays": 313.2103,
+              "lastReviewedAt": "2026-01-22T08:10:00.000Z",
+              "nextReviewAt": "2026-02-24T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 14,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 60000,
+            "reviewedAt": "2026-02-24T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.22,
+              "intervalDays": 73,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 25893,
+              "stabilityDays": 692.8592,
+              "lastReviewedAt": "2026-02-24T08:10:00.000Z",
+              "nextReviewAt": "2026-05-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 33,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "late_reviews",
+      "description": "Késve ismételt, de felidézett kártya: a késés fele beszámít",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-18T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 28,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2000,
+              "stabilityDays": 265.7542,
+              "lastReviewedAt": "2026-01-18T08:10:00.000Z",
+              "nextReviewAt": "2026-02-15T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 16,
+            "retrievabilityAtReview": 0.755057
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-03-27T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.36,
+              "intervalDays": 113,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 2300,
+              "stabilityDays": 1072.508,
+              "lastReviewedAt": "2026-03-27T08:10:00.000Z",
+              "nextReviewAt": "2026-07-18T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 68,
+            "retrievabilityAtReview": 0.774238
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 1000,
+            "reviewedAt": "2026-07-18T20:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.46,
+              "intervalDays": 279,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 1910,
+              "stabilityDays": 2648.0508,
+              "lastReviewedAt": "2026-07-18T20:10:00.000Z",
+              "nextReviewAt": "2027-04-23T20:10:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 113.5,
+            "retrievabilityAtReview": 0.899581
+          }
+        }
+      ]
+    },
+    {
+      "name": "early_reviews",
+      "description": "Korai ismétlés: az intervallum nem nő a minimumra és nem is csökken",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 15,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2000,
+              "stabilityDays": 142.3683,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 1000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 15,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 1700,
+              "stabilityDays": 142.3683,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:10:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 0,
+            "retrievabilityAtReview": 1
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-15T20:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 20,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 1790,
+              "stabilityDays": 189.8244,
+              "lastReviewedAt": "2026-01-15T20:10:00.000Z",
+              "nextReviewAt": "2026-02-04T20:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 7.5,
+            "retrievabilityAtReview": 0.948683
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-17T20:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 20,
+              "repetitions": 6,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 7,
+              "correctReviews": 7,
+              "avgResponseMs": 1853,
+              "stabilityDays": 189.8244,
+              "lastReviewedAt": "2026-01-17T20:10:00.000Z",
+              "nextReviewAt": "2026-02-06T20:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 2,
+            "retrievabilityAtReview": 0.989519
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-02-06T20:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 52,
+              "repetitions": 7,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 8,
+              "correctReviews": 8,
+              "avgResponseMs": 1897,
+              "stabilityDays": 493.5435,
+              "lastReviewedAt": "2026-02-06T20:10:00.000Z",
+              "nextReviewAt": "2026-03-30T20:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 20,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "easy_new_card",
+      "description": "„Könnyű” (5) új kártya: azonnal REVIEW 4 napra",
+      "steps": [
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 900,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 4,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 900,
+              "stabilityDays": 37.9649,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-05T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 900,
+            "reviewedAt": "2026-01-05T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 10,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 900,
+              "stabilityDays": 94.9122,
+              "lastReviewedAt": "2026-01-05T08:00:00.000Z",
+              "nextReviewAt": "2026-01-15T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 4,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 900,
+            "reviewedAt": "2026-01-15T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.7,
+              "intervalDays": 27,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 900,
+              "stabilityDays": 256.263,
+              "lastReviewedAt": "2026-01-15T08:00:00.000Z",
+              "nextReviewAt": "2026-02-11T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 10,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 900,
+            "reviewedAt": "2026-02-11T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.8,
+              "intervalDays": 76,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 900,
+              "stabilityDays": 721.3328,
+              "lastReviewedAt": "2026-02-11T08:00:00.000Z",
+              "nextReviewAt": "2026-04-28T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 27,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "learning_failures",
+      "description": "Tanulási fázisban ismételt hiba: vissza az első lépcsőre, EF nem változik",
+      "steps": [
+        {
+          "input": {
+            "grade": 0,
+            "responseTimeMs": 8000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 0,
+              "avgResponseMs": 8000,
+              "stabilityDays": 0.0066,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:01:00.000Z"
+            },
+            "effectiveGrade": 0,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 1,
+            "responseTimeMs": 7000,
+            "reviewedAt": "2026-01-01T08:01:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 0,
+              "avgResponseMs": 7700,
+              "stabilityDays": 0.0066,
+              "lastReviewedAt": "2026-01-01T08:01:00.000Z",
+              "nextReviewAt": "2026-01-01T08:02:00.000Z"
+            },
+            "effectiveGrade": 1,
+            "elapsedDays": 0.0007,
+            "retrievabilityAtReview": 0.900128
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 6000,
+            "reviewedAt": "2026-01-01T08:02:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 1,
+              "avgResponseMs": 7190,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:02:00.000Z",
+              "nextReviewAt": "2026-01-01T08:12:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 0.0007,
+            "retrievabilityAtReview": 0.900128
+          }
+        },
+        {
+          "input": {
+            "grade": 2,
+            "responseTimeMs": 6000,
+            "reviewedAt": "2026-01-01T08:12:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 1,
+              "avgResponseMs": 6833,
+              "stabilityDays": 0.0066,
+              "lastReviewedAt": "2026-01-01T08:12:00.000Z",
+              "nextReviewAt": "2026-01-01T08:13:00.000Z"
+            },
+            "effectiveGrade": 2,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 5000,
+            "reviewedAt": "2026-01-01T08:13:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 2,
+              "avgResponseMs": 6283,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:13:00.000Z",
+              "nextReviewAt": "2026-01-01T08:23:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 0.0007,
+            "retrievabilityAtReview": 0.900128
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 4000,
+            "reviewedAt": "2026-01-01T08:23:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 3,
+              "avgResponseMs": 5598,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:23:00.000Z",
+              "nextReviewAt": "2026-01-02T08:23:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 4000,
+            "reviewedAt": "2026-01-02T08:23:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.36,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 7,
+              "correctReviews": 4,
+              "avgResponseMs": 5119,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:23:00.000Z",
+              "nextReviewAt": "2026-01-08T08:23:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "ease_floor",
+      "description": "Sorozatos „nehéz” (3) és felejtés: az EF 1.30-nál megáll",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.36,
+              "intervalDays": 14,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2300,
+              "stabilityDays": 132.8771,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-22T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-01-22T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.22,
+              "intervalDays": 31,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 2510,
+              "stabilityDays": 294.2279,
+              "lastReviewedAt": "2026-01-22T08:10:00.000Z",
+              "nextReviewAt": "2026-02-22T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 14,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-02-22T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.08,
+              "intervalDays": 64,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 2657,
+              "stabilityDays": 607.4382,
+              "lastReviewedAt": "2026-02-22T08:10:00.000Z",
+              "nextReviewAt": "2026-04-27T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 31,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-04-27T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.94,
+              "intervalDays": 124,
+              "repetitions": 6,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 7,
+              "correctReviews": 7,
+              "avgResponseMs": 2760,
+              "stabilityDays": 1176.9115,
+              "lastReviewedAt": "2026-04-27T08:10:00.000Z",
+              "nextReviewAt": "2026-08-29T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 64,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 0,
+            "responseTimeMs": 9000,
+            "reviewedAt": "2026-08-29T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "RELEARNING",
+              "easeFactor": 1.3,
+              "intervalDays": 62,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 8,
+              "correctReviews": 7,
+              "avgResponseMs": 4632,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-08-29T08:10:00.000Z",
+              "nextReviewAt": "2026-08-29T08:20:00.000Z"
+            },
+            "effectiveGrade": 0,
+            "elapsedDays": 124,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-08-29T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.3,
+              "intervalDays": 62,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 9,
+              "correctReviews": 8,
+              "avgResponseMs": 4142,
+              "stabilityDays": 588.4557,
+              "lastReviewedAt": "2026-08-29T08:20:00.000Z",
+              "nextReviewAt": "2026-10-30T08:20:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-10-30T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.3,
+              "intervalDays": 81,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 10,
+              "correctReviews": 9,
+              "avgResponseMs": 3799,
+              "stabilityDays": 768.7889,
+              "lastReviewedAt": "2026-10-30T08:20:00.000Z",
+              "nextReviewAt": "2027-01-19T08:20:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 62,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2027-01-19T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.3,
+              "intervalDays": 105,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 11,
+              "correctReviews": 10,
+              "avgResponseMs": 3559,
+              "stabilityDays": 996.5783,
+              "lastReviewedAt": "2027-01-19T08:20:00.000Z",
+              "nextReviewAt": "2027-05-04T08:20:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 81,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2027-05-04T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.3,
+              "intervalDays": 137,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 12,
+              "correctReviews": 11,
+              "avgResponseMs": 3391,
+              "stabilityDays": 1300.2974,
+              "lastReviewedAt": "2027-05-04T08:20:00.000Z",
+              "nextReviewAt": "2027-09-18T08:20:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 105,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2027-09-18T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.3,
+              "intervalDays": 178,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 13,
+              "correctReviews": 12,
+              "avgResponseMs": 3274,
+              "stabilityDays": 1689.4374,
+              "lastReviewedAt": "2027-09-18T08:20:00.000Z",
+              "nextReviewAt": "2028-03-14T08:20:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 137,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "ease_ceiling_and_max_interval",
+      "description": "Sorozatos „könnyű” (5): az EF 5.00-nál, az intervallum 36 500 napnál megáll",
+      "steps": [
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 4,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 800,
+              "stabilityDays": 37.9649,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-05T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-01-05T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.6,
+              "intervalDays": 10,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 800,
+              "stabilityDays": 94.9122,
+              "lastReviewedAt": "2026-01-05T08:00:00.000Z",
+              "nextReviewAt": "2026-01-15T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 4,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-01-15T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.7,
+              "intervalDays": 27,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 800,
+              "stabilityDays": 256.263,
+              "lastReviewedAt": "2026-01-15T08:00:00.000Z",
+              "nextReviewAt": "2026-02-11T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 10,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-02-11T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.8,
+              "intervalDays": 76,
+              "repetitions": 4,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 800,
+              "stabilityDays": 721.3328,
+              "lastReviewedAt": "2026-02-11T08:00:00.000Z",
+              "nextReviewAt": "2026-04-28T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 27,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-04-28T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.9,
+              "intervalDays": 220,
+              "repetitions": 5,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 5,
+              "correctReviews": 5,
+              "avgResponseMs": 800,
+              "stabilityDays": 2088.0687,
+              "lastReviewedAt": "2026-04-28T08:00:00.000Z",
+              "nextReviewAt": "2026-12-04T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 76,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2026-12-04T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3,
+              "intervalDays": 660,
+              "repetitions": 6,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 6,
+              "correctReviews": 6,
+              "avgResponseMs": 800,
+              "stabilityDays": 6264.2062,
+              "lastReviewedAt": "2026-12-04T08:00:00.000Z",
+              "nextReviewAt": "2028-09-24T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 220,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2028-09-24T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.1,
+              "intervalDays": 2046,
+              "repetitions": 7,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 7,
+              "correctReviews": 7,
+              "avgResponseMs": 800,
+              "stabilityDays": 19419.0394,
+              "lastReviewedAt": "2028-09-24T08:00:00.000Z",
+              "nextReviewAt": "2034-05-02T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 660,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2034-05-02T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.2,
+              "intervalDays": 6547,
+              "repetitions": 8,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 8,
+              "correctReviews": 8,
+              "avgResponseMs": 800,
+              "stabilityDays": 62139.0277,
+              "lastReviewedAt": "2034-05-02T08:00:00.000Z",
+              "nextReviewAt": "2052-04-04T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 2046,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2052-04-04T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.3,
+              "intervalDays": 21605,
+              "repetitions": 9,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 9,
+              "correctReviews": 9,
+              "avgResponseMs": 800,
+              "stabilityDays": 205057.8423,
+              "lastReviewedAt": "2052-04-04T08:00:00.000Z",
+              "nextReviewAt": "2111-05-31T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 6547,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2111-05-31T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.4,
+              "intervalDays": 36500,
+              "repetitions": 10,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 10,
+              "correctReviews": 10,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2111-05-31T08:00:00.000Z",
+              "nextReviewAt": "2211-05-07T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 21605,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2211-05-07T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.5,
+              "intervalDays": 36500,
+              "repetitions": 11,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 11,
+              "correctReviews": 11,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2211-05-07T08:00:00.000Z",
+              "nextReviewAt": "2311-04-13T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2311-04-13T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.6,
+              "intervalDays": 36500,
+              "repetitions": 12,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 12,
+              "correctReviews": 12,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2311-04-13T08:00:00.000Z",
+              "nextReviewAt": "2411-03-19T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2411-03-19T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.7,
+              "intervalDays": 36500,
+              "repetitions": 13,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 13,
+              "correctReviews": 13,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2411-03-19T08:00:00.000Z",
+              "nextReviewAt": "2511-02-23T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2511-02-23T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.8,
+              "intervalDays": 36500,
+              "repetitions": 14,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 14,
+              "correctReviews": 14,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2511-02-23T08:00:00.000Z",
+              "nextReviewAt": "2611-01-30T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2611-01-30T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 3.9,
+              "intervalDays": 36500,
+              "repetitions": 15,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 15,
+              "correctReviews": 15,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2611-01-30T08:00:00.000Z",
+              "nextReviewAt": "2711-01-06T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2711-01-06T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4,
+              "intervalDays": 36500,
+              "repetitions": 16,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 16,
+              "correctReviews": 16,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2711-01-06T08:00:00.000Z",
+              "nextReviewAt": "2810-12-12T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2810-12-12T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.1,
+              "intervalDays": 36500,
+              "repetitions": 17,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 17,
+              "correctReviews": 17,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2810-12-12T08:00:00.000Z",
+              "nextReviewAt": "2910-11-18T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "2910-11-18T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.2,
+              "intervalDays": 36500,
+              "repetitions": 18,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 18,
+              "correctReviews": 18,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "2910-11-18T08:00:00.000Z",
+              "nextReviewAt": "3010-10-25T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3010-10-25T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.3,
+              "intervalDays": 36500,
+              "repetitions": 19,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 19,
+              "correctReviews": 19,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3010-10-25T08:00:00.000Z",
+              "nextReviewAt": "3110-10-01T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3110-10-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.4,
+              "intervalDays": 36500,
+              "repetitions": 20,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 20,
+              "correctReviews": 20,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3110-10-01T08:00:00.000Z",
+              "nextReviewAt": "3210-09-06T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3210-09-06T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.5,
+              "intervalDays": 36500,
+              "repetitions": 21,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 21,
+              "correctReviews": 21,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3210-09-06T08:00:00.000Z",
+              "nextReviewAt": "3310-08-13T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3310-08-13T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.6,
+              "intervalDays": 36500,
+              "repetitions": 22,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 22,
+              "correctReviews": 22,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3310-08-13T08:00:00.000Z",
+              "nextReviewAt": "3410-07-20T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3410-07-20T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.7,
+              "intervalDays": 36500,
+              "repetitions": 23,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 23,
+              "correctReviews": 23,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3410-07-20T08:00:00.000Z",
+              "nextReviewAt": "3510-06-26T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3510-06-26T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.8,
+              "intervalDays": 36500,
+              "repetitions": 24,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 24,
+              "correctReviews": 24,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3510-06-26T08:00:00.000Z",
+              "nextReviewAt": "3610-06-01T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3610-06-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 4.9,
+              "intervalDays": 36500,
+              "repetitions": 25,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 25,
+              "correctReviews": 25,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3610-06-01T08:00:00.000Z",
+              "nextReviewAt": "3710-05-08T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3710-05-08T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 5,
+              "intervalDays": 36500,
+              "repetitions": 26,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 26,
+              "correctReviews": 26,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3710-05-08T08:00:00.000Z",
+              "nextReviewAt": "3810-04-14T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3810-04-14T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 5,
+              "intervalDays": 36500,
+              "repetitions": 27,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 27,
+              "correctReviews": 27,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3810-04-14T08:00:00.000Z",
+              "nextReviewAt": "3910-03-21T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "3910-03-21T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 5,
+              "intervalDays": 36500,
+              "repetitions": 28,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 28,
+              "correctReviews": 28,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "3910-03-21T08:00:00.000Z",
+              "nextReviewAt": "4010-02-24T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "4010-02-24T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 5,
+              "intervalDays": 36500,
+              "repetitions": 29,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 29,
+              "correctReviews": 29,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "4010-02-24T08:00:00.000Z",
+              "nextReviewAt": "4110-01-31T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 800,
+            "reviewedAt": "4110-01-31T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 5,
+              "intervalDays": 36500,
+              "repetitions": 30,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 30,
+              "correctReviews": 30,
+              "avgResponseMs": 800,
+              "stabilityDays": 346429.5877,
+              "lastReviewedAt": "4110-01-31T08:00:00.000Z",
+              "nextReviewAt": "4210-01-07T08:00:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 36500,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "relearning_easy_exit",
+      "description": "Újratanulásból „könnyű” válasszal azonnali visszatérés",
+      "steps": [
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 2000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-01T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 2000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:10:00.000Z",
+              "nextReviewAt": "2026-01-02T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-02T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 6,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 2000,
+              "stabilityDays": 56.9473,
+              "lastReviewedAt": "2026-01-02T08:10:00.000Z",
+              "nextReviewAt": "2026-01-08T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 1,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-08T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 15,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 2000,
+              "stabilityDays": 142.3683,
+              "lastReviewedAt": "2026-01-08T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:10:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 6,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 0,
+            "responseTimeMs": 9000,
+            "reviewedAt": "2026-01-23T08:10:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "RELEARNING",
+              "easeFactor": 1.7,
+              "intervalDays": 8,
+              "repetitions": 0,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 5,
+              "correctReviews": 4,
+              "avgResponseMs": 4100,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-23T08:10:00.000Z",
+              "nextReviewAt": "2026-01-23T08:20:00.000Z"
+            },
+            "effectiveGrade": 0,
+            "elapsedDays": 15,
+            "retrievabilityAtReview": 0.9
+          }
+        },
+        {
+          "input": {
+            "grade": 5,
+            "responseTimeMs": 1000,
+            "reviewedAt": "2026-01-23T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.7,
+              "intervalDays": 8,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 6,
+              "correctReviews": 5,
+              "avgResponseMs": 3170,
+              "stabilityDays": 75.9298,
+              "lastReviewedAt": "2026-01-23T08:20:00.000Z",
+              "nextReviewAt": "2026-01-31T08:20:00.000Z"
+            },
+            "effectiveGrade": 5,
+            "elapsedDays": 0.0069,
+            "retrievabilityAtReview": 0.899984
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 2000,
+            "reviewedAt": "2026-01-31T08:20:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 1.7,
+              "intervalDays": 14,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 1,
+              "totalReviews": 7,
+              "correctReviews": 6,
+              "avgResponseMs": 2819,
+              "stabilityDays": 132.8771,
+              "lastReviewedAt": "2026-01-31T08:20:00.000Z",
+              "nextReviewAt": "2026-02-14T08:20:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 8,
+            "retrievabilityAtReview": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "name": "out_of_schedule_minutes",
+      "description": "Tanulási lépcső előtti / utáni értékelés (perc pontosság)",
+      "steps": [
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 4000,
+            "reviewedAt": "2026-01-01T08:00:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "LEARNING",
+              "easeFactor": 2.5,
+              "intervalDays": 0,
+              "repetitions": 0,
+              "learningStep": 1,
+              "lapses": 0,
+              "totalReviews": 1,
+              "correctReviews": 1,
+              "avgResponseMs": 4000,
+              "stabilityDays": 0.0659,
+              "lastReviewedAt": "2026-01-01T08:00:00.000Z",
+              "nextReviewAt": "2026-01-01T08:10:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": null,
+            "retrievabilityAtReview": null
+          }
+        },
+        {
+          "input": {
+            "grade": 3,
+            "responseTimeMs": 4000,
+            "reviewedAt": "2026-01-01T08:03:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 1,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 2,
+              "correctReviews": 2,
+              "avgResponseMs": 4000,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T08:03:00.000Z",
+              "nextReviewAt": "2026-01-02T08:03:00.000Z"
+            },
+            "effectiveGrade": 3,
+            "elapsedDays": 0.0021,
+            "retrievabilityAtReview": 0.968881
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-01-01T18:03:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 1,
+              "repetitions": 2,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 3,
+              "correctReviews": 3,
+              "avgResponseMs": 3700,
+              "stabilityDays": 9.4912,
+              "lastReviewedAt": "2026-01-01T18:03:00.000Z",
+              "nextReviewAt": "2026-01-02T18:03:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 0.4167,
+            "retrievabilityAtReview": 0.957049
+          }
+        },
+        {
+          "input": {
+            "grade": 4,
+            "responseTimeMs": 3000,
+            "reviewedAt": "2026-01-04T12:43:00.000Z"
+          },
+          "expected": {
+            "card": {
+              "state": "REVIEW",
+              "easeFactor": 2.5,
+              "intervalDays": 5,
+              "repetitions": 3,
+              "learningStep": 0,
+              "lapses": 0,
+              "totalReviews": 4,
+              "correctReviews": 4,
+              "avgResponseMs": 3490,
+              "stabilityDays": 47.4561,
+              "lastReviewedAt": "2026-01-04T12:43:00.000Z",
+              "nextReviewAt": "2026-01-09T12:43:00.000Z"
+            },
+            "effectiveGrade": 4,
+            "elapsedDays": 2.7778,
+            "retrievabilityAtReview": 0.746269
+          }
+        }
+      ]
+    }
+  ]
+}

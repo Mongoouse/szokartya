@@ -175,12 +175,19 @@ export class SyncService {
       return result(ChangeStatus.REJECTED, 'card_not_found');
     }
 
-    // Verzióegyezés → nincs párhuzamos módosítás; különben LWW az időbélyeg alapján.
-    const clientWins = card.version === c.baseVersion || changedAt > card.updatedAt;
+    // Verzióegyezés → nincs párhuzamos módosítás. Különben LWW: a jelzők
+    // utolsó MÓDOSÍTÁSÁNAK ideje dönt (nem az updated_at, ami a szerverre
+    // érkezés ideje – egy korábban módosító, de előbb szinkronizáló eszköz
+    // azzal jogtalanul nyerne).
+    const lastFlagChange = card.flagsChangedAt ?? card.createdAt;
+    const clientWins = card.version === c.baseVersion || changedAt > lastFlagChange;
     if (!clientWins) {
       return result(ChangeStatus.CONFLICT, 'server_newer');
     }
-    const data: { isSuspended?: boolean; deletedAt?: Date | null } = {};
+    const data: { isSuspended?: boolean; deletedAt?: Date | null; flagsChangedAt: Date } = {
+      // Verzióegyezésnél is a későbbi időpont marad meg (sorrenden kívüli feltöltés).
+      flagsChangedAt: card.flagsChangedAt && card.flagsChangedAt > changedAt ? card.flagsChangedAt : changedAt,
+    };
     if (c.isSuspended !== undefined) {
       data.isSuspended = c.isSuspended;
     }

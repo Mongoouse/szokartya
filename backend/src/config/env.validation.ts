@@ -1,5 +1,5 @@
-import { plainToInstance, Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min, MinLength, validateSync } from 'class-validator';
+import { plainToInstance, Transform, Type } from 'class-transformer';
+import { IsBoolean, IsInt, IsOptional, IsString, Max, Min, MinLength, validateSync } from 'class-validator';
 
 /**
  * A futtatási környezet típusos, validált leírása.
@@ -36,6 +36,11 @@ export class EnvironmentVariables {
   @Min(1)
   @Max(365)
   REFRESH_TOKEN_TTL_DAYS = 30;
+
+  /** Rate limit be-/kikapcsolása. Kikapcsolni csak tesztkörnyezetben indokolt. */
+  @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase() !== 'false' : value))
+  @IsBoolean()
+  THROTTLE_ENABLED = true;
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvironmentVariables {

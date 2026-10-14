@@ -24,7 +24,7 @@ Minden felhasználói művelet a **helyi adatbázison** fut, és ugyanabban a SQ
 | Adat | Igazságforrás | Stratégia |
 |---|---|---|
 | Ütemezési állapot (EF, intervallum, esedékesség, számlálók) | szerver | **Eseményalapú:** a kliens az értékeléseket (review event) küldi, a szerver időrendben újrajátssza őket az SM-2 ütemezővel. A kliens helyi állapota ideiglenes, a pull felülírja. |
-| Felhasználói jelzők (felfüggesztés, törlés) | utolsó író | **Időbélyeg-alapú LWW + verzió:** ha a kliens a legfrissebb verzión dolgozott, alkalmazódik; ha közben máshol változott, a későbbi (órakülönbséggel korrigált) időbélyeg nyer. |
+| Felhasználói jelzők (felfüggesztés, törlés) | utolsó író | **Időbélyeg-alapú LWW + verzió:** ha a kliens a legfrissebb verzión dolgozott, alkalmazódik; ha közben máshol változott, a későbbi (órakülönbséggel korrigált) *módosítási* időpont nyer – a `flags_changed_at` alapján, nem a szerverre érkezés ideje szerint (lásd Fázis 4, talált hiba). |
 | Kártyafelvétel | szerver | A (felhasználó, szó, kártyatípus) természetes kulcs dönt. Ha két eszköz offline ugyanazt veszi fel, a második a szerver azonosítóját kapja vissza (`exists` + `serverProgressId`), és helyben átírja (remap). |
 | Szókatalógus | szerver | Csak lefelé szinkronizál, verzió szerint. |
 
@@ -91,10 +91,10 @@ loading ──► question ──reveal()──► answer ──grade(q)──�
 ## 5. Ellenőrzés
 
 - `flutter analyze` – hibamentes (szigorú típusellenőrzés: `strict-casts`, `strict-inference`, `strict-raw-types`).
-- **Ütemező-paritás:** ugyanarra a 16 lépéses sorozatra (felejtés, újratanulás, lassú válasz, késés, korai ismétlés) a TypeScript és a Dart implementáció minden mezője megegyezett (`tool/parity_dump.dart`).
+- **Ütemező-paritás:** ugyanarra a 16 lépéses sorozatra (felejtés, újratanulás, lassú válasz, késés, korai ismétlés) a TypeScript és a Dart implementáció minden mezője megegyezett. Fázis 4 óta ezt a közös golden fájl (`shared/fixtures/sm2-golden.json`) mindkét tesztkészletben ellenőrzi.
 - **Szerver, kétféle eszköz szimulálva (curl):** offline felvétel + időrenden kívül küldött értékelések, ugyanaz a kártya más azonosítóval egy órával késő órájú eszközről (`exists` + leképezés), a köteg ismételt küldése (`exists`/`duplicate`), LWW: régebbi időbélyeg → `conflict`, újabb → `applied`, érvénytelen kurzor → 400.
 - **Végponttól végpontig, valódi szerverrel, két Dart klienssel** (külön SQLite adatbázis): A felvesz és értékel → B megkapja; mindkettő offline értékeli ugyanazt a kártyát és felveszi ugyanazt a szintet → szinkron után a két eszköz kártyái, verziói és naplója mezőre pontosan egyeztek, duplikált kártya nélkül, üres outboxszal.
-- A fenti forgatókönyvek automatizált tesztté alakítása: Fázis 4.
+- A fenti forgatókönyvek automatizált tesztként: [04-teszteles.md](04-teszteles.md).
 
 ## 6. Ismert korlátok
 

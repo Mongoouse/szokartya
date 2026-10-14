@@ -30,4 +30,8 @@ export class AppConfigService {
   get refreshTokenTtlDays(): number {
     return this.config.get('REFRESH_TOKEN_TTL_DAYS', { infer: true });
   }
+
+  get throttleEnabled(): boolean {
+    return this.config.get('THROTTLE_ENABLED', { infer: true });
+  }
 }
