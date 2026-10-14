@@ -8,6 +8,7 @@ import { AppConfigModule } from './config/config.module';
 import { HealthController } from './health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { RepetitionModule } from './repetition/repetition.module';
+import { SyncModule } from './sync/sync.module';
 import { UsersModule } from './users/users.module';
 import { WordsModule } from './words/words.module';
 
@@ -21,6 +22,7 @@ import { WordsModule } from './words/words.module';
     UsersModule,
     WordsModule,
     RepetitionModule,
+    SyncModule,
   ],
   controllers: [HealthController],
   providers: [

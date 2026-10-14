@@ -15,5 +15,6 @@ import { DEFAULT_SCHEDULER_CONFIG } from './scheduler/sm2-scheduler';
     // Injektálható konfiguráció: tesztekben és később felhasználónként felülírható.
     { provide: SCHEDULER_CONFIG, useValue: DEFAULT_SCHEDULER_CONFIG },
   ],
+  exports: [RepetitionService, RepetitionRepository],
 })
 export class RepetitionModule {}

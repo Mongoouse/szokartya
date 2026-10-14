@@ -20,6 +20,21 @@ import { Grade, scheduleReview, SchedulerConfig } from './scheduler/sm2-schedule
 
 export const SCHEDULER_CONFIG = Symbol('SCHEDULER_CONFIG');
 
+/** Egy értékelés bemenete (REST DTO és szinkron push közös alakja). */
+export interface ReviewInputData {
+  reviewId: string;
+  grade: number;
+  responseTimeMs: number;
+  reviewedAt?: Date;
+  deviceId?: string | null;
+}
+
+export interface ReviewOutcome {
+  /** true: a reviewId-t a szerver már korábban feldolgozta. */
+  duplicate: boolean;
+  effectiveGrade: number;
+}
+
 /** Ennyivel lehet a kliens órája a szerveré előtt, mielőtt a szerveridőt használjuk. */
 const MAX_CLOCK_SKEW_MS = 5 * 60_000;
 const DAY_MS = 86_400_000;
@@ -99,13 +114,32 @@ export class RepetitionService {
    * állapotváltozás nélkül, sem állapotváltozás napló nélkül.
    */
   async submitReview(userId: string, progressId: string, dto: SubmitReviewDto, now: Date = new Date()): Promise<ReviewResultDto> {
-    const result = await this.prisma.$transaction(async (tx) => {
+    const outcome = await this.applyReview(userId, progressId, dto, now);
+    const card = await this.repo.findOwnedCard(userId, progressId);
+    if (!card) {
+      throw new NotFoundException('A kártya nem található');
+    }
+    return {
+      reviewId: dto.reviewId,
+      duplicate: outcome.duplicate,
+      effectiveGrade: outcome.effectiveGrade,
+      card: StudyCardDto.fromEntity(card),
+    };
+  }
+
+  /**
+   * Az értékelés tranzakciós magja – a REST végpont és a szinkronizációs
+   * push közösen használja, így offline és online értékelés pontosan
+   * ugyanazon a kódúton megy át.
+   */
+  async applyReview(userId: string, progressId: string, input: ReviewInputData, now: Date = new Date()): Promise<ReviewOutcome> {
+    return this.prisma.$transaction(async (tx) => {
       const card = await this.repo.lockOwnedCard(userId, progressId, tx);
       if (!card) {
         throw new NotFoundException('A kártya nem található');
       }
 
-      const existingLog = await this.repo.findReviewLog(dto.reviewId, tx);
+      const existingLog = await this.repo.findReviewLog(input.reviewId, tx);
       if (existingLog) {
         if (existingLog.userId !== userId || existingLog.progressId !== progressId) {
           throw new ConflictException('A reviewId már egy másik értékeléshez tartozik');
@@ -117,23 +151,23 @@ export class RepetitionService {
       }
 
       const state = toSchedulingState(card);
-      const reviewedAt = this.normalizeReviewedAt(dto.reviewedAt, state.lastReviewedAt, now);
+      const reviewedAt = this.normalizeReviewedAt(input.reviewedAt, state.lastReviewedAt, now);
       const scheduled = scheduleReview(
         state,
-        { grade: dto.grade as Grade, responseTimeMs: dto.responseTimeMs, reviewedAt },
+        { grade: input.grade as Grade, responseTimeMs: input.responseTimeMs, reviewedAt },
         this.schedulerConfig,
       );
 
       await this.repo.updateProgress(card.id, toProgressUpdate(scheduled.card), tx);
       await this.repo.createReviewLog(
         {
-          id: dto.reviewId,
+          id: input.reviewId,
           userId,
           progressId: card.id,
-          grade: dto.grade,
-          responseTimeMs: dto.responseTimeMs,
+          grade: input.grade,
+          responseTimeMs: input.responseTimeMs,
           reviewedAt,
-          deviceId: dto.deviceId ?? null,
+          deviceId: input.deviceId ?? null,
           stateBefore: state.state,
           stateAfter: scheduled.card.state,
           easeFactorBefore: state.easeFactor,
@@ -147,17 +181,6 @@ export class RepetitionService {
       );
       return { duplicate: false, effectiveGrade: scheduled.effectiveGrade };
     });
-
-    const card = await this.repo.findOwnedCard(userId, progressId);
-    if (!card) {
-      throw new NotFoundException('A kártya nem található');
-    }
-    return {
-      reviewId: dto.reviewId,
-      duplicate: result.duplicate,
-      effectiveGrade: result.effectiveGrade,
-      card: StudyCardDto.fromEntity(card),
-    };
   }
 
   /**
