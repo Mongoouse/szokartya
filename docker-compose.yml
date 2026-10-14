@@ -1,0 +1,23 @@
+# Fejlesztői adatbázis. Indítás: docker compose up -d db
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: szokartya-db
+    environment:
+      POSTGRES_USER: szokartya
+      POSTGRES_PASSWORD: szokartya
+      POSTGRES_DB: szokartya
+      # UTF-8 kódolás a német (ä, ö, ü, ß) és magyar (ő, ű) karakterekhez
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C.UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U szokartya -d szokartya"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db-data:

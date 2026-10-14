@@ -1,0 +1,30 @@
+{
+  "name": "@szokartya/backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Szókártya – NestJS backend (Fázis 1: adatbázis-séma és migrációk)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev --create-only",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate reset --force",
+    "typecheck": "tsc --noEmit",
+    "db:verify": "psql \"${DATABASE_URL%%\\?*}\" -v ON_ERROR_STOP=1 -q -f prisma/verify/schema-checks.sql"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prisma": "6.19.3",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3"
+  }
+}
