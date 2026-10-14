@@ -1,0 +1,127 @@
+# Folyamatos integráció: minden push és pull request futtatja.
+#  - backend: típusellenőrzés, egységtesztek, migrációk + séma-ellenőrzés, integrációs tesztek
+#  - mobile:  statikus elemzés, egység- és widgetszintű tesztek
+#  - sync-e2e: Flutter kliensek valódi backend ellen (többeszközös adatintegritás)
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  FLUTTER_VERSION: '3.47.7'
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: szokartya
+          POSTGRES_PASSWORD: szokartya
+          POSTGRES_DB: szokartya_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U szokartya" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://szokartya:szokartya@localhost:5432/szokartya_test?schema=public
+      TEST_DATABASE_URL: postgresql://szokartya:szokartya@localhost:5432/szokartya_test?schema=public
+      JWT_ACCESS_SECRET: ci-secret-that-is-at-least-32-characters-long
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Egységtesztek
+        run: npm test -- --ci
+      - name: Migrációk + séma-ellenőrzés (CHECK, triggerek, indexhasználat)
+        run: |
+          npx prisma migrate deploy
+          npx tsx prisma/seed.ts
+          npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --exit-code
+          psql "${DATABASE_URL%%\?*}" -v ON_ERROR_STOP=1 -q -f prisma/verify/schema-checks.sql
+      - name: Integrációs tesztek
+        run: npm run test:e2e -- --ci
+
+  mobile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+      - run: flutter pub get
+      - run: flutter analyze
+      - name: Tesztek (az e2e csomag backend nélkül kihagyódik)
+        run: flutter test
+
+  sync-e2e:
+    runs-on: ubuntu-latest
+    needs: [backend, mobile]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: szokartya
+          POSTGRES_PASSWORD: szokartya
+          POSTGRES_DB: szokartya_e2e
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U szokartya" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://szokartya:szokartya@localhost:5432/szokartya_e2e?schema=public
+      JWT_ACCESS_SECRET: ci-secret-that-is-at-least-32-characters-long
+      THROTTLE_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+      - name: Backend indítása
+        working-directory: backend
+        run: |
+          npm ci
+          npx prisma migrate deploy
+          npx tsx prisma/seed.ts
+          npm run build
+          nohup node dist/main.js > api.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf localhost:3000/api/v1/health && break; sleep 1; done
+      - name: Többeszközös szinkrontesztek
+        working-directory: mobile
+        env:
+          SZOKARTYA_E2E_API: http://localhost:3000/api/v1
+        run: |
+          flutter pub get
+          flutter test --tags e2e
+      - name: Backend napló (hiba esetén)
+        if: failure()
+        run: cat backend/api.log

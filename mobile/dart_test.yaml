@@ -1,0 +1,3 @@
+tags:
+  e2e:
+    description: Valódi backend elleni többeszközös szinkrontesztek (SZOKARTYA_E2E_API szükséges).
