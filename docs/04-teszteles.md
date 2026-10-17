@@ -4,7 +4,7 @@
 
 | Szint | Hol | Eszköz | Darab | Futási idő |
 |---|---|---|---|---|
-| Adatbázis-invariánsok | `backend/prisma/verify/schema-checks.sql` | psql | 17 állítás | < 1 s |
+| Adatbázis-invariánsok | `backend/prisma/verify/schema-checks.sql` | `npm run db:verify` (Prisma) | 17 állítás | < 1 s |
 | Backend egységtesztek | `backend/src/**/*.spec.ts` | Jest 30 + ts-jest | 70 | ~6 s |
 | Backend integrációs tesztek | `backend/test/*.e2e-spec.ts` | Jest + supertest + PostgreSQL | 73 | ~9 s |
 | Kliens egység- és komponenstesztek | `mobile/test/{domain,data,core,sync,features}` | flutter_test + sqflite_common_ffi | 59 | ~3 s |
@@ -25,6 +25,7 @@ npm run test:cov              # lefedettség
 cd mobile
 flutter test                  # e2e nélkül (az e2e csomag backend nélkül kihagyódik)
 SZOKARTYA_E2E_API=http://localhost:3000/api/v1 flutter test --tags e2e
+# Windows PowerShell: $env:SZOKARTYA_E2E_API = "http://localhost:3000/api/v1"; majd flutter test --tags e2e
 ```
 
 Az integrációs tesztek adatbázisa: `TEST_DATABASE_URL` (alapértelmezés: `…/szokartya_test`). A globális setup a sémát **a migrációkból** építi újra (ugyanaz a kód, ami élesben fut), majd betölti a szókatalógust. Biztonsági zár: csak `_test` végű nevű adatbázison fut, így egy elírt környezeti változó sem törölhet fejlesztői vagy éles adatot.

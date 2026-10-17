@@ -28,6 +28,17 @@ flutter run --dart-define=API_BASE_URL=https://api.example.hu/api/v1
 ```sh
 flutter analyze
 flutter test                                   # egység- és komponenstesztek
-SZOKARTYA_E2E_API=http://localhost:3000/api/v1 \
-  flutter test --tags e2e                      # többeszközös szinkron valódi backenddel
+```
+
+Többeszközös szinkron valódi backenddel:
+
+```sh
+# macOS / Linux
+SZOKARTYA_E2E_API=http://localhost:3000/api/v1 flutter test --tags e2e
+```
+
+```powershell
+# Windows PowerShell
+$env:SZOKARTYA_E2E_API = "http://localhost:3000/api/v1"
+flutter test --tags e2e
 ```
