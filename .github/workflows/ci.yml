@@ -54,7 +54,7 @@ jobs:
           npx prisma migrate deploy
           npx tsx prisma/seed.ts
           npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --exit-code
-          psql "${DATABASE_URL%%\?*}" -v ON_ERROR_STOP=1 -q -f prisma/verify/schema-checks.sql
+          npm run db:verify
       - name: Integrációs tesztek
         run: npm run test:e2e -- --ci
 
