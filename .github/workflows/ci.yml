@@ -1,7 +1,8 @@
 # Folyamatos integráció: minden push és pull request futtatja.
-#  - backend: típusellenőrzés, egységtesztek, migrációk + séma-ellenőrzés, integrációs tesztek
+#  - backend: típusellenőrzés, lint, formázás, egységtesztek, migrációk + séma-ellenőrzés, integrációs tesztek
 #  - mobile:  statikus elemzés, egység- és widgetszintű tesztek
 #  - sync-e2e: Flutter kliensek valódi backend ellen (többeszközös adatintegritás)
+#  - docker:   a teljes stack (db + migráció + API) image-ből indul
 name: CI
 
 on:
@@ -127,3 +128,18 @@ jobs:
       - name: Backend napló (hiba esetén)
         if: failure()
         run: cat backend/api.log
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [backend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Teljes stack (db + migráció/seed + API) Dockerből
+        run: |
+          docker compose --profile api up --build -d
+          for i in $(seq 1 60); do curl -sf localhost:3000/api/v1/health && break; sleep 2; done
+          curl -sf localhost:3000/api/v1/health
+          docker compose logs migrate | grep 'Seed kész'
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: docker compose --profile api logs
