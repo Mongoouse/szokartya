@@ -177,8 +177,7 @@ export function scheduleReview(
   const now = review.reviewedAt;
   const grade = effectiveGrade(review.grade, review.responseTimeMs, config);
   const passed = grade >= 3;
-  const elapsedDays =
-    card.lastReviewedAt === null ? null : Math.max(0, (now.getTime() - card.lastReviewedAt.getTime()) / DAY_MS);
+  const elapsedDays = card.lastReviewedAt === null ? null : Math.max(0, (now.getTime() - card.lastReviewedAt.getTime()) / DAY_MS);
 
   // Statisztikai számlálók – a nyers (nem korrigált) minőség alapján: a helyes
   // válasz akkor is helyes, ha lassú volt.

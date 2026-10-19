@@ -111,13 +111,17 @@ export class SyncService {
 
     const cardChanges: CardChangeResultDto[] = [];
     for (const c of dto.cardChanges) {
-      cardChanges.push(await this.applyCardChange(userId, { ...c, progressId: resolve(c.progressId) }, toServerTime(c.changedAt), c.progressId));
+      cardChanges.push(
+        await this.applyCardChange(userId, { ...c, progressId: resolve(c.progressId) }, toServerTime(c.changedAt), c.progressId),
+      );
     }
 
     const reviews: ReviewResultItemDto[] = [];
     const ordered = [...dto.reviews].sort((a, b) => a.reviewedAt.getTime() - b.reviewedAt.getTime());
     for (const r of ordered) {
-      reviews.push(await this.applyReviewEvent(userId, r.reviewId, resolve(r.progressId), r, toServerTime(r.reviewedAt), dto.deviceId, now));
+      reviews.push(
+        await this.applyReviewEvent(userId, r.reviewId, resolve(r.progressId), r, toServerTime(r.reviewedAt), dto.deviceId, now),
+      );
     }
 
     return { serverTime: now, clockOffsetMs: rawOffset, enrollments, cardChanges, reviews };
@@ -155,12 +159,7 @@ export class SyncService {
     }
   }
 
-  private async applyCardChange(
-    userId: string,
-    c: CardChangeDto,
-    changedAt: Date,
-    clientProgressId: string,
-  ): Promise<CardChangeResultDto> {
+  private async applyCardChange(userId: string, c: CardChangeDto, changedAt: Date, clientProgressId: string): Promise<CardChangeResultDto> {
     const result = (status: ChangeStatus, reason?: string): CardChangeResultDto => ({
       progressId: clientProgressId,
       status,
@@ -231,12 +230,7 @@ export class SyncService {
   }
 }
 
-function advance<T extends { id: string }>(
-  cursor: SyncCursor,
-  stream: SyncStream,
-  last: T | undefined,
-  ts: (row: T) => Date,
-): void {
+function advance<T extends { id: string }>(cursor: SyncCursor, stream: SyncStream, last: T | undefined, ts: (row: T) => Date): void {
   if (last) {
     cursor.streams[stream] = { t: ts(last).toISOString(), id: last.id };
   }

@@ -1,6 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { AuxiliaryVerb, ConjugationType, GrammaticalCase, GrammaticalGender, NumberType, PartOfSpeech, ReflexiveType } from '@prisma/client';
+import {
+  AuxiliaryVerb,
+  ConjugationType,
+  GrammaticalCase,
+  GrammaticalGender,
+  NumberType,
+  PartOfSpeech,
+  ReflexiveType,
+} from '@prisma/client';
 import { parseLine, parseVocabulary, VocabularyFormatError } from './vocabulary';
 
 describe('szólista-formátum', () => {
@@ -31,7 +39,9 @@ describe('szólista-formátum', () => {
   });
 
   it('ige: elváló igekötő, visszaható alak, segédige, vonzat mintával', () => {
-    const w = parseLine('V|B1|sich vor·bereiten|bereitet sich vor|bereitete sich vor|hat vorbereitet|r|felkészül|bildung||auf:A:felkészül valamire');
+    const w = parseLine(
+      'V|B1|sich vor·bereiten|bereitet sich vor|bereitete sich vor|hat vorbereitet|r|felkészül|bildung||auf:A:felkészül valamire',
+    );
     expect(w).toMatchObject({
       lemma: 'vorbereiten',
       homographNo: 1,
@@ -68,7 +78,13 @@ describe('szólista-formátum', () => {
       attributes: { data: { reflexiveType: ReflexiveType.DATIVE } },
     });
     expect(parseLine('V|A2|danken|dankt|dankte|hat gedankt|r|megköszön|x||-:D:megköszön valakinek').valencies).toEqual([
-      { preposition: null, governedCase: GrammaticalCase.DATIVE, isReflexive: false, pattern: 'danken + Dat.', meaning: 'megköszön valakinek' },
+      {
+        preposition: null,
+        governedCase: GrammaticalCase.DATIVE,
+        isReflexive: false,
+        pattern: 'danken + Dat.',
+        meaning: 'megköszön valakinek',
+      },
     ]);
   });
 

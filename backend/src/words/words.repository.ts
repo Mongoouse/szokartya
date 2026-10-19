@@ -14,12 +14,7 @@ export interface WordFilter {
 export class WordsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findPage(
-    userId: string,
-    filter: WordFilter,
-    limit: number,
-    offset: number,
-  ): Promise<{ items: WordWithDetails[]; total: number }> {
+  async findPage(userId: string, filter: WordFilter, limit: number, offset: number): Promise<{ items: WordWithDetails[]; total: number }> {
     const where = this.buildWhere(userId, filter);
     const [items, total] = await this.prisma.$transaction([
       this.prisma.word.findMany({

@@ -110,9 +110,7 @@ export class AuthService {
       case 'ok':
         return outcome.tokens;
       case 'reuse':
-        this.logger.warn(
-          `Refresh token újrafelhasználás: user=${outcome.userId} family=${outcome.familyId} – család visszavonva`,
-        );
+        this.logger.warn(`Refresh token újrafelhasználás: user=${outcome.userId} family=${outcome.familyId} – család visszavonva`);
         throw new UnauthorizedException(INVALID_REFRESH);
       case 'invalid':
         throw new UnauthorizedException(INVALID_REFRESH);

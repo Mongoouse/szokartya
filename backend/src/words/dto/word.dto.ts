@@ -258,12 +258,7 @@ export class WordDto {
   }
 }
 
-function displayForm(
-  lemma: string,
-  article: Article | null,
-  numberType: NumberType | null,
-  reflexive: ReflexiveType | null,
-): string {
+function displayForm(lemma: string, article: Article | null, numberType: NumberType | null, reflexive: ReflexiveType | null): string {
   if (numberType === 'PLURAL_ONLY') {
     return `die ${lemma}`; // többes szám névelője mindig „die”
   }

@@ -20,6 +20,9 @@
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset --force",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.ts\"",
     "db:verify": "prisma db execute --schema prisma/schema.prisma --file prisma/verify/schema-checks.sql",
     "test": "jest",
     "test:cov": "jest --coverage",
@@ -43,17 +46,21 @@
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@nestjs/cli": "^11.0.24",
     "@nestjs/testing": "^11.2.7",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.0",
     "@types/supertest": "^6.0.3",
+    "eslint": "^9.39.5",
     "jest": "^30.5.2",
+    "prettier": "^3.9.10",
     "prisma": "6.19.3",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.14",
     "tsx": "^4.20.0",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.0"
   }
 }

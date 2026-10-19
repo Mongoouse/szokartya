@@ -1,6 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '@prisma/client';
-import { IsInt, IsOptional, IsString, Max, MaxLength, Min, Validate, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+  Validate,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { isValidTimeZone } from '../../common/utils/time-zone';
 
 @ValidatorConstraint({ name: 'ianaTimeZone' })

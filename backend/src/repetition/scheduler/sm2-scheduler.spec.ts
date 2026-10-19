@@ -259,9 +259,9 @@ describe('SM-2 ütemező', () => {
         retrievabilityAtReview: number | null;
       };
     }
-    const golden = JSON.parse(
-      readFileSync(join(__dirname, '../../../../shared/fixtures/sm2-golden.json'), 'utf8'),
-    ) as { cases: { name: string; steps: GoldenStep[] }[] };
+    const golden = JSON.parse(readFileSync(join(__dirname, '../../../../shared/fixtures/sm2-golden.json'), 'utf8')) as {
+      cases: { name: string; steps: GoldenStep[] }[];
+    };
 
     it.each(golden.cases.map((c) => [c.name, c.steps] as const))('%s', (_name, steps) => {
       let c = initialCardState();
@@ -276,8 +276,7 @@ describe('SM-2 ütemező', () => {
           },
           effectiveGrade: result.effectiveGrade,
           elapsedDays: result.elapsedDays,
-          retrievabilityAtReview:
-            result.retrievabilityAtReview === null ? null : Math.round(result.retrievabilityAtReview * 1e6) / 1e6,
+          retrievabilityAtReview: result.retrievabilityAtReview === null ? null : Math.round(result.retrievabilityAtReview * 1e6) / 1e6,
         };
         expect({ step: i, ...actual }).toEqual({ step: i, ...step.expected });
       });

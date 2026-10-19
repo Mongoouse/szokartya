@@ -9,7 +9,17 @@ const HOUR = 3_600_000;
 interface PullBody {
   cursor: string;
   hasMore: boolean;
-  progress: { id: string; wordId: string; cardType: string; version: number; state: string; totalReviews: number; isSuspended: boolean; deletedAt: string | null; updatedAt: string }[];
+  progress: {
+    id: string;
+    wordId: string;
+    cardType: string;
+    version: number;
+    state: string;
+    totalReviews: number;
+    isSuspended: boolean;
+    deletedAt: string | null;
+    updatedAt: string;
+  }[];
   words: { id: string; lemma: string; version: number; translations: { text: string }[] }[];
   reviewLogs: { id: string; progressId: string; deviceId: string | null; reviewedAt: string }[];
 }
@@ -63,7 +73,7 @@ describe('Szinkronizáció (integráció)', () => {
       if (!page.hasMore) break;
       if (pages > 2000) throw new Error('végtelen lapozás');
     }
-    return { ...all, cursor: cursor!, pages };
+    return { ...all, cursor, pages };
   }
 
   // ---------------------------------------------------------------------------
@@ -81,7 +91,9 @@ describe('Szinkronizáció (integráció)', () => {
       const words = await t.prisma.word.findMany({ where: { ownerId: null }, select: { id: true } });
       // Egy tranzakcióban → azonos updated_at minden soron.
       await t.prisma.userProgress.createMany({
-        data: words.flatMap((w) => ['RECOGNITION', 'PRODUCTION'].map((cardType) => ({ userId: user.id, wordId: w.id, cardType: cardType as never }))),
+        data: words.flatMap((w) =>
+          ['RECOGNITION', 'PRODUCTION'].map((cardType) => ({ userId: user.id, wordId: w.id, cardType: cardType as never })),
+        ),
       });
       const all = await pullAll(undefined, 3);
       const ids = all.progress.map((p) => p.id);
@@ -225,8 +237,14 @@ describe('Szinkronizáció (integráció)', () => {
 
       // B később küldi fel a KORÁBBI értékelését: a szerver az időpontot normalizálja,
       // de az eseményt nem dobja el.
-      await push({ deviceId: 'A', reviews: [{ reviewId: uuid(), progressId, grade: 4, responseTimeMs: 1000, reviewedAt: iso(now - 10 * MIN) }] }).expect(200);
-      await push({ deviceId: 'B', reviews: [{ reviewId: uuid(), progressId, grade: 4, responseTimeMs: 1000, reviewedAt: iso(now - 20 * MIN) }] }).expect(200);
+      await push({
+        deviceId: 'A',
+        reviews: [{ reviewId: uuid(), progressId, grade: 4, responseTimeMs: 1000, reviewedAt: iso(now - 10 * MIN) }],
+      }).expect(200);
+      await push({
+        deviceId: 'B',
+        reviews: [{ reviewId: uuid(), progressId, grade: 4, responseTimeMs: 1000, reviewedAt: iso(now - 20 * MIN) }],
+      }).expect(200);
 
       const card = await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } });
       expect(card).toMatchObject({ totalReviews: 2, correctReviews: 2, state: CardState.REVIEW });
@@ -340,7 +358,9 @@ describe('Szinkronizáció (integráció)', () => {
     });
 
     it('a jelzőmódosítás nem írja felül az ütemezési állapotot (közben érkezett értékelés megmarad)', async () => {
-      await push({ reviews: [{ reviewId: uuid(), progressId, grade: 5, responseTimeMs: 900, reviewedAt: iso(Date.now() - MIN) }] }).expect(200);
+      await push({ reviews: [{ reviewId: uuid(), progressId, grade: 5, responseTimeMs: 900, reviewedAt: iso(Date.now() - MIN) }] }).expect(
+        200,
+      );
       const res = await change(1, Date.now(), true);
       expect(res.body.cardChanges[0].status).toBe('applied');
       expect(await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } })).toMatchObject({
@@ -392,7 +412,10 @@ describe('Szinkronizáció (integráció)', () => {
     expect(pageB.reviewLogs.filter((l) => l.progressId === progressId)).toHaveLength(1);
 
     // B felfüggeszti a látott verzión.
-    await push({ deviceId: 'B', cardChanges: [{ progressId, baseVersion: seenByB.version, changedAt: iso(Date.now()), isSuspended: true }] }).expect(200);
+    await push({
+      deviceId: 'B',
+      cardChanges: [{ progressId, baseVersion: seenByB.version, changedAt: iso(Date.now()), isSuspended: true }],
+    }).expect(200);
 
     // A lehúzza: a felfüggesztés és B naplója is megérkezik, a verzió nő.
     const pageA = await pullAll(cursorA);

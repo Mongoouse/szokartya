@@ -12,7 +12,10 @@ export class WordsController {
   constructor(private readonly words: WordsService) {}
 
   @Get('words')
-  @ApiOperation({ summary: 'Szókereső', description: 'Szűrés CEFR szintre, szófajra, kategóriára; részleges egyezés német alakra vagy magyar fordításra.' })
+  @ApiOperation({
+    summary: 'Szókereső',
+    description: 'Szűrés CEFR szintre, szófajra, kategóriára; részleges egyezés német alakra vagy magyar fordításra.',
+  })
   @ApiOkResponse({ type: WordPageDto })
   search(@CurrentUser() user: AuthenticatedUser, @Query() query: WordQueryDto): Promise<WordPageDto> {
     return this.words.search(user.id, query);
