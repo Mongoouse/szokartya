@@ -38,10 +38,12 @@ class AuthRepository {
     return cached == null ? null : UserProfile.decode(cached);
   }
 
-  /// Kilépés: a szerveren visszavonja a munkamenetet (ha elérhető), és törli a
-  /// helyi adatokat. A még fel nem töltött módosítások elvesznek – a hívó
-  /// felelőssége előtte szinkronizálni (lásd AuthController.signOut).
-  Future<void> logout() async {
+  /// Kilépés: a szerveren visszavonja a munkamenetet (ha elérhető).
+  ///
+  /// [keepLocalData] = true esetén a helyi adatok (és a fel nem töltött
+  /// módosítások) megmaradnak, és ugyanannak a felhasználónak a következő
+  /// belépésekor feltöltődnek; másik fiókkal belépve törlődnek.
+  Future<void> logout({bool keepLocalData = false}) async {
     final tokens = await _tokens.read();
     if (tokens != null) {
       try {
@@ -50,6 +52,13 @@ class AuthRepository {
         // Offline kilépés: a refresh token a szerveren magától lejár.
       }
     }
+    await _tokens.clear();
+    if (!keepLocalData) await _store.wipe();
+  }
+
+  /// Fiók végleges törlése (jelszóval megerősítve), majd a helyi adatok törlése.
+  Future<void> deleteAccount(String password) async {
+    await _api.delete('/users/me', body: {'password': password});
     await _tokens.clear();
     await _store.wipe();
   }

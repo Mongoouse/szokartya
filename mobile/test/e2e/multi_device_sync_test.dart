@@ -12,6 +12,8 @@ import 'package:szokartya/core/config/app_config.dart';
 import 'package:szokartya/core/time/clock.dart';
 import 'package:szokartya/data/local/app_database.dart';
 import 'package:szokartya/data/local/local_store.dart';
+import 'package:szokartya/data/models/custom_word_input.dart';
+import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/repositories/auth_repository.dart';
 import 'package:szokartya/data/repositories/study_repository.dart';
 import 'package:szokartya/domain/sm2_scheduler.dart';
@@ -190,5 +192,25 @@ void main() {
     await expectConverged();
     final row = (await b.db.db.query('cards', where: 'id = ?', whereArgs: [card.id])).single;
     expect(row['is_suspended'], 0);
+  });
+
+  test('offline felvett saját szó és nyelvtani kártyák: a szerver elfogadja, a másik eszközön is megjelenik', () async {
+    a.network.online = false;
+    final word = await a.study.addCustomWord(const CustomWordInput(
+      lemma: 'Fernweh',
+      partOfSpeech: 'NOUN',
+      gender: 'NEUTER',
+      pluralForm: 'Fernwehe',
+      translations: ['vágyakozás távoli helyekre'],
+    ));
+    await a.study.review((await a.study.loadQueue()).newCards.firstWhere((c) => c.wordId == word.id), grade: 4, responseTimeMs: 1500);
+
+    a.network.online = true;
+    await syncAll();
+    await expectConverged();
+
+    final onB = await b.study.searchWords(customOnly: true);
+    expect(onB.single.word.display, 'das Fernweh');
+    expect(await b.study.enrolledTypes(word.id), {CardType.recognition, CardType.production, CardType.gender, CardType.plural});
   });
 }

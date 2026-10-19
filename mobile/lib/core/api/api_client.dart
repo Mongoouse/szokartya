@@ -44,6 +44,8 @@ class ApiClient {
 
   Future<Json> patch(String path, {Object? body}) => _send('PATCH', path, body: body);
 
+  Future<Json> delete(String path, {Object? body}) => _send('DELETE', path, body: body);
+
   Future<Json> _send(
     String method,
     String path, {

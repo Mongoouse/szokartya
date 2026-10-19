@@ -86,10 +86,18 @@ class SyncEngine {
 
   /// Egy köteg feltöltése. @returns (elküldött tételek, elutasítottak).
   Future<(int, int)> _pushOnce() async {
-    final enrollments = await _store.outbox(kind: OutboxKind.enroll, limit: _batchSize);
-    final changes = await _store.outbox(kind: OutboxKind.cardChange, limit: _batchSize);
-    final reviews = await _store.outbox(kind: OutboxKind.review, limit: _batchSize);
-    final all = [...enrollments, ...changes, ...reviews];
+    // Függőségi sorrend: saját szó → kártyafelvétel → módosítás / értékelés (a
+    // szerver is így dolgozza fel egy kérésen belül). Ha egy előbbi típusból
+    // több vár, mint ami egy kötegbe fér, a későbbiek a következő körre maradnak –
+    // különben egy értékelés megelőzhetné a saját kártyája felvételét, és a
+    // szerver elutasítaná.
+    final customWords = await _store.outbox(kind: OutboxKind.customWord, limit: _batchSize);
+    final wordsPending = customWords.length == _batchSize;
+    final enrollments = wordsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.enroll, limit: _batchSize);
+    final enrollmentsPending = wordsPending || enrollments.length == _batchSize;
+    final changes = enrollmentsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.cardChange, limit: _batchSize);
+    final reviews = enrollmentsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.review, limit: _batchSize);
+    final all = [...customWords, ...enrollments, ...changes, ...reviews];
     if (all.isEmpty) return (0, 0);
 
     final Json response;
@@ -97,6 +105,7 @@ class SyncEngine {
       response = await _api.post('/sync/push', body: {
         'clientTime': _clock.now().toIso8601String(),
         'deviceId': await deviceId(),
+        'customWords': customWords.map((e) => e.payload).toList(),
         'enrollments': enrollments.map((e) => e.payload).toList(),
         'cardChanges': changes.map((e) => e.payload).toList(),
         'reviews': reviews.map((e) => e.payload).toList(),
@@ -107,6 +116,15 @@ class SyncEngine {
     }
 
     var rejected = 0;
+
+    // Elutasított saját szó (pl. érvénytelen adat): a helyi szó és kártyái törlődnek.
+    final wordResults = ((response['customWords'] as List?) ?? const []).cast<Json>();
+    for (final r in wordResults) {
+      if (r['status'] == 'rejected') {
+        rejected++;
+        await _store.discardWord(r['wordId'] as String);
+      }
+    }
 
     // Kártyafelvételek: azonosító-leképezés, elutasításnál a helyi kártya törlése.
     final enrollResults = (response['enrollments'] as List).cast<Json>();
