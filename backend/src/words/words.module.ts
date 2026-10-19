@@ -6,6 +6,6 @@ import { WordsService } from './words.service';
 @Module({
   controllers: [WordsController],
   providers: [WordsRepository, WordsService],
-  exports: [WordsRepository],
+  exports: [WordsRepository, WordsService],
 })
 export class WordsModule {}

@@ -1,11 +1,16 @@
 import { ConflictException, HttpException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { CardType, PartOfSpeech, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { RepetitionService } from '../repetition/repetition.service';
+import { UsersRepository } from '../users/users.repository';
+import { isCardTypeApplicable } from '../words/card-applicability';
+import { CustomWordStatus } from '../words/dto/custom-word.dto';
 import { WordsRepository } from '../words/words.repository';
+import { WordsService } from '../words/words.service';
 import {
   CardChangeDto,
   CardChangeResultDto,
   ChangeStatus,
+  CustomWordPushResultDto,
   EnrollmentChangeDto,
   EnrollmentResultDto,
   EnrollmentStatus,
@@ -38,7 +43,9 @@ const CLOCK_OFFSET_THRESHOLD_MS = 2_000;
  *    wins”, verzióellenőrzéssel. Ha a kliens a legfrissebb verzión dolgozott,
  *    a módosítás alkalmazódik; ha közben máshol is változott a kártya, a
  *    későbbi (órakülönbséggel korrigált) időbélyeg nyer.
- *  - Szókatalógus: csak lefelé szinkronizál (szerver → kliens).
+ *  - Szókatalógus: a központi szavak csak lefelé szinkronizálnak (szerver →
+ *    kliens), a felhasználó választott szintjeire szűkítve; a saját szavak
+ *    a kliensen is létrehozhatók (push: customWords).
  */
 @Injectable()
 export class SyncService {
@@ -48,6 +55,8 @@ export class SyncService {
     private readonly repo: SyncRepository,
     private readonly words: WordsRepository,
     private readonly repetition: RepetitionService,
+    private readonly users: UsersRepository,
+    private readonly wordsService: WordsService,
   ) {}
 
   // -------------------------------------------------------------------------
@@ -58,9 +67,10 @@ export class SyncService {
     const serverTime = new Date();
     const cursor = decodeCursor(rawCursor);
 
+    const user = await this.users.findActiveById(userId);
     const [progress, words, logs] = await Promise.all([
       this.repo.progressChanges(userId, keysetStart(cursor, 'progress'), limit),
-      this.repo.wordChanges(userId, keysetStart(cursor, 'words'), limit),
+      this.repo.wordChanges(userId, keysetStart(cursor, 'words'), limit, user?.catalogLevels ?? []),
       this.repo.reviewLogChanges(userId, keysetStart(cursor, 'reviewLogs'), limit),
     ]);
 
@@ -85,7 +95,7 @@ export class SyncService {
   // -------------------------------------------------------------------------
 
   /**
-   * A kliens kimenő sorának (outbox) feldolgozása. Sorrend: kártyafelvételek →
+   * A kliens kimenő sorának (outbox) feldolgozása. Sorrend: saját szavak → kártyafelvételek →
    * jelzőmódosítások → értékelések (időrendben), mert a későbbiek hivatkozhatnak
    * az offline létrehozott kártyákra. Minden tétel önállóan sikerül vagy bukik;
    * az eredményt tételenként adjuk vissza. Infrastruktúra-hiba (pl. adatbázis
@@ -99,6 +109,17 @@ export class SyncService {
     // Kliens-azonosító → szerver-azonosító (ha a kártya más eszközről már létezett).
     const idMap = new Map<string, string>();
     const resolve = (id: string): string => idMap.get(id) ?? id;
+
+    // Saját szavak elsőként: a kártyafelvételek hivatkozhatnak rájuk.
+    const customWords: CustomWordPushResultDto[] = [];
+    for (const w of dto.customWords) {
+      if (!w.id) {
+        customWords.push({ wordId: '', status: CustomWordStatus.REJECTED, reason: 'id_required' });
+        continue;
+      }
+      const { wordId, status, reason } = await this.wordsService.createCustom(userId, w);
+      customWords.push({ wordId, status, ...(reason ? { reason } : {}) });
+    }
 
     const enrollments: EnrollmentResultDto[] = [];
     for (const e of dto.enrollments) {
@@ -124,7 +145,7 @@ export class SyncService {
       );
     }
 
-    return { serverTime: now, clockOffsetMs: rawOffset, enrollments, cardChanges, reviews };
+    return { serverTime: now, clockOffsetMs: rawOffset, customWords, enrollments, cardChanges, reviews };
   }
 
   private async applyEnrollment(userId: string, e: EnrollmentChangeDto): Promise<EnrollmentResultDto> {
@@ -132,8 +153,8 @@ export class SyncService {
     if (!word) {
       return { progressId: e.progressId, status: EnrollmentStatus.REJECTED, reason: 'unknown_word' };
     }
-    if (e.cardType === CardType.GENDER && !(word.partOfSpeech === PartOfSpeech.NOUN && word.nounAttributes?.gender)) {
-      return { progressId: e.progressId, status: EnrollmentStatus.REJECTED, reason: 'gender_not_applicable' };
+    if (!isCardTypeApplicable(word, e.cardType)) {
+      return { progressId: e.progressId, status: EnrollmentStatus.REJECTED, reason: `${e.cardType.toLowerCase()}_not_applicable` };
     }
 
     const existing = await this.repo.findCardByNaturalKey(userId, e.wordId, e.cardType);

@@ -1,7 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { CefrLevel, User } from '@prisma/client';
 import {
+  ArrayUnique,
+  IsArray,
+  IsEnum,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   Max,
@@ -47,6 +51,12 @@ export class UserDto {
   @ApiProperty({ example: 200 })
   dailyReviewLimit!: number;
 
+  @ApiProperty({ example: 0.9, description: 'Cél felidézési valószínűség az esedékességkor (0.70–0.97)' })
+  targetRetention!: number;
+
+  @ApiProperty({ enum: CefrLevel, enumName: 'CefrLevel', isArray: true, description: 'Szinkronizált katalógusszintek; üres = mind' })
+  catalogLevels!: CefrLevel[];
+
   @ApiProperty()
   createdAt!: Date;
 
@@ -59,6 +69,8 @@ export class UserDto {
       timezone: user.timezone,
       dailyNewCardsLimit: user.dailyNewCardsLimit,
       dailyReviewLimit: user.dailyReviewLimit,
+      targetRetention: user.targetRetention.toNumber(),
+      catalogLevels: user.catalogLevels,
       createdAt: user.createdAt,
     };
   }
@@ -89,4 +101,18 @@ export class UpdateUserSettingsDto {
   @Min(0)
   @Max(10000)
   dailyReviewLimit?: number;
+
+  @ApiPropertyOptional({ minimum: 0.7, maximum: 0.97, example: 0.9, description: 'Magasabb érték → rövidebb intervallumok' })
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0.7)
+  @Max(0.97)
+  targetRetention?: number;
+
+  @ApiPropertyOptional({ enum: CefrLevel, enumName: 'CefrLevel', isArray: true, description: 'Üres tömb = minden szint' })
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsEnum(CefrLevel, { each: true })
+  catalogLevels?: CefrLevel[];
 }

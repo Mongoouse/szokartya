@@ -49,6 +49,20 @@ export class AuthService {
     }
   }
 
+  /**
+   * Fiók végleges törlése (GDPR 17. cikk – „elfeledtetéshez való jog”). A
+   * jelszót újra kérjük, hogy egy ellopott access token ne legyen elég hozzá.
+   * A törlés kaszkádol: munkamenetek, saját szavak, kártyák, értékelési napló.
+   */
+  async deleteAccount(userId: string, password: string): Promise<void> {
+    const user = await this.users.findActiveById(userId);
+    if (!user || !(await this.passwords.verify(user.passwordHash, password))) {
+      throw new UnauthorizedException('Hibás jelszó');
+    }
+    await this.users.delete(user.id);
+    this.logger.log(`Fiók törölve: ${user.id}`);
+  }
+
   async login(dto: LoginDto, ctx: ClientContext): Promise<AuthTokensDto> {
     const user = await this.users.findActiveByEmail(dto.email);
     const valid = user

@@ -81,3 +81,10 @@ export class AuthTokensDto {
   @ApiProperty({ type: UserDto })
   user!: UserDto;
 }
+
+export class DeleteAccountDto {
+  @ApiProperty({ description: 'A jelenlegi jelszó (megerősítésként)' })
+  @IsString()
+  @MaxLength(128)
+  password!: string;
+}

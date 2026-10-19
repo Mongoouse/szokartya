@@ -6,6 +6,7 @@ import {
   effectiveGrade,
   Grade,
   initialCardState,
+  retentionIntervalFactor,
   retrievabilityAt,
   scheduleReview,
   SchedulerConfig,
@@ -182,6 +183,31 @@ describe('SM-2 ütemező', () => {
       const when = at(10 * DAY + 5 * MIN);
       const { card: next } = review(reviewCard(10), 4, when);
       expect(next.nextReviewAt!.getTime()).toBe(when.getTime() + next.intervalDays * DAY);
+    });
+  });
+
+  describe('célmegtartás (felhasználói beállítás)', () => {
+    const withRetention = (targetRetention: number): SchedulerConfig => ({ ...DEFAULT_SCHEDULER_CONFIG, targetRetention });
+
+    it('szorzó: 0.90 → 1, magasabb cél → rövidebb, alacsonyabb → hosszabb intervallum', () => {
+      expect(retentionIntervalFactor(0.9)).toBe(1);
+      expect(retentionIntervalFactor(0.95)).toBeCloseTo(0.4868, 4);
+      expect(retentionIntervalFactor(0.8)).toBeCloseTo(2.1179, 4);
+      expect(() => retentionIntervalFactor(1)).toThrow(RangeError);
+    });
+
+    it('az intervallum a szorzóval skálázódik, a minimális növekedés megmarad', () => {
+      const c = reviewCard(10);
+      expect(review(c, 4, at(10 * DAY), 2000, withRetention(0.8)).card.intervalDays).toBe(53); // 25 · 2.118
+      expect(review(c, 4, at(10 * DAY), 2000, withRetention(0.95)).card.intervalDays).toBe(12); // 25 · 0.487
+      expect(review(reviewCard(10), 3, at(10 * DAY), 2000, withRetention(0.97)).card.intervalDays).toBe(11); // padló: I + 1
+    });
+
+    it('a stabilitásbecslés nem függ a választott céltól', () => {
+      const c = reviewCard(10);
+      const s80 = review(c, 4, at(10 * DAY), 2000, withRetention(0.8)).card.stabilityDays!;
+      const s90 = review(c, 4, at(10 * DAY)).card.stabilityDays!;
+      expect(s80).toBeCloseTo(s90, 0);
     });
   });
 

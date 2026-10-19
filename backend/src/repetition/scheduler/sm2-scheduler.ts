@@ -72,6 +72,28 @@ export const DEFAULT_SCHEDULER_CONFIG: Readonly<SchedulerConfig> = Object.freeze
   responseTimeEmaAlpha: 0.3,
 });
 
+/**
+ * Az SM-2 alapintervallumai erre a felidézési valószínűségre vannak kalibrálva
+ * (a módosított SM-2 tipikus 85–90%-os megtartást ad).
+ */
+export const REFERENCE_RETENTION = 0.9;
+
+/**
+ * Intervallumszorzó a felhasználó által választott célmegtartáshoz.
+ *
+ * A felejtési görbe R(t) = exp(−t / S); adott S mellett a célértéket
+ * t = S · (−ln R_cél) idő múlva éri el. A referencia-intervallumhoz képesti
+ * arány tehát ln(R_cél) / ln(R_ref): 0.90 → 1 (változatlan), 0.95 → ≈ 0.49
+ * (sűrűbb ismétlés), 0.80 → ≈ 2.12 (ritkább ismétlés). Mivel a stabilitás
+ * becslése ugyanezzel a céllal számol, S nem függ a választott céltól.
+ */
+export function retentionIntervalFactor(targetRetention: number): number {
+  if (!(targetRetention > 0 && targetRetention < 1)) {
+    throw new RangeError(`Érvénytelen célmegtartás: ${targetRetention} (0 és 1 közötti szám várt)`);
+  }
+  return Math.log(targetRetention) / Math.log(REFERENCE_RETENTION);
+}
+
 /** Egy kártya ütemezési állapota (a `user_progress` releváns mezői). */
 export interface CardSchedulingState {
   state: CardState;
@@ -267,17 +289,18 @@ function applyReview(
   const scheduled = card.intervalDays;
   const actual = elapsedDays ?? scheduled;
   const onTime = actual >= scheduled;
+  const factor = retentionIntervalFactor(config.targetRetention);
   let candidate: number;
   if (onTime) {
     // Időben vagy késve: a késés fele beszámít; az intervallum szigorúan nő,
     // a második sikeres ismétlés után legalább secondIntervalDays.
     const base = scheduled + (actual - scheduled) / 2;
     const floor = next.repetitions <= 2 ? config.secondIntervalDays : scheduled + 1;
-    candidate = Math.max(floor, scheduled + 1, Math.round(base * next.easeFactor));
+    candidate = Math.max(floor, scheduled + 1, Math.round(base * next.easeFactor * factor));
   } else {
     // Korai ismétlés: csak a ténylegesen eltelt idő számít; az intervallum nem
     // csökken, de a korai siker sem „ugrat” előre (nincs minimum-emelés).
-    candidate = Math.max(scheduled, Math.round(actual * next.easeFactor));
+    candidate = Math.max(scheduled, Math.round(actual * next.easeFactor * factor));
   }
   next.intervalDays = clamp(candidate, 1, config.maxIntervalDays);
   next.state = 'REVIEW';

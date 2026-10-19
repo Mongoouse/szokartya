@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AppConfigService } from '../config/app-config.service';
 import { UsersModule } from '../users/users.module';
+import { AccountController } from './account.controller';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
@@ -21,7 +22,7 @@ import { TokenService } from './token.service';
       }),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AccountController],
   providers: [AuthService, PasswordService, RefreshTokenRepository, TokenService],
 })
 export class AuthModule {}
