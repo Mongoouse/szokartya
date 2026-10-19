@@ -5,10 +5,10 @@
 | Szint | Hol | Eszköz | Darab | Futási idő |
 |---|---|---|---|---|
 | Adatbázis-invariánsok | `backend/prisma/verify/schema-checks.sql` | `npm run db:verify` (Prisma) | 17 állítás | < 1 s |
-| Backend egységtesztek | `backend/src/**/*.spec.ts` | Jest 30 + ts-jest | 70 | ~6 s |
-| Backend integrációs tesztek | `backend/test/*.e2e-spec.ts` | Jest + supertest + PostgreSQL | 73 | ~9 s |
-| Kliens egység- és komponenstesztek | `mobile/test/{domain,data,core,sync,features}` | flutter_test + sqflite_common_ffi | 59 | ~3 s |
-| Többeszközös végponttól végpontig | `mobile/test/e2e` | flutter_test + valódi backend | 4 forgatókönyv | ~4 s |
+| Backend egységtesztek | `backend/{src,prisma,scripts}/**/*.spec.ts` | Jest 30 + ts-jest | 94 | ~8 s |
+| Backend integrációs tesztek | `backend/test/*.e2e-spec.ts` | Jest + supertest + PostgreSQL | 84 | ~15 s |
+| Kliens egység-, komponens- és widgettesztek | `mobile/test/{domain,data,core,sync,features,widgets}` | flutter_test + sqflite_common_ffi | 91 | ~5 s |
+| Többeszközös végponttól végpontig | `mobile/test/e2e` | flutter_test + valódi backend | 5 forgatókönyv | ~30 s |
 
 **Lefedettség (backend):** az ütemező, a kurzor és az időzóna-modulok egységtesztjei 99% utasítás- / 96% ághoz jutnak; az integrációs tesztek a teljes backend 93%-át (utasítás) futtatják.
 
@@ -100,13 +100,18 @@ Időzóna (`time-zone.spec.ts`): normál nap, helyi/UTC napváltás eltérése, 
 | `core/api_client_test.dart` | Bearer, UTF-8; 401 → frissítés → megismétlés; **5 párhuzamos 401 → 1 frissítés**; sikertelen frissítés → kiléptetés; hibaüzenetek; hálózati hiba / időtúllépés |
 | `sync/sync_engine_test.dart` | hamis szerverrel: köteg, kiürítés, `exists` → remap, elutasított felvétel → törlés, **hálózati hiba után nincs adatvesztés**, lapozás, érvénytelen kurzor → teljes újraszinkron, single-flight |
 | `features/study_session_controller_test.dart` | állapotgép: betöltés, keret, megfordítás + előnézet, értékelés megfordítás előtt tiltva, tanulási kártya visszasorolása, napvégi határ, **dupla koppintás → 1 értékelés**, mért reakcióidő a naplóban |
-| `e2e/multi_device_sync_test.dart` | két valódi kliens (külön SQLite, kikapcsolható hálózat) egy backend ellen: munka átvitele; ugyanaz a kártya offline mindkét eszközön; ugyanazok a szavak offline felvéve; felfüggesztési ütközés. Mindegyik után: **a két eszköz kártyái, verziói és naplója mezőre egyezik, üres outboxszal.** |
+| `data/study_repository_test.dart` | alkalmazható kártyatípusok, kategória szerinti felvétel, keresés (LIKE-helyettesítők szó szerint), saját szó offline, célmegtartás, profil-időzóna, statisztika |
+| `data/migration_test.dart` | helyi adatbázis v1 → v2: adatok megmaradnak, keresőoszlop és kategóriák visszatöltve, az outbox új típust fogad |
+| `domain/answer_check_test.dart` | gépelt válasz: normalizálás, hiányzó / rossz névelő, elütés |
+| `widgets/*` | kártyanézet minden típusra, gépelt válasz → javasolt gomb, kiejtés, akadálymentes gombcímkék |
+| `e2e/multi_device_sync_test.dart` | két valódi kliens (külön SQLite, kikapcsolható hálózat) egy backend ellen: munka átvitele; ugyanaz a kártya offline mindkét eszközön; ugyanazok a szavak offline felvéve; felfüggesztési ütközés; offline felvett saját szó nyelvtani kártyákkal. Mindegyik után: **a két eszköz kártyái, verziói és naplója mezőre egyezik, üres outboxszal.** |
 
 ## 6. A tesztek által talált hibák
 
 | Hiba | Hogyan derült ki | Javítás |
 |---|---|---|
 | **LWW rossz időponthoz hasonlított:** ha B korábban módosított (offline), de előbb szinkronizált, A későbbi módosítása elveszett, mert a szerver az `updated_at`-hez (B *érkezési* idejéhez) hasonlított | e2e: „felfüggesztési ütközés” | 4. migráció: `user_progress.flags_changed_at` – a módosítás tényleges (órakülönbséggel korrigált) ideje; regressziós integrációs teszt |
+| **Értékelés megelőzhette a kártyája felvételét:** a push típusonként külön 200-as kötegeket küldött; 200-nál több várakozó felvételnél a köteghatáron túli kártya értékelését a szerver elutasította | e2e: a bővebb szókincs miatt az A1 felvétel 200 kártya fölé nőtt | a kliens függőségi sorrendben ürít; regressziós teszt a `sync_engine_test.dart`-ban |
 | Korábbi fázisokban: korai ismétlés 6 napra ugratott; a gyermektábla no-op UPDATE-je léptette a szó verzióját | kézi végponttól végpontig próbák | javítva; most automatizált tesztek védik |
 
 Tesztkörnyezeti tanulság (dokumentálva a `test_support.dart`-ban): az `inMemoryDatabasePath` több eszköz szimulálására alkalmatlan, mert a sqflite azonos útvonalra ugyanazt a példányt adja vissza – ezért minden „eszköz” külön ideiglenes fájlt kap.

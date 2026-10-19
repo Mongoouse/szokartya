@@ -17,6 +17,7 @@ Keresztplatformos, offline-first szókincsfejlesztő alkalmazás német nyelvtan
 | 2 | Auth, `RepetitionService`, REST API + OpenAPI | ✅ kész – [docs/02-backend.md](docs/02-backend.md) |
 | 3 | Offline szinkronizáció, Flutter kliens | ✅ kész – [docs/03-szinkronizacio-es-kliens.md](docs/03-szinkronizacio-es-kliens.md) |
 | 4 | Egység-, integrációs és szinkron tesztek, CI | ✅ kész – [docs/04-teszteles.md](docs/04-teszteles.md) |
+| 5 | Bővebb szókincs, nyelvtani kártyák, saját szavak, beállítások, statisztika, GDPR, Docker | ✅ kész – [docs/05-tovabbfejlesztes.md](docs/05-tovabbfejlesztes.md) |
 
 ## Könyvtárszerkezet
 
@@ -33,8 +34,12 @@ backend/
   prisma/
     schema.prisma          # adatmodell (forrás)
     migrations/            # 1: generált séma, 2: kézi CHECK / index / trigger
-    seed.ts                # idempotens mintaadatok
+    seed.ts                # idempotens seed (kategóriák + data/wortschatz.txt)
+    data/wortschatz.txt    # ~450 szavas szólista tömör formátumban
+    import-vocabulary.ts   # saját szólista importálása (npm run db:import)
     verify/schema-checks.sql
+  scripts/                 # SM-2 vs FSRS összehasonlítás (npm run eval:schedulers)
+  Dockerfile
   prisma.config.ts
 mobile/                    # Flutter kliens – lásd mobile/README.md
   lib/core/ domain/ data/ sync/ features/
@@ -43,9 +48,10 @@ docs/
   02-backend.md            # rétegek, hitelesítés, SM-2 ütemező, tranzakciók
   03-szinkronizacio-es-kliens.md  # offline-first szinkron, konfliktuskezelés, Flutter kliens
   04-teszteles.md          # tesztstratégia, lefedettség, talált hibák
+  05-tovabbfejlesztes.md   # új funkciók: kártyatípusok, saját szavak, beállítások, GDPR
 shared/fixtures/           # közös SM-2 golden referencia (TS + Dart tesztek)
 .github/workflows/ci.yml   # CI: backend, mobil, többeszközös szinkron e2e
-docker-compose.yml         # fejlesztői PostgreSQL
+docker-compose.yml         # PostgreSQL; --profile api: migráció + seed + API konténerben
 ```
 
 ## Indítás
@@ -64,7 +70,7 @@ cd backend
 cp .env.example .env              # PowerShell: Copy-Item .env.example .env
 npm install                       # a Prisma klienst is legenerálja (postinstall)
 npm run db:migrate                # migrációk alkalmazása
-npm run db:seed                   # mintaszavak – várt kimenet: „Seed kész: 9 kategória, 15 szó.”
+npm run db:seed                   # szókincs – várt kimenet: „Seed kész: 21 kategória, 471 szó.”
 npm run db:verify                 # séma-ellenőrzés: kényszerek, triggerek, indexhasználat
 npm run start:dev                 # API: http://localhost:3000/api/v1 – Swagger: http://localhost:3000/docs
 
@@ -73,6 +79,8 @@ cd ../mobile
 flutter pub get
 flutter run
 ```
+
+A teljes backend konténerben is indítható (Node.js nélkül): `docker compose --profile api up -d`, ekkor az API a `http://localhost:3000/api/v1` címen fut.
 
 ### Gyakori hibák
 
@@ -88,6 +96,7 @@ flutter run
 ```bash
 cd backend
 npm test                          # egységtesztek
+npm run lint                      # ESLint (npm run format: Prettier)
 npm run test:e2e                  # integrációs tesztek – a szokartya_test adatbázist ÚJRAÉPÍTI (fusson a db konténer)
 
 cd ../mobile
