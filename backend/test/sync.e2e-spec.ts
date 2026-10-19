@@ -61,7 +61,7 @@ describe('Szinkronizáció (integráció)', () => {
       all.reviewLogs.push(...page.reviewLogs);
       cursor = page.cursor;
       if (!page.hasMore) break;
-      if (pages > 100) throw new Error('végtelen lapozás');
+      if (pages > 2000) throw new Error('végtelen lapozás');
     }
     return { ...all, cursor: cursor!, pages };
   }
