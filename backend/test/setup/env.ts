@@ -7,3 +7,4 @@ process.env.JWT_ACCESS_TTL_SECONDS = '900';
 process.env.REFRESH_TOKEN_TTL_DAYS = '30';
 // A rate limit külön tesztben, saját alkalmazáspéldánnyal kerül ellenőrzésre.
 process.env.THROTTLE_ENABLED = 'false';
+process.env.LOG_LEVEL = 'silent';

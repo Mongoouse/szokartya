@@ -1,5 +1,5 @@
 import { plainToInstance, Transform, Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional, IsString, Max, Min, MinLength, validateSync } from 'class-validator';
+import { IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, Min, MinLength, validateSync } from 'class-validator';
 
 /**
  * A futtatási környezet típusos, validált leírása.
@@ -41,6 +41,15 @@ export class EnvironmentVariables {
   @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase() !== 'false' : value))
   @IsBoolean()
   THROTTLE_ENABLED = true;
+
+  /** Naplózási szint (pino). Tesztben: silent. */
+  @IsIn(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+  LOG_LEVEL = 'info';
+
+  /** true: emberi olvasásra formázott napló (fejlesztés); false: JSON soronként (éles, naplógyűjtőnek). */
+  @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase() === 'true' : value))
+  @IsBoolean()
+  LOG_PRETTY = false;
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvironmentVariables {

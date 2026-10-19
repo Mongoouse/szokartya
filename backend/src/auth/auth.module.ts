@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
 import { RefreshTokenRepository } from './refresh-token.repository';
+import { TokenCleanupService } from './token-cleanup.service';
 import { TokenService } from './token.service';
 
 @Module({
@@ -23,6 +24,6 @@ import { TokenService } from './token.service';
     }),
   ],
   controllers: [AuthController, AccountController],
-  providers: [AuthService, PasswordService, RefreshTokenRepository, TokenService],
+  providers: [AuthService, PasswordService, RefreshTokenRepository, TokenService, TokenCleanupService],
 })
 export class AuthModule {}

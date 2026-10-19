@@ -1,3 +1,4 @@
+import { TokenCleanupService } from '../src/auth/token-cleanup.service';
 import { createTestApp, PASSWORD, RegisteredUser, registerUser, resetUserData, TestApp, uuid, wordId } from './helpers/test-app';
 
 const API = '/api/v1';
@@ -213,6 +214,40 @@ describe('Továbbfejlesztett funkciók (integráció)', () => {
       await t.http.patch(`${API}/users/me`).set(user.auth).send({ catalogLevels: [] }).expect(200);
       const all = await pullAllWords();
       expect(all.length).toBe((await t.prisma.word.count({ where: { ownerId: null } })) + 1);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  describe('üzemeltetés', () => {
+    it('biztonsági fejlécek (helmet) minden válaszon', async () => {
+      const res = await t.http.get(`${API}/health`).expect(200);
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+      expect(res.headers['strict-transport-security']).toBeDefined();
+      expect(res.headers['x-powered-by']).toBeUndefined();
+    });
+
+    it('tokentakarítás: csak a (türelmi idővel) lejárt tokenek törlődnek, a visszavontak maradnak', async () => {
+      const now = new Date();
+      const family = uuid();
+      const make = (hash: string, expiresAt: Date, revokedAt: Date | null = null) =>
+        t.prisma.refreshToken.create({
+          data: {
+            userId: user.id,
+            tokenHash: hash.padEnd(64, '0'),
+            familyId: family,
+            expiresAt,
+            revokedAt,
+            createdAt: new Date(expiresAt.getTime() - 30 * DAY),
+          },
+        });
+      await make('a', new Date(now.getTime() - 3 * DAY)); // rég lejárt → törlendő
+      await make('b', new Date(now.getTime() - 60_000)); // épp most járt le → türelmi idő
+      await make('c', new Date(now.getTime() + DAY), now); // visszavont, de érvényes idejű → kell a lopásdetektáláshoz
+
+      const deleted = await t.app.get(TokenCleanupService).purgeExpired(now);
+      expect(deleted).toBe(1);
+      const left = await t.prisma.refreshToken.findMany({ where: { familyId: family }, select: { tokenHash: true } });
+      expect(left.map((r) => r.tokenHash[0]).sort()).toEqual(['b', 'c']);
     });
   });
 
