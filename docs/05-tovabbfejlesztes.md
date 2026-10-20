@@ -63,6 +63,23 @@ A szerver (`words/card-applicability.ts`) és a kliens (`CardType.appliesTo`) ug
 - Biztonsági fejlécek (`helmet`), strukturált JSON naplózás (`nestjs-pino`, jelszó / token / Authorization kitakarva; `LOG_LEVEL`, `LOG_PRETTY`).
 - ESLint (typescript-eslint, típusinformációval) és Prettier; a CI mindkettőt futtatja.
 
-## 9. SM-2 és FSRS összehasonlítás
+## 9. SM-2 és FSRS összehasonlítás, személyre illesztett FSRS (gépi tanulás)
 
-`npm run eval:schedulers -- [--user <email>] [--json]` a valódi értékelési naplón visszamenőleg összeveti a két modell előrejelzését (melyik becsülte jobban, hogy a felhasználó emlékezni fog): log-loss, kalibrációs RMSE (10 sáv), AUC, és egy állandó alapmodell. Csak az előző értékelés után legalább 1 nappal történt értékeléseket pontozza (a tanulási lépcsők nem hosszú távú felidézések). Az FSRS-4.5 az alapértelmezett súlyokkal fut, felhasználónkénti optimalizálás nélkül – a szakdolgozati értékeléshez valós használati adat kell; szintetikus adatból készült összevetés félrevezető lenne, ezért nincs ilyen mód.
+`npm run eval:schedulers -- [--user <uuid>] [--json <fájl>] [--personalize [--test 0.2]]`
+
+**Alapmód:** a valódi értékelési naplón visszamenőleg összeveti a két modell előrejelzését (mekkora valószínűséggel emlékszik a felhasználó a következő ismétléskor): log-veszteség, kalibrációs RMSE (sávos), AUC, és egy állandó alapvonal. Csak az előző értékelés után legalább 1 nappal történt értékelések kerülnek a mintába (a tanulási lépcsők nem hosszú távú felidézések).
+
+**`--personalize` – felhasználónkénti tanítás** (`scripts/fsrs-optimizer.ts`):
+
+| Lépés | Megvalósítás |
+|---|---|
+| Feladat | felügyelt tanulás bináris kimenetre (felidézte / elfelejtette) |
+| Modell | FSRS-4.5, 17 paraméter (kezdeti stabilitás, nehézség, stabilitásnövekedés, felejtés utáni stabilitás) |
+| Célfüggvény | átlagos log-veszteség + L2-regularizáció az alapsúlyok felé (λ = 1 / mintaszám: kevés adatnál az előzetes tudás, sok adatnál az adat dönt) |
+| Optimalizáló | Adam, véges differenciás gradienssel, normalizált paramétertérben, a referencia-implementáció tartományaiba szorítva |
+| Kiértékelés | **időbeli felosztás felhasználónként:** a minták időrendjében első 80% a tanító, utolsó 20% a teszthalmaz; mind a négy modell (SM-2, FSRS alap, FSRS személyre illesztett, alapvonal) csak a teszthalmazon mér. Az alapvonal is csak a tanító arányt ismeri. |
+| Kevés adat | 100 tanító minta alatt nincs illesztés, az alapsúlyok maradnak |
+
+**Ellenőrzés (egységtesztek):** egy szimulált tanuló, akinek a felejtését *ismert*, az átlagosnál gyorsabb felejtést leíró súlyok határozzák meg. Az illesztés (1) csökkenti a tanító veszteséget, a kezdeti stabilitást a helyes irányba mozdítja; (2) a kihagyott, későbbi adaton kisebb log-veszteséget és jobb kalibrációt ad, mint az alapsúlyok; (3) a tanítási határ utáni kimenetek megfordítása nem változtat a súlyokon (nincs adatszivárgás); (4) kevés adatnál nem illeszt. A szimulált adat csak az optimalizáló helyességét igazolja: mivel FSRS-ből generált, az SM-2-vel való összevetésre nem alkalmas – a szakdolgozati eredményhez valós használati napló kell (több hét, felhasználónként néhány száz ≥ 1 napos szünet utáni értékelés).
+
+**Kapcsolat az ütemezéssel:** a rendszer jelenleg az SM-2 szerint ütemez; a hibázott szavak gyakoribb ismétlését a kártyánkénti könnyűségi szorzó és a felejtéskori intervallumfelezés adja. A személyre illesztett FSRS mostantól mérhetővé teszi, hogy egy tanult modell jobban jósolja-e a felejtést. Ha igen, a következő lépés az illesztett súlyok tárolása a profilban és FSRS-alapú ütemezés (a célmegtartás ugyanígy alkalmazható: az intervallum az a t, ahol R(t) = cél).

@@ -5,7 +5,7 @@
 | Szint | Hol | Eszköz | Darab | Futási idő |
 |---|---|---|---|---|
 | Adatbázis-invariánsok | `backend/prisma/verify/schema-checks.sql` | `npm run db:verify` (Prisma) | 17 állítás | < 1 s |
-| Backend egységtesztek | `backend/{src,prisma,scripts}/**/*.spec.ts` | Jest 30 + ts-jest | 94 | ~8 s |
+| Backend egységtesztek | `backend/{src,prisma,scripts}/**/*.spec.ts` | Jest 30 + ts-jest | 98 | ~20 s |
 | Backend integrációs tesztek | `backend/test/*.e2e-spec.ts` | Jest + supertest + PostgreSQL | 84 | ~15 s |
 | Kliens egység-, komponens- és widgettesztek | `mobile/test/{domain,data,core,sync,features,widgets}` | flutter_test + sqflite_common_ffi | 91 | ~5 s |
 | Többeszközös végponttól végpontig | `mobile/test/e2e` | flutter_test + valódi backend | 5 forgatókönyv | ~30 s |
