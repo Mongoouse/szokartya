@@ -26,10 +26,12 @@ class FakeClock implements Clock {
 ///
 /// Fontos: az `inMemoryDatabasePath` NEM használható több „eszköz” szimulálására,
 /// mert a sqflite azonos útvonalra ugyanazt a példányt adja vissza.
-Future<AppDatabase> openTestDatabase() async {
+Future<AppDatabase> openTestDatabase({String? path, int? version}) async {
   sqfliteFfiInit();
-  final dir = await Directory.systemTemp.createTemp('szokartya_test_');
-  return AppDatabase.open(path: '${dir.path}/db.sqlite', factory: databaseFactoryFfiNoIsolate);
+  final dbPath = path ?? '${(await Directory.systemTemp.createTemp('szokartya_test_')).path}/db.sqlite';
+  return version == null
+      ? AppDatabase.open(path: dbPath, factory: databaseFactoryFfiNoIsolate)
+      : AppDatabase.open(path: dbPath, factory: databaseFactoryFfiNoIsolate, version: version);
 }
 
 /// Bejelentkezett állapot előkészítése (profil a helyi tárolóban).
@@ -57,6 +59,12 @@ Json wordJson({
   String translation = 'asztal',
   int? version,
   bool deleted = false,
+  String? pluralForm,
+  bool countable = true,
+  Json? verb,
+  List<Json> valencies = const [],
+  List<({String slug, String nameHu})> categories = const [],
+  bool isCustom = false,
 }) =>
     {
       'id': id,
@@ -66,18 +74,23 @@ Json wordJson({
       'homographNo': 1,
       'cefrLevel': cefrLevel,
       'ipa': null,
-      'isCustom': false,
+      'isCustom': isCustom,
       'noun': partOfSpeech == 'NOUN'
-          ? {'gender': 'MASCULINE', 'article': article, 'numberType': 'REGULAR', 'pluralForm': '${lemma}e'}
+          ? {
+              'gender': article == null ? null : 'MASCULINE',
+              'article': article,
+              'numberType': countable ? 'REGULAR' : 'SINGULAR_ONLY',
+              'pluralForm': countable ? (pluralForm ?? '${lemma}e') : null,
+            }
           : null,
-      'verb': null,
+      'verb': verb,
       'adjective': null,
       'translations': [
         {'text': translation, 'senseNote': null, 'isPrimary': true},
       ],
-      'valencies': <Json>[],
+      'valencies': valencies,
       'examples': <Json>[],
-      'categories': <Json>[],
+      'categories': [for (final c in categories) {'slug': c.slug, 'nameHu': c.nameHu}],
       'version': version ?? ++_wordVersion,
       'updatedAt': DateTime.utc(2026).toIso8601String(),
       'deletedAt': deleted ? DateTime.utc(2026).toIso8601String() : null,

@@ -94,6 +94,16 @@ Egyetlen adatbázis-tranzakcióban:
 
 Az értékelés időpontja a kliensé (offline értékelésnél ez a valós), de normalizált: 5 percnél többel jövőbeli idő → szerveridő; az előző értékelésnél korábbi idő → az előző értékelés ideje.
 
+### Új végpontok (Fázis 5)
+| Végpont | Feladat |
+|---|---|
+| `POST /words`, `DELETE /words/:id` | saját szó felvétele (idempotens a kliens azonosítójával) és törlése |
+| `PATCH /users/me` – `targetRetention`, `catalogLevels` | célmegtartás (0,70–0,97) és a szinkronizált CEFR szintek |
+| `GET /users/me/export` | minden saját adat JSON-ban (GDPR) |
+| `DELETE /users/me` | jelszóval megerősített fióktörlés |
+
+Részletek: [05-tovabbfejlesztes.md](05-tovabbfejlesztes.md).
+
 ## 4. Futtatás
 
 ```bash

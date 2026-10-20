@@ -116,6 +116,9 @@ enum CardType {
   RECOGNITION // német → magyar (felismerés)
   PRODUCTION //  magyar → német (felidézés)
   GENDER //      névelő gyakorlása (csak főneveknél értelmes)
+  PLURAL //      többes szám: der Tisch → die Tische (csak megszámlálható főnévnél)
+  VERB_FORMS //  igei alapalakok: fahren → fährt – fuhr – ist gefahren
+  VALENCY //     vonzat: warten ___ + Akk. → auf (csak vonzatos szónál)
 
   @@map("card_type")
 }
@@ -135,28 +138,35 @@ enum CardState {
 // -----------------------------------------------------------------------------
 
 model User {
-  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   /// citext: kis-/nagybetű-független egyediség (a@x.hu == A@X.hu) alkalmazáslogika nélkül.
-  email              String    @unique @db.Citext
+  email              String      @unique @db.Citext
   /// argon2id hash (PHC string formátum, a paramétereket is tartalmazza).
-  passwordHash       String    @map("password_hash") @db.VarChar(255)
-  displayName        String?   @map("display_name") @db.VarChar(100)
+  passwordHash       String      @map("password_hash") @db.VarChar(255)
+  displayName        String?     @map("display_name") @db.VarChar(100)
   /// ISO 639-1 kód.
-  nativeLanguage     String    @default("hu") @map("native_language") @db.VarChar(8)
+  nativeLanguage     String      @default("hu") @map("native_language") @db.VarChar(8)
   /// IANA időzóna – a „mai esedékes kártyák” napfordulójának meghatározásához.
-  timezone           String    @default("Europe/Budapest") @db.VarChar(64)
-  dailyNewCardsLimit Int       @default(20) @map("daily_new_cards_limit") @db.SmallInt
-  dailyReviewLimit   Int       @default(200) @map("daily_review_limit") @db.SmallInt
-  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt          DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(3)
+  timezone           String      @default("Europe/Budapest") @db.VarChar(64)
+  dailyNewCardsLimit Int         @default(20) @map("daily_new_cards_limit") @db.SmallInt
+  dailyReviewLimit   Int         @default(200) @map("daily_review_limit") @db.SmallInt
+  /// Cél felidézési valószínűség az esedékességkor (0.70–0.97). Magasabb érték
+  /// → rövidebb intervallumok, több ismétlés; az ütemező ebből skálázza az
+  /// ismétlési intervallumot (lásd sm2-scheduler: retentionIntervalFactor).
+  targetRetention    Decimal     @default(0.90) @map("target_retention") @db.Decimal(3, 2)
+  /// A szinkronizált központi szókatalógus CEFR szintjei; üres = mind.
+  /// A saját és a már felvett szavak szinttől függetlenül szinkronizálódnak.
+  catalogLevels      CefrLevel[] @default([]) @map("catalog_levels")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt          DateTime?   @map("deleted_at") @db.Timestamptz(3)
 
   refreshTokens RefreshToken[]
   ownedWords    Word[]         @relation("WordOwner")
   progress      UserProgress[]
   reviewLogs    ReviewLog[]
 
-  // [SQL] CHECK: email formátum, napi limitek tartománya.
+  // [SQL] CHECK: email formátum, napi limitek tartománya, target_retention tartománya.
   @@map("users")
 }
 

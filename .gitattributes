@@ -1,0 +1,6 @@
+# Egységes sorvégek minden platformon (Windows-on is LF a tárolóban és a munkapéldányban).
+# Különösen fontos a migrációknál: a Prisma ellenőrzőösszeget számol a migration.sql
+# fájlokra, így egy CRLF-re konvertált fájl „módosított migrációnak” látszana.
+*.sql   text eol=lf
+*.sh    text eol=lf
+*.prisma text eol=lf

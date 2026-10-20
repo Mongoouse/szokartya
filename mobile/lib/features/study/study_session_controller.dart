@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/time/clock.dart';
 import '../../data/models/study_card.dart';
+import '../../domain/answer_check.dart';
 import '../../domain/sm2_scheduler.dart';
 import '../../providers.dart';
 import '../home/home_summary_provider.dart';
@@ -33,6 +33,8 @@ class StudySessionState {
     this.preview = const {},
     this.saving = false,
     this.error,
+    this.check,
+    this.typed,
   });
 
   final StudyPhase phase;
@@ -49,6 +51,10 @@ class StudySessionState {
   final bool saving;
   final String? error;
 
+  /// A gépelt válasz ellenőrzésének eredménye (csak ha gépelt a felhasználó).
+  final AnswerCheck? check;
+  final String? typed;
+
   StudyCard? get current => queue.isEmpty ? null : queue.first;
   int get remaining => queue.length;
 
@@ -60,6 +66,9 @@ class StudySessionState {
     Map<int, Duration>? preview,
     bool? saving,
     String? error,
+    AnswerCheck? check,
+    String? typed,
+    bool clearCheck = false,
   }) =>
       StudySessionState(
         phase: phase ?? this.phase,
@@ -69,6 +78,8 @@ class StudySessionState {
         preview: preview ?? this.preview,
         saving: saving ?? this.saving,
         error: error ?? this.error,
+        check: clearCheck ? null : (check ?? this.check),
+        typed: clearCheck ? null : (typed ?? this.typed),
       );
 }
 
@@ -84,6 +95,7 @@ class StudySessionState {
 class StudySessionController extends Notifier<StudySessionState> {
   final Stopwatch _stopwatch = Stopwatch();
   int _responseTimeMs = 0;
+  DateTime? _dayEndsAt;
 
   @override
   StudySessionState build() {
@@ -95,22 +107,27 @@ class StudySessionController extends Notifier<StudySessionState> {
     try {
       final queue = await ref.read(studyRepositoryProvider).loadQueue();
       if (!ref.mounted) return;
+      _dayEndsAt = queue.dayEndsAt;
       _showNext(state.copyWith(queue: queue.ordered));
     } on Exception catch (e) {
       if (ref.mounted) state = state.copyWith(phase: StudyPhase.error, error: e.toString());
     }
   }
 
-  /// A kártya megfordítása.
-  void reveal() {
+  /// A kártya megfordítása. [typed]: a felidézés kártyán begépelt válasz –
+  /// ilyenkor az ellenőrzés eredménye javasolt értékelést ad.
+  Future<void> reveal({String? typed}) async {
     final card = state.current;
     if (state.phase != StudyPhase.question || card == null) return;
     _stopwatch.stop();
     _responseTimeMs = _stopwatch.elapsedMilliseconds;
-    state = state.copyWith(
-      phase: StudyPhase.answer,
-      preview: ref.read(studyRepositoryProvider).previewIntervals(card, responseTimeMs: _responseTimeMs),
-    );
+    final answer = typed?.trim();
+    final check = answer == null || answer.isEmpty ? null : checkAnswer(answer, card.word.display);
+    state = state.copyWith(phase: StudyPhase.answer, check: check, typed: answer);
+    final preview = await ref.read(studyRepositoryProvider).previewIntervals(card, responseTimeMs: _responseTimeMs);
+    if (ref.mounted && state.current?.id == card.id && state.phase == StudyPhase.answer) {
+      state = state.copyWith(preview: preview);
+    }
   }
 
   /// Önértékelés: 1 = nem tudtam, 3 = nehéz, 4 = jó, 5 = könnyű.
@@ -144,20 +161,21 @@ class StudySessionController extends Notifier<StudySessionState> {
 
   void _showNext(StudySessionState next) {
     if (next.queue.isEmpty) {
-      state = next.copyWith(phase: StudyPhase.finished, preview: const {});
+      state = next.copyWith(phase: StudyPhase.finished, preview: const {}, clearCheck: true);
       return;
     }
     _stopwatch
       ..reset()
       ..start();
-    state = next.copyWith(phase: StudyPhase.question, preview: const {});
+    state = next.copyWith(phase: StudyPhase.question, preview: const {}, clearCheck: true);
   }
 
   bool _dueAgainToday(StudyCard card) {
     final s = card.scheduling;
     if (s.state != CardState.learning && s.state != CardState.relearning) return false;
     final next = s.nextReviewAt;
-    return next != null && next.isBefore(localDayBounds(ref.read(clockProvider).now()).end);
+    final dayEnd = _dayEndsAt;
+    return next != null && dayEnd != null && next.isBefore(dayEnd);
   }
 }
 

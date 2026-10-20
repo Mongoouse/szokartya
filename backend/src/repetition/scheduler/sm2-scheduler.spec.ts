@@ -6,6 +6,7 @@ import {
   effectiveGrade,
   Grade,
   initialCardState,
+  retentionIntervalFactor,
   retrievabilityAt,
   scheduleReview,
   SchedulerConfig,
@@ -185,6 +186,31 @@ describe('SM-2 ütemező', () => {
     });
   });
 
+  describe('célmegtartás (felhasználói beállítás)', () => {
+    const withRetention = (targetRetention: number): SchedulerConfig => ({ ...DEFAULT_SCHEDULER_CONFIG, targetRetention });
+
+    it('szorzó: 0.90 → 1, magasabb cél → rövidebb, alacsonyabb → hosszabb intervallum', () => {
+      expect(retentionIntervalFactor(0.9)).toBe(1);
+      expect(retentionIntervalFactor(0.95)).toBeCloseTo(0.4868, 4);
+      expect(retentionIntervalFactor(0.8)).toBeCloseTo(2.1179, 4);
+      expect(() => retentionIntervalFactor(1)).toThrow(RangeError);
+    });
+
+    it('az intervallum a szorzóval skálázódik, a minimális növekedés megmarad', () => {
+      const c = reviewCard(10);
+      expect(review(c, 4, at(10 * DAY), 2000, withRetention(0.8)).card.intervalDays).toBe(53); // 25 · 2.118
+      expect(review(c, 4, at(10 * DAY), 2000, withRetention(0.95)).card.intervalDays).toBe(12); // 25 · 0.487
+      expect(review(reviewCard(10), 3, at(10 * DAY), 2000, withRetention(0.97)).card.intervalDays).toBe(11); // padló: I + 1
+    });
+
+    it('a stabilitásbecslés nem függ a választott céltól', () => {
+      const c = reviewCard(10);
+      const s80 = review(c, 4, at(10 * DAY), 2000, withRetention(0.8)).card.stabilityDays!;
+      const s90 = review(c, 4, at(10 * DAY)).card.stabilityDays!;
+      expect(s80).toBeCloseTo(s90, 0);
+    });
+  });
+
   describe('felejtés és újratanulás', () => {
     it('hiba REVIEW-ban: lapses + 1, ismétlésszám 0, intervallum fele, RELEARNING 10 percre', () => {
       const { card: next } = review(reviewCard(40, { lapses: 2 }), 1, at(40 * DAY));
@@ -259,9 +285,9 @@ describe('SM-2 ütemező', () => {
         retrievabilityAtReview: number | null;
       };
     }
-    const golden = JSON.parse(
-      readFileSync(join(__dirname, '../../../../shared/fixtures/sm2-golden.json'), 'utf8'),
-    ) as { cases: { name: string; steps: GoldenStep[] }[] };
+    const golden = JSON.parse(readFileSync(join(__dirname, '../../../../shared/fixtures/sm2-golden.json'), 'utf8')) as {
+      cases: { name: string; steps: GoldenStep[] }[];
+    };
 
     it.each(golden.cases.map((c) => [c.name, c.steps] as const))('%s', (_name, steps) => {
       let c = initialCardState();
@@ -276,8 +302,7 @@ describe('SM-2 ütemező', () => {
           },
           effectiveGrade: result.effectiveGrade,
           elapsedDays: result.elapsedDays,
-          retrievabilityAtReview:
-            result.retrievabilityAtReview === null ? null : Math.round(result.retrievabilityAtReview * 1e6) / 1e6,
+          retrievabilityAtReview: result.retrievabilityAtReview === null ? null : Math.round(result.retrievabilityAtReview * 1e6) / 1e6,
         };
         expect({ step: i, ...actual }).toEqual({ step: i, ...step.expected });
       });

@@ -3,8 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, Validate } from 'class-validator';
 import { IsIanaTimeZone, UserDto } from '../../users/dto/user.dto';
 
-const trimLower = ({ value }: { value: unknown }): unknown =>
-  typeof value === 'string' ? value.trim().toLowerCase() : value;
+const trimLower = ({ value }: { value: unknown }): unknown => (typeof value === 'string' ? value.trim().toLowerCase() : value);
 
 /** Opcionális eszközazonosító: a munkamenetek eszközönkénti kezeléséhez. */
 class DeviceInfoDto {
@@ -81,4 +80,11 @@ export class AuthTokensDto {
 
   @ApiProperty({ type: UserDto })
   user!: UserDto;
+}
+
+export class DeleteAccountDto {
+  @ApiProperty({ description: 'A jelenlegi jelszó (megerősítésként)' })
+  @IsString()
+  @MaxLength(128)
+  password!: string;
 }

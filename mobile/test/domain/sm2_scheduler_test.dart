@@ -97,6 +97,35 @@ void main() {
     });
   });
 
+  group('célmegtartás (a szerverrel azonos értékek)', () {
+    ScheduleResult withRetention(CardSchedulingState c, int grade, double r) => scheduleReview(
+          c,
+          grade: grade,
+          responseTimeMs: 2000,
+          reviewedAt: t0.add(day * 10),
+          config: const SchedulerConfig().withTargetRetention(r),
+        );
+
+    test('szorzó: 0.90 → 1, magasabb cél → rövidebb, alacsonyabb → hosszabb intervallum', () {
+      expect(retentionIntervalFactor(0.9), 1);
+      expect(retentionIntervalFactor(0.95), closeTo(0.4868, 1e-4));
+      expect(retentionIntervalFactor(0.8), closeTo(2.1179, 1e-4));
+      expect(() => retentionIntervalFactor(1), throwsRangeError);
+    });
+
+    test('az intervallum a szorzóval skálázódik, a minimális növekedés megmarad', () {
+      expect(withRetention(reviewCard(10), 4, 0.8).card.intervalDays, 53);
+      expect(withRetention(reviewCard(10), 4, 0.95).card.intervalDays, 12);
+      expect(withRetention(reviewCard(10), 3, 0.97).card.intervalDays, 11);
+    });
+
+    test('a stabilitásbecslés nem függ a választott céltól', () {
+      final s80 = withRetention(reviewCard(10), 4, 0.8).card.stabilityDays!;
+      final s90 = review(reviewCard(10), 4, t0.add(day * 10)).card.stabilityDays!;
+      expect(s80, closeTo(s90, 0.5));
+    });
+  });
+
   group('golden referencia (közös a TypeScript implementációval)', () {
     final golden = jsonDecode(File('../shared/fixtures/sm2-golden.json').readAsStringSync()) as Map<String, dynamic>;
     final cases = (golden['cases'] as List).cast<Map<String, dynamic>>();

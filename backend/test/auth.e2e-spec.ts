@@ -68,10 +68,7 @@ describe('Hitelesítés (integráció)', () => {
     it('hibás jelszó és nem létező fiók ugyanazt a választ adja (nincs felhasználó-felsorolás)', async () => {
       const u = await registerUser(t.http);
       const wrong = await t.http.post(`${API}/auth/login`).send({ email: u.email, password: 'rossz-jelszo-123' }).expect(401);
-      const missing = await t.http
-        .post(`${API}/auth/login`)
-        .send({ email: 'nincs@example.hu', password: 'rossz-jelszo-123' })
-        .expect(401);
+      const missing = await t.http.post(`${API}/auth/login`).send({ email: 'nincs@example.hu', password: 'rossz-jelszo-123' }).expect(401);
       expect(missing.body.message).toBe(wrong.body.message);
     });
 
@@ -113,9 +110,7 @@ describe('Hitelesítés (integráció)', () => {
     it('lejárt token → 401', async () => {
       const jwt = t.app.get(JwtService);
       // Az alkalmazás titkával aláírt, de 10 másodperce lejárt token.
-      const expired = jwt.sign(
-        { sub: uuid(), email: 'x@example.hu', typ: 'access', exp: Math.floor(Date.now() / 1000) - 10 },
-      );
+      const expired = jwt.sign({ sub: uuid(), email: 'x@example.hu', typ: 'access', exp: Math.floor(Date.now() / 1000) - 10 });
       await t.http.get(`${API}/users/me`).set('Authorization', `Bearer ${expired}`).expect(401);
     });
 
@@ -192,7 +187,10 @@ describe('Hitelesítés (integráció)', () => {
     });
 
     it('ismeretlen refresh token → 401; formailag hibás → 400', async () => {
-      await t.http.post(`${API}/auth/refresh`).send({ refreshToken: 'x'.repeat(43) }).expect(401);
+      await t.http
+        .post(`${API}/auth/refresh`)
+        .send({ refreshToken: 'x'.repeat(43) })
+        .expect(401);
       await t.http.post(`${API}/auth/refresh`).send({ refreshToken: 'rovid' }).expect(400);
     });
 

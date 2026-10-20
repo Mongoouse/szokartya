@@ -1,12 +1,15 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/api/api_client.dart';
 import 'core/api/token_store.dart';
 import 'core/config/app_config.dart';
 import 'core/time/clock.dart';
+import 'core/tts/speaker.dart';
 import 'data/local/app_database.dart';
 import 'data/local/local_store.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/settings_repository.dart';
 import 'data/repositories/study_repository.dart';
 import 'sync/sync_engine.dart';
 
@@ -50,4 +53,16 @@ final syncEngineProvider = Provider<SyncEngine>(
     store: ref.watch(localStoreProvider),
     clock: ref.watch(clockProvider),
   ),
+);
+
+final settingsRepositoryProvider = Provider<SettingsRepository>(
+  (ref) => SettingsRepository(api: ref.watch(apiClientProvider), store: ref.watch(localStoreProvider)),
+);
+
+/// Német kiejtés (tesztben némítható).
+final speakerProvider = Provider<Speaker>((ref) => DeviceSpeaker());
+
+/// Hálózati állapot változásai (true = van kapcsolat). Tesztben felülírható.
+final connectivityProvider = Provider<Stream<bool>>(
+  (ref) => Connectivity().onConnectivityChanged.map((r) => r.any((c) => c != ConnectivityResult.none)).distinct(),
 );

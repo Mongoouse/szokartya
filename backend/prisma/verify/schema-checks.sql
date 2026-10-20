@@ -1,15 +1,17 @@
 -- =============================================================================
 -- Séma-ellenőrző szkript: kényszerek, triggerek és indexhasználat.
 --
--- Futtatás (migrált adatbázison, a seed után):
---   psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/verify/schema-checks.sql
+-- Futtatás (migrált adatbázison, a seed után) – Windows, macOS, Linux:
+--   npm run db:verify
+-- (a `prisma db execute` futtatja, a .env DATABASE_URL-jével; psql nem kell).
+-- Részletes, állításonkénti kimenethez psql-lel is futtatható:
+--   psql "<kapcsolat ?schema=public nélkül>" -v ON_ERROR_STOP=1 -f prisma/verify/schema-checks.sql
 --
 -- Minden ellenőrzés egyetlen tranzakcióban fut, ROLLBACK-kel zárul, így az
--- adatbázis állapota nem változik. Bármely sikertelen állítás kivételt dob.
+-- adatbázis állapota nem változik. Bármely sikertelen állítás kivételt dob,
+-- és a parancs nem nulla kilépési kóddal ér véget.
+-- Csak szabványos SQL: psql-specifikus meta-parancs (\o, \set …) ne kerüljön bele.
 -- =============================================================================
-
--- A SELECT-ek eredménysorai érdektelenek; csak a NOTICE / ERROR üzenetek számítanak.
-\o /dev/null
 
 BEGIN;
 

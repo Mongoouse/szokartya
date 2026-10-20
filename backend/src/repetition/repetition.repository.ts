@@ -21,13 +21,7 @@ export class RepetitionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   /** Esedékes, már tanult kártyák a megadott időpontig, esedékesség szerint. */
-  findDue(
-    userId: string,
-    dueBefore: Date,
-    states: CardState[],
-    limit: number,
-    db: DbClient = this.prisma,
-  ): Promise<ProgressWithWord[]> {
+  findDue(userId: string, dueBefore: Date, states: CardState[], limit: number, db: DbClient = this.prisma): Promise<ProgressWithWord[]> {
     if (limit <= 0) {
       return Promise.resolve([]);
     }
@@ -82,10 +76,7 @@ export class RepetitionRepository {
   }
 
   /** Kártyák felvétele; a már létezőket (user, szó, kártyatípus) kihagyja. */
-  async createCards(
-    cards: { userId: string; wordId: string; cardType: CardType }[],
-    db: DbClient = this.prisma,
-  ): Promise<number> {
+  async createCards(cards: { userId: string; wordId: string; cardType: CardType }[], db: DbClient = this.prisma): Promise<number> {
     if (cards.length === 0) {
       return 0;
     }

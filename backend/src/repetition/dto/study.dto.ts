@@ -114,7 +114,8 @@ export class EnrollCardsDto {
     enumName: 'CardType',
     isArray: true,
     default: [CardType.RECOGNITION, CardType.PRODUCTION],
-    description: 'GENDER kártya csak nemmel rendelkező főnévhez jön létre',
+    description:
+      'Csak az alkalmazható típusok jönnek létre: GENDER nemmel rendelkező főnévhez, PLURAL többes számú alakkal rendelkező főnévhez, VERB_FORMS igéhez, VALENCY vonzatos szóhoz',
   })
   @IsOptional()
   @ArrayMinSize(1)

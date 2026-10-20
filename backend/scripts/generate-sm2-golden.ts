@@ -158,8 +158,7 @@ function resolveTime(when: When | undefined, previousAt: number, card: CardSched
 }
 
 const output = {
-  description:
-    'SM-2 ütemező referenciaadatok. GENERÁLT fájl (backend/scripts/generate-sm2-golden.ts) – kézzel ne szerkeszd.',
+  description: 'SM-2 ütemező referenciaadatok. GENERÁLT fájl (backend/scripts/generate-sm2-golden.ts) – kézzel ne szerkeszd.',
   initial: serialize(initialCardState()),
   cases: CASES.map(({ name, description, steps }) => {
     let card = initialCardState();
