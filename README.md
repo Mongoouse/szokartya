@@ -33,7 +33,8 @@ backend/
   prisma/
     schema.prisma          # adatmodell (forrás)
     migrations/            # 1: generált séma, 2: kézi CHECK / index / trigger
-    seed.ts                # idempotens mintaadatok
+    seed.ts                # idempotens seed (SEED_SETS=core,b2)
+    vocab/                 # szókészletek: core (sémaminták), b2 (~1600 B2 szó, névelővel/vonzattal)
     verify/schema-checks.sql
   prisma.config.ts
 mobile/                    # Flutter kliens – lásd mobile/README.md
@@ -58,7 +59,7 @@ cd backend
 cp .env.example .env
 npm install
 npm run db:migrate        # migrációk alkalmazása
-npm run db:seed           # mintaszavak (der Tisch, warten auf + Akk., …)
+npm run db:seed           # alap minták + B2 szókincs (csak a minták: SEED_SETS=core npm run db:seed)
 
 # séma-ellenőrzés (kényszerek, triggerek, indexhasználat); a .env-et be kell tölteni:
 set -a && . ./.env && set +a && npm run db:verify
