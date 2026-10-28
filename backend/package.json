@@ -29,6 +29,8 @@
     "test:e2e": "jest --config test/jest-e2e.config.js --runInBand",
     "test:golden:update": "tsx scripts/generate-sm2-golden.ts",
     "eval:schedulers": "tsx scripts/evaluate-schedulers.ts",
+    "experiment:schedulers": "tsx scripts/experiment/run-experiment.ts",
+    "experiment:schedulers:docs": "tsx scripts/experiment/run-experiment.ts --out ../docs/kiserlet/szimulacio",
     "db:import": "tsx prisma/import-vocabulary.ts"
   },
   "dependencies": {

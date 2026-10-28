@@ -18,6 +18,7 @@ Keresztplatformos, offline-first szókincsfejlesztő alkalmazás német nyelvtan
 | 3 | Offline szinkronizáció, Flutter kliens | ✅ kész – [docs/03-szinkronizacio-es-kliens.md](docs/03-szinkronizacio-es-kliens.md) |
 | 4 | Egység-, integrációs és szinkron tesztek, CI | ✅ kész – [docs/04-teszteles.md](docs/04-teszteles.md) |
 | 5 | Bővebb szókincs, nyelvtani kártyák, saját szavak, beállítások, statisztika, GDPR, Docker | ✅ kész – [docs/05-tovabbfejlesztes.md](docs/05-tovabbfejlesztes.md) |
+| 6 | SM-2 ↔ személyre illesztett FSRS: kísérleti összevetés, statisztikai próbák | ✅ kész – [docs/06-utemezok-kiserlet.md](docs/06-utemezok-kiserlet.md) |
 
 ## Könyvtárszerkezet
 

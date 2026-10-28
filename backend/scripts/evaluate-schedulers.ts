@@ -14,7 +14,8 @@
 import 'dotenv/config';
 import { writeFileSync } from 'node:fs';
 import { PrismaClient } from '@prisma/client';
-import { evaluate, evaluatePersonalized, ModelScore, ReviewEvent } from './scheduler-evaluation';
+import { loadReviewLogs } from './review-log-source';
+import { evaluate, evaluatePersonalized, ModelScore } from './scheduler-evaluation';
 
 function printScores(scores: ModelScore[]): void {
   console.table(
@@ -42,19 +43,7 @@ async function main(): Promise<void> {
 
   const prisma = new PrismaClient();
   try {
-    const logs = await prisma.reviewLog.findMany({
-      where: userId ? { userId } : {},
-      select: { userId: true, progressId: true, grade: true, responseTimeMs: true, reviewedAt: true },
-      orderBy: [{ progressId: 'asc' }, { reviewedAt: 'asc' }],
-    });
-    const users = new Map<string, Map<string, ReviewEvent[]>>();
-    for (const l of logs) {
-      const cards = users.get(l.userId) ?? new Map<string, ReviewEvent[]>();
-      const list = cards.get(l.progressId) ?? [];
-      list.push({ grade: l.grade, responseTimeMs: l.responseTimeMs, reviewedAt: l.reviewedAt });
-      cards.set(l.progressId, list);
-      users.set(l.userId, cards);
-    }
+    const users = await loadReviewLogs(prisma, userId);
 
     let output: unknown;
     if (personalize) {
