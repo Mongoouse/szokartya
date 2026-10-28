@@ -1,0 +1,48 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='760' height='402' viewBox='0 0 760 402' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Páros különbségek – AUC</title>
+<rect width='760' height='402' fill='#ffffff'/>
+<line x1='300' x2='300' y1='90' y2='310' stroke='#e4e3df'/>
+<text x='300' y='328' text-anchor='middle' fill='#52514e'>-0,40</text>
+<line x1='375' x2='375' y1='90' y2='310' stroke='#e4e3df'/>
+<text x='375' y='328' text-anchor='middle' fill='#52514e'>-0,20</text>
+<line x1='450' x2='450' y1='90' y2='310' stroke='#e4e3df'/>
+<text x='450' y='328' text-anchor='middle' fill='#52514e'>0,00</text>
+<line x1='525' x2='525' y1='90' y2='310' stroke='#e4e3df'/>
+<text x='525' y='328' text-anchor='middle' fill='#52514e'>0,20</text>
+<line x1='600' x2='600' y1='90' y2='310' stroke='#e4e3df'/>
+<text x='600' y='328' text-anchor='middle' fill='#52514e'>0,40</text>
+<line x1='300' x2='600' y1='310' y2='310' stroke='#52514e'/>
+<text x='450' y='350' text-anchor='middle' fill='#0b0b0b'>Különbség (a − b), AUC</text>
+<text transform='translate(254 200) rotate(-90)' text-anchor='middle' fill='#0b0b0b'></text>
+<line x1='450' x2='450' y1='90' y2='310' stroke='#52514e'/>
+<text x='300' y='80' fill='#52514e' font-size='11'>← „b” a jobb</text>
+<text x='600' y='80' text-anchor='end' fill='#52514e' font-size='11'>„a” a jobb →</text>
+<text x='616' y='80' fill='#52514e' font-size='11'>p (Holm)</text>
+<text x='286' y='109' text-anchor='end' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve)</text>
+<text x='286' y='124' text-anchor='end' fill='#52514e' font-size='11'>vs. SM-2</text>
+<line x1='487.20980164572563' x2='501.6503614380277' y1='112' y2='112' stroke='#6250d6' stroke-width='2' stroke-linecap='round'/>
+<path d='M494.7 105.5 L500.2 112 L494.7 118.5 L489.2 112 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='616' y='116' fill='#0b0b0b'>&lt; 0,001</text>
+<text x='286' y='153' text-anchor='end' fill='#0b0b0b'>FSRS-4.5 (alapsúlyok)</text>
+<text x='286' y='168' text-anchor='end' fill='#52514e' font-size='11'>vs. SM-2</text>
+<line x1='487.38017256390515' x2='501.39509720254796' y1='156' y2='156' stroke='#1baf7a' stroke-width='2' stroke-linecap='round'/>
+<path d='M494.6 149.5 L500.1 156 L494.6 162.5 L489.1 156 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<text x='616' y='160' fill='#0b0b0b'>&lt; 0,001</text>
+<text x='286' y='197' text-anchor='end' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve)</text>
+<text x='286' y='212' text-anchor='end' fill='#52514e' font-size='11'>vs. FSRS-4.5 (alapsúlyok)</text>
+<line x1='448.79055485921174' x2='451.29197055611104' y1='200' y2='200' stroke='#6250d6' stroke-width='2' stroke-linecap='round'/>
+<path d='M450.1 193.5 L455.6 200 L450.1 206.5 L444.6 200 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='616' y='204' fill='#0b0b0b'>0,773</text>
+<text x='286' y='241' text-anchor='end' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve)</text>
+<text x='286' y='256' text-anchor='end' fill='#52514e' font-size='11'>vs. SM-2 (utólag kalibrálva)</text>
+<line x1='487.3312007895759' x2='501.8397759475057' y1='244' y2='244' stroke='#6250d6' stroke-width='2' stroke-linecap='round'/>
+<path d='M494.7 237.5 L500.2 244 L494.7 250.5 L489.2 244 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='616' y='248' fill='#0b0b0b'>&lt; 0,001</text>
+<text x='286' y='285' text-anchor='end' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve)</text>
+<text x='286' y='300' text-anchor='end' fill='#52514e' font-size='11'>vs. Átlag-alapvonal</text>
+<line x1='513.5791246667687' x2='524.6324082462347' y1='288' y2='288' stroke='#6250d6' stroke-width='2' stroke-linecap='round'/>
+<path d='M519.2 281.5 L524.7 288 L519.2 294.5 L513.7 288 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='616' y='292' fill='#0b0b0b'>&lt; 0,001</text>
+<text x='20' y='26' font-size='15' font-weight='600' fill='#0b0b0b'>Páros különbségek – AUC</text><text x='20' y='46' fill='#52514e'>szimuláció, FSRS-4.5 (perturbált súlyok)</text>
+<text x='20' y='390' fill='#52514e' font-size='11'>Felhasználónkénti különbségek átlaga, 95%-os bootstrap CI (2000 újraminta); Wilcoxon-próba, 40 felhasználó.</text>
+</svg>
