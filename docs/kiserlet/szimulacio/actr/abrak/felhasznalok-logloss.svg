@@ -1,0 +1,67 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='600' height='620' viewBox='0 0 600 620' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Felhasználónkénti log-veszteség: FSRS (személyre illesztve) vs. SM-2</title>
+<rect width='600' height='620' fill='#ffffff'/>
+<line x1='80' x2='550' y1='530' y2='530' stroke='#e4e3df'/>
+<text x='72' y='534' text-anchor='end' fill='#52514e'>0,20</text>
+<line x1='80' x2='550' y1='383.33333333333337' y2='383.33333333333337' stroke='#e4e3df'/>
+<text x='72' y='387.33333333333337' text-anchor='end' fill='#52514e'>0,40</text>
+<line x1='80' x2='550' y1='236.66666666666663' y2='236.66666666666663' stroke='#e4e3df'/>
+<text x='72' y='240.66666666666663' text-anchor='end' fill='#52514e'>0,60</text>
+<line x1='80' x2='550' y1='90' y2='90' stroke='#e4e3df'/>
+<text x='72' y='94' text-anchor='end' fill='#52514e'>0,80</text>
+<line x1='80' x2='80' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='80' y='548' text-anchor='middle' fill='#52514e'>0,20</text>
+<line x1='236.66666666666666' x2='236.66666666666666' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='236.66666666666666' y='548' text-anchor='middle' fill='#52514e'>0,40</text>
+<line x1='393.33333333333337' x2='393.33333333333337' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='393.33333333333337' y='548' text-anchor='middle' fill='#52514e'>0,60</text>
+<line x1='550' x2='550' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='550' y='548' text-anchor='middle' fill='#52514e'>0,80</text>
+<line x1='80' x2='550' y1='530' y2='530' stroke='#52514e'/>
+<text x='315' y='570' text-anchor='middle' fill='#0b0b0b'>SM-2 – log-veszteség</text>
+<text transform='translate(34 310) rotate(-90)' text-anchor='middle' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve) – log-veszteség</text>
+<line x1='80' y1='530' x2='550' y2='90' stroke='#8a8984' stroke-dasharray='4 4'/>
+<circle cx='364' cy='283.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='382.3' cy='270.3' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='476.3' cy='250.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='268.5' cy='354.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='470.1' cy='237.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='465.5' cy='257.3' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='217.4' cy='381.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='154.8' cy='445.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='302.9' cy='319.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='444.5' cy='236.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='453.1' cy='247.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='407.3' cy='267.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='323.6' cy='328.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='150.9' cy='455.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='455.8' cy='234.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='334.1' cy='329.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='269.1' cy='353.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='348.1' cy='300.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='393.7' cy='269.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='443.4' cy='233.3' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='259.6' cy='365.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='349.1' cy='294.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='277' cy='339' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='337.6' cy='325.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='294.2' cy='347.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='252' cy='347.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='236.4' cy='381.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='512.7' cy='213.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='458.4' cy='236.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='302.9' cy='331.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='367.7' cy='293.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='254.1' cy='351.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='375.2' cy='271.3' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='351' cy='301.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='241.2' cy='381.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='321.3' cy='313.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='438' cy='247.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='497.4' cy='223.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='397.7' cy='262.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='318' cy='330.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='544' y='520' text-anchor='end' fill='#52514e' font-size='11'>átló alatt: „FSRS-4.5 (személyre illesztve)” a jobb</text>
+<text x='20' y='26' font-size='15' font-weight='600' fill='#0b0b0b'>Felhasználónkénti log-veszteség: FSRS (személyre illesztve) vs. SM-2</text><text x='20' y='46' fill='#52514e'>szimuláció, ACT-R (hatványfüggvény, térközhatás)</text>
+<text x='20' y='608' fill='#52514e' font-size='11'>Egy pont = egy felhasználó teszthalmaza. Átló alatt: 32 / 40 felhasználó.</text>
+</svg>

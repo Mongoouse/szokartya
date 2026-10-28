@@ -15,7 +15,7 @@
  */
 import { CardSchedulingState, Grade, initialCardState, scheduleReview, SchedulerConfig } from '../src/repetition/scheduler/sm2-scheduler';
 import { FSRS45_DEFAULT_WEIGHTS, ratingFromSm2Grade } from './fsrs';
-import { FitOptions, fitFsrsWeights, fsrsPredict, FsrsStep } from './fsrs-optimizer';
+import { FitOptions, FitResult, fitFsrsWeights, fsrsPredict, FsrsStep } from './fsrs-optimizer';
 import { auc, logLoss, Prediction, rmseBins } from './prediction-metrics';
 
 const DAY_MS = 86_400_000;
@@ -24,6 +24,8 @@ export interface ReviewEvent {
   grade: number;
   responseTimeMs: number;
   reviewedAt: Date;
+  /** Csak szimulált naplóban: a valódi felidézési valószínűség (az „orákulum” előrejelzése). */
+  trueRecallProbability?: number;
 }
 
 export interface ModelScore {
@@ -49,6 +51,8 @@ export interface EvaluationResult {
 export interface CompiledStep extends FsrsStep {
   /** Az SM-2 előrejelzése (csak a mintába kerülő lépéseknél). */
   sm2P?: number;
+  /** A valódi felidézési valószínűség, ha ismert (szimuláció). */
+  trueP?: number;
 }
 
 /**
@@ -75,6 +79,7 @@ export function compileHistory(events: readonly ReviewEvent[], config?: Schedule
       y: e.grade >= 3 ? 1 : 0,
       reviewedAt: e.reviewedAt,
       ...(scored ? { sm2P: Math.exp(-sinceLast / sm2State.stabilityDays!) } : {}),
+      ...(scored && e.trueRecallProbability !== undefined ? { trueP: e.trueRecallProbability } : {}),
     });
     if (updates) fsrsLast = e.reviewedAt;
     sm2State = scheduleReview(
@@ -86,7 +91,7 @@ export function compileHistory(events: readonly ReviewEvent[], config?: Schedule
   return steps;
 }
 
-function sm2Predictions(steps: readonly CompiledStep[], filter?: (s: FsrsStep) => boolean): Prediction[] {
+export function sm2Predictions(steps: readonly CompiledStep[], filter?: (s: FsrsStep) => boolean): Prediction[] {
   return steps.filter((s) => s.sm2P !== undefined && (!filter || filter(s))).map((s) => ({ p: s.sm2P!, y: s.y }));
 }
 
@@ -163,56 +168,91 @@ export interface PersonalizedEvaluation {
   fits: UserFit[];
 }
 
+/** Egy felhasználó időbeli tanító / teszt felosztása és a modellek előrejelzései. */
+export interface UserTestSet {
+  trainSamples: number;
+  trainRecalled: number;
+  /** Az illesztés eredménye, vagy null, ha kevés volt a tanító minta. */
+  fit: FitResult | null;
+  /** Az SM-2 előrejelzései a tanító halmazon (pl. utólagos kalibrációhoz). */
+  sm2Train: Prediction[];
+  /**
+   * A teszthalmaz előrejelzései. A tömbök elemenként ugyanarra az értékelésre
+   * vonatkoznak (azonos sorrend), így mintaszinten is párosíthatók.
+   */
+  test: { sm2: Prediction[]; fsrs: Prediction[]; personal: Prediction[]; oracle: Prediction[] | null };
+}
+
 /**
  * Felhasználónként: a minták időrendjében az első (1 − testFraction) rész a
  * tanító, a többi a teszthalmaz. Az FSRS súlyait csak a tanító részre
- * illesztjük, és mindhárom modellt a teszthalmazon mérjük. A teszthalmazbeli
+ * illesztjük, és minden modellt a teszthalmazon mérünk. A teszthalmazbeli
  * előrejelzés a korábbi (tanító időszakbeli és azóta történt) értékelésekre
- * épül – ugyanúgy, ahogy a valódi használatban.
+ * épül – ugyanúgy, ahogy a valódi használatban. Null, ha nincs legalább két minta.
  */
+export function predictUserTestSet(
+  cards: ReadonlyMap<string, readonly ReviewEvent[]>,
+  options: PersonalizationOptions = {},
+  config?: SchedulerConfig,
+): UserTestSet | null {
+  const { testFraction = 0.2, minTrainSamples = 100, fit } = options;
+  const histories = [...cards.values()].map((events) => compileHistory(events, config));
+  const times = histories
+    .flat()
+    .filter((s) => s.scored)
+    .map((s) => s.reviewedAt.getTime())
+    .sort((a, b) => a - b);
+  if (times.length < 2) return null;
+  const cutoff = new Date(times[Math.min(times.length - 1, Math.floor(times.length * (1 - testFraction)))]!);
+  const isTest = (s: FsrsStep) => s.reviewedAt >= cutoff;
+  const isTrain = (s: FsrsStep) => s.reviewedAt < cutoff;
+
+  const sm2Train = histories.flatMap((h) => sm2Predictions(h, isTrain));
+  const fitted = sm2Train.length >= minTrainSamples ? fitFsrsWeights(histories, { ...fit, trainBefore: cutoff }) : null;
+  const weights = fitted?.weights ?? FSRS45_DEFAULT_WEIGHTS;
+  const testSteps = histories.flatMap((h) => h.filter((s) => s.sm2P !== undefined && isTest(s)));
+  const hasOracle = testSteps.length > 0 && testSteps.every((s) => s.trueP !== undefined);
+  return {
+    trainSamples: sm2Train.length,
+    trainRecalled: sm2Train.reduce((a, p) => a + p.y, 0),
+    fit: fitted,
+    sm2Train,
+    test: {
+      sm2: testSteps.map((s) => ({ p: s.sm2P!, y: s.y })),
+      fsrs: histories.flatMap((h) => fsrsPredict(h, FSRS45_DEFAULT_WEIGHTS, isTest)),
+      personal: histories.flatMap((h) => fsrsPredict(h, weights, isTest)),
+      oracle: hasOracle ? testSteps.map((s) => ({ p: s.trueP!, y: s.y })) : null,
+    },
+  };
+}
+
+/** Az összes felhasználó teszthalmazán összesített mérőszámok (lásd `predictUserTestSet`). */
 export function evaluatePersonalized(
   users: ReadonlyMap<string, ReadonlyMap<string, readonly ReviewEvent[]>>,
   options: PersonalizationOptions = {},
   config?: SchedulerConfig,
 ): PersonalizedEvaluation {
-  const { testFraction = 0.2, minTrainSamples = 100, fit } = options;
   const test = { sm2: [] as Prediction[], fsrs: [] as Prediction[], personal: [] as Prediction[] };
   const fits: UserFit[] = [];
   let trainSamples = 0;
   let trainRecalled = 0;
 
   for (const [userId, cards] of users) {
-    const histories = [...cards.values()].map((events) => compileHistory(events, config));
-    const times = histories
-      .flat()
-      .filter((s) => s.scored)
-      .map((s) => s.reviewedAt.getTime())
-      .sort((a, b) => a - b);
-    if (times.length < 2) continue;
-    const cutoff = new Date(times[Math.min(times.length - 1, Math.floor(times.length * (1 - testFraction)))]!);
-    const isTest = (s: FsrsStep) => s.reviewedAt >= cutoff;
-    const isTrain = (s: FsrsStep) => s.reviewedAt < cutoff;
-
-    const userTrain = histories.flatMap((h) => sm2Predictions(h, isTrain));
-    trainSamples += userTrain.length;
-    trainRecalled += userTrain.reduce((a, p) => a + p.y, 0);
-
-    const fitted = userTrain.length >= minTrainSamples ? fitFsrsWeights(histories, { ...fit, trainBefore: cutoff }) : null;
-    const weights = fitted?.weights ?? FSRS45_DEFAULT_WEIGHTS;
-    const userTest = histories.flatMap((h) => sm2Predictions(h, isTest));
+    const set = predictUserTestSet(cards, options, config);
+    if (!set) continue;
+    trainSamples += set.trainSamples;
+    trainRecalled += set.trainRecalled;
     fits.push({
       userId,
-      trainSamples: userTrain.length,
-      testSamples: userTest.length,
-      weights: fitted?.weights ?? null,
-      trainLossBefore: fitted?.initialLoss ?? NaN,
-      trainLossAfter: fitted?.finalLoss ?? NaN,
+      trainSamples: set.trainSamples,
+      testSamples: set.test.sm2.length,
+      weights: set.fit?.weights ?? null,
+      trainLossBefore: set.fit?.initialLoss ?? NaN,
+      trainLossAfter: set.fit?.finalLoss ?? NaN,
     });
-    test.sm2.push(...userTest);
-    for (const h of histories) {
-      test.fsrs.push(...fsrsPredict(h, FSRS45_DEFAULT_WEIGHTS, isTest));
-      test.personal.push(...fsrsPredict(h, weights, isTest));
-    }
+    test.sm2.push(...set.test.sm2);
+    test.fsrs.push(...set.test.fsrs);
+    test.personal.push(...set.test.personal);
   }
 
   const testRecallRate = test.sm2.length === 0 ? NaN : test.sm2.reduce((a, x) => a + x.y, 0) / test.sm2.length;

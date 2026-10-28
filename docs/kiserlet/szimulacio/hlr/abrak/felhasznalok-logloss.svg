@@ -1,0 +1,71 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='600' height='620' viewBox='0 0 600 620' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Felhasználónkénti log-veszteség: FSRS (személyre illesztve) vs. SM-2</title>
+<rect width='600' height='620' fill='#ffffff'/>
+<line x1='80' x2='550' y1='530' y2='530' stroke='#e4e3df'/>
+<text x='72' y='534' text-anchor='end' fill='#52514e'>0,20</text>
+<line x1='80' x2='550' y1='420' y2='420' stroke='#e4e3df'/>
+<text x='72' y='424' text-anchor='end' fill='#52514e'>0,30</text>
+<line x1='80' x2='550' y1='310' y2='310' stroke='#e4e3df'/>
+<text x='72' y='314' text-anchor='end' fill='#52514e'>0,40</text>
+<line x1='80' x2='550' y1='200.0000000000001' y2='200.0000000000001' stroke='#e4e3df'/>
+<text x='72' y='204.0000000000001' text-anchor='end' fill='#52514e'>0,50</text>
+<line x1='80' x2='550' y1='90.00000000000011' y2='90.00000000000011' stroke='#e4e3df'/>
+<text x='72' y='94.00000000000011' text-anchor='end' fill='#52514e'>0,60</text>
+<line x1='80' x2='80' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='80' y='548' text-anchor='middle' fill='#52514e'>0,20</text>
+<line x1='197.50000000000003' x2='197.50000000000003' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='197.50000000000003' y='548' text-anchor='middle' fill='#52514e'>0,30</text>
+<line x1='315' x2='315' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='315' y='548' text-anchor='middle' fill='#52514e'>0,40</text>
+<line x1='432.4999999999999' x2='432.4999999999999' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='432.4999999999999' y='548' text-anchor='middle' fill='#52514e'>0,50</text>
+<line x1='549.9999999999999' x2='549.9999999999999' y1='90' y2='530' stroke='#e4e3df'/>
+<text x='549.9999999999999' y='548' text-anchor='middle' fill='#52514e'>0,60</text>
+<line x1='80' x2='550' y1='530' y2='530' stroke='#52514e'/>
+<text x='315' y='570' text-anchor='middle' fill='#0b0b0b'>SM-2 – log-veszteség</text>
+<text transform='translate(34 310) rotate(-90)' text-anchor='middle' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve) – log-veszteség</text>
+<line x1='80' y1='530' x2='550' y2='90' stroke='#8a8984' stroke-dasharray='4 4'/>
+<circle cx='397.8' cy='280.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='235' cy='354.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='238.1' cy='389.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='358.5' cy='312.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='257.1' cy='359.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='310.6' cy='319.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='154.5' cy='433.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='253.3' cy='367.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='163.7' cy='434' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='341.9' cy='336.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='417.4' cy='272.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='191.4' cy='410.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='229.3' cy='388.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='329.2' cy='318.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='335.2' cy='345.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='263.3' cy='344' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='271.5' cy='381.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='215.5' cy='395.5' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='250.5' cy='364.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='326.2' cy='317.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='336.6' cy='311' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='187.8' cy='417.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='145' cy='452.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='220.5' cy='398.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='367.5' cy='359.8' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='186.2' cy='418.3' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='279.8' cy='331.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='331' cy='297.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='236.9' cy='360.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='150.1' cy='451.2' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='279.3' cy='354.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='271.7' cy='374.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='269' cy='352.9' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='234.7' cy='353.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='496.5' cy='259.7' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='468' cy='351.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='241.8' cy='354.6' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='214.1' cy='404.1' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='438.6' cy='343' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<circle cx='371.9' cy='335.4' r='4.5' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<text x='544' y='520' text-anchor='end' fill='#52514e' font-size='11'>átló alatt: „FSRS-4.5 (személyre illesztve)” a jobb</text>
+<text x='20' y='26' font-size='15' font-weight='600' fill='#0b0b0b'>Felhasználónkénti log-veszteség: FSRS (személyre illesztve) vs. SM-2</text><text x='20' y='46' fill='#52514e'>szimuláció, HLR (exponenciális felejtés)</text>
+<text x='20' y='608' fill='#52514e' font-size='11'>Egy pont = egy felhasználó teszthalmaza. Átló alatt: 19 / 40 felhasználó.</text>
+</svg>
