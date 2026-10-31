@@ -384,10 +384,12 @@ async function main(): Promise<void> {
   }
 
   const categoryIds = await seedCategories(prisma, categories);
+  let skipped = 0;
   for (const w of all) {
-    await seedWord(prisma, w, categoryIds);
+    if (!(await seedWord(prisma, w, categoryIds))) skipped++;
   }
   console.log(`Seed kész: ${categories.length} kategória, ${all.length} szó.`);
+  if (skipped > 0) console.log(`  (${skipped} admin által ellenőrzött szó változatlanul maradt.)`);
 }
 
 main()

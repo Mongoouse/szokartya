@@ -39,6 +39,12 @@ class ApiClient {
 
   Future<Json> get(String path, {Map<String, String>? query}) => _send('GET', path, query: query);
 
+  /// GET olyan végpontra, amely JSON tömböt ad vissza.
+  Future<List<Json>> getList(String path, {Map<String, String>? query}) async {
+    final body = await _sendAny('GET', path, query: query);
+    return body is List ? body.cast<Json>() : const [];
+  }
+
   Future<Json> post(String path, {Object? body, bool authenticated = true}) =>
       _send('POST', path, body: body, authenticated: authenticated);
 
@@ -47,6 +53,17 @@ class ApiClient {
   Future<Json> delete(String path, {Object? body}) => _send('DELETE', path, body: body);
 
   Future<Json> _send(
+    String method,
+    String path, {
+    Object? body,
+    Map<String, String>? query,
+    bool authenticated = true,
+  }) async {
+    final decoded = await _sendAny(method, path, body: body, query: query, authenticated: authenticated);
+    return decoded is Json ? decoded : <String, dynamic>{};
+  }
+
+  Future<Object?> _sendAny(
     String method,
     String path, {
     Object? body,
@@ -67,7 +84,7 @@ class ApiClient {
       }
       response = await _raw(method, path, body: body, query: query, accessToken: tokens.accessToken);
     }
-    return _decode(response);
+    return _decodeAny(response);
   }
 
   Future<http.Response> _raw(
@@ -128,10 +145,16 @@ class ApiClient {
   }
 
   Json _decode(http.Response response) {
+    final decoded = _decodeAny(response);
+    return decoded is Json ? decoded : <String, dynamic>{};
+  }
+
+  /// Sikeres válasznál a dekódolt törzs (objektum, tömb vagy null), különben kivétel.
+  Object? _decodeAny(http.Response response) {
     final text = utf8.decode(response.bodyBytes);
     final Object? decoded = text.isEmpty ? null : _tryJson(text);
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return decoded is Json ? decoded : <String, dynamic>{};
+      return decoded;
     }
     if (response.statusCode == HttpStatus.unauthorized) {
       throw UnauthorizedException(_message(decoded) ?? 'Nincs jogosultság.');

@@ -15,6 +15,7 @@ import 'package:szokartya/data/local/local_store.dart';
 import 'package:szokartya/data/models/custom_word_input.dart';
 import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/repositories/auth_repository.dart';
+import 'package:szokartya/data/repositories/report_repository.dart';
 import 'package:szokartya/data/repositories/study_repository.dart';
 import 'package:szokartya/domain/sm2_scheduler.dart';
 import 'package:szokartya/sync/sync_engine.dart';
@@ -212,5 +213,21 @@ void main() {
     final onB = await b.study.searchWords(customOnly: true);
     expect(onB.single.word.display, 'das Fernweh');
     expect(await b.study.enrolledTypes(word.id), {CardType.recognition, CardType.production, CardType.gender, CardType.plural});
+  });
+
+  test('offline hibabejelentés: szinkron után a szerveren van, és a másik eszközről is látszik az állapota', () async {
+    final word = (await a.study.searchWords(query: 'Tisch')).firstWhere((r) => r.word.lemma == 'Tisch').word;
+    a.network.online = false;
+    final reports = ReportRepository(store: a.store, api: a.api, clock: const SystemClock());
+    await reports.report(wordId: word.id, category: ReportCategory.translation, message: 'e2e bejelentés');
+    await expectLater(a.sync.sync(), throwsA(isA<NetworkException>()));
+
+    a.network.online = true;
+    final result = await a.sync.sync();
+    expect(result.rejected, 0);
+    expect(await a.store.outboxCount(), 0);
+
+    final fromB = await ReportRepository(store: b.store, api: b.api, clock: const SystemClock()).mine();
+    expect(fromB.single, isA<MyReport>().having((r) => r.word, 'word', 'Tisch').having((r) => r.status, 'status', 'OPEN'));
   });
 }

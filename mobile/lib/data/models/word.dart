@@ -28,6 +28,10 @@ class Word {
   bool get isCustom => _json['isCustom'] == true;
   bool get isDeleted => _json['deletedAt'] != null;
 
+  /// Központi szónál az emberi ellenőrzöttség (UNREVIEWED / VERIFIED / REJECTED); saját szónál null.
+  String? get reviewStatus => _json['reviewStatus'] as String?;
+  bool get isVerified => reviewStatus == 'VERIFIED';
+
   /// der / die / das (csak nemmel rendelkező főnévnél).
   String? get article => _noun?['article'] as String?;
   String? get pluralForm => _noun?['pluralForm'] as String?;

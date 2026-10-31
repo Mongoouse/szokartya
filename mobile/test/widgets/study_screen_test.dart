@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:szokartya/core/tts/speaker.dart';
 import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/models/word.dart';
+import 'package:szokartya/data/repositories/report_repository.dart';
 import 'package:szokartya/data/repositories/study_repository.dart';
 import 'package:szokartya/features/study/study_screen.dart';
 import 'package:szokartya/features/sync/sync_controller.dart';
@@ -37,6 +38,19 @@ class FakeStudyRepository implements StudyRepository {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class RecordingReports implements ReportRepository {
+  final sent = <({String wordId, ReportCategory category, String message, CardType? cardType})>[];
+
+  @override
+  Future<String> report({required String wordId, required ReportCategory category, required String message, CardType? cardType}) async {
+    sent.add((wordId: wordId, category: category, message: message, cardType: cardType));
+    return 'r1';
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 class SilentSync extends SyncController {
   @override
   SyncStatus build() => const SyncStatus();
@@ -55,11 +69,15 @@ class RecordingSpeaker implements Speaker {
 void main() {
   final tisch = Word.fromJson(wordJson(id: 'w1', lemma: 'Tisch', translation: 'asztal'));
 
+  late RecordingReports reports;
+
   Future<(FakeStudyRepository, RecordingSpeaker)> pump(WidgetTester tester, List<StudyCard> cards) async {
     final study = FakeStudyRepository(cards);
     final speaker = RecordingSpeaker();
+    reports = RecordingReports();
     await tester.pumpWidget(ProviderScope(
       overrides: [
+        reportRepositoryProvider.overrideWithValue(reports),
         studyRepositoryProvider.overrideWithValue(study),
         syncControllerProvider.overrideWith(SilentSync.new),
         speakerProvider.overrideWithValue(speaker),
@@ -108,5 +126,30 @@ void main() {
     await tester.tap(find.text('Mutasd a választ'));
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel('Értékelés: Könnyű, következő ismétlés 4 nap múlva'), findsOneWidget);
+  });
+
+  testWidgets('hibabejelentés: a zászló gomb párbeszédablakot nyit, üres szöveget nem küld, a kártya adataival rögzít', (tester) async {
+    await pump(tester, [cardOf(tisch, CardType.recognition)]);
+    await tester.tap(find.byKey(const Key('reportWord')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Hiba bejelentése'), findsOneWidget);
+
+    await tester.tap(find.text('Küldés'));
+    await tester.pumpAndSettle();
+    expect(find.text('Írd le röviden, mi a hiba.'), findsOneWidget);
+    expect(reports.sent, isEmpty);
+
+    await tester.enterText(find.byKey(const Key('reportMessage')), 'Nem asztal, hanem szék.');
+    await tester.tap(find.text('Küldés'));
+    await tester.pumpAndSettle();
+    expect(reports.sent.single, (
+      wordId: 'w1',
+      category: ReportCategory.translation,
+      message: 'Nem asztal, hanem szék.',
+      cardType: CardType.recognition,
+    ));
+    expect(find.textContaining('Köszönjük'), findsOneWidget);
+    // A tanulás ugyanott folytatódik.
+    expect(find.text('Mutasd a választ'), findsOneWidget);
   });
 }

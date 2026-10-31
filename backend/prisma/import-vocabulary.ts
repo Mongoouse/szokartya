@@ -27,10 +27,11 @@ async function main(): Promise<void> {
   try {
     const categories = await prisma.category.findMany({ select: { id: true, slug: true } });
     const ids = new Map(categories.map((c) => [c.slug, c.id]));
+    let skipped = 0;
     for (const w of words) {
-      await seedWord(prisma, w, ids);
+      if (!(await seedWord(prisma, w, ids))) skipped++;
     }
-    console.log('Import kész.');
+    console.log(`Import kész.${skipped > 0 ? ` (${skipped} admin által ellenőrzött szó változatlanul maradt.)` : ''}`);
   } finally {
     await prisma.$disconnect();
   }

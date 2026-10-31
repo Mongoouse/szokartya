@@ -14,14 +14,15 @@ import 'package:sqflite/sqflite.dart';
 ///                  ütemezés is ide íródik; a szerver állapota a pull-lal érkezik);
 ///  - `review_log`  értékelési napló (helyi + más eszközökről lehúzott), a napi
 ///                  keretek offline számításához;
-///  - `outbox`      szinkronizálásra váró helyi módosítások, FIFO sorrendben;
+///  - `outbox`      szinkronizálásra váró helyi módosítások (kártyák, értékelések,
+///                  saját szavak, hibabejelentések), FIFO sorrendben;
 ///  - `sync_state`  kulcs–érték: szinkron kurzor, felhasználói beállítások.
 ///
 /// Időbélyegek: UTC ezredmásodperc (INTEGER) – rendezhető és zónafüggetlen.
 class AppDatabase {
   AppDatabase._(this.db);
 
-  static const _version = 2;
+  static const _version = 3;
 
   final Database db;
 
@@ -150,7 +151,25 @@ class AppDatabase {
         ..execute('ALTER TABLE outbox_v2 RENAME TO outbox')
         ..execute('CREATE INDEX outbox_entity_idx ON outbox (entity_id)');
     }
-    // Későbbi verziók: if (from < 3) { ... }
+    if (from < 3 && to >= 3) {
+      // Hibabejelentés offline rögzítése: új kimenő típus ('report') → a CHECK
+      // miatt ismét táblaújraépítés, a sorrend (seq) megőrzésével.
+      batch
+        ..execute('''
+          CREATE TABLE outbox_v3 (
+            seq        INTEGER PRIMARY KEY AUTOINCREMENT,
+            kind       TEXT    NOT NULL CHECK (kind IN ('custom_word', 'enroll', 'card_change', 'review', 'report')),
+            entity_id  TEXT    NOT NULL,
+            payload    TEXT    NOT NULL,
+            created_at INTEGER NOT NULL,
+            attempts   INTEGER NOT NULL DEFAULT 0
+          )''')
+        ..execute('INSERT INTO outbox_v3 SELECT seq, kind, entity_id, payload, created_at, attempts FROM outbox')
+        ..execute('DROP TABLE outbox')
+        ..execute('ALTER TABLE outbox_v3 RENAME TO outbox')
+        ..execute('CREATE INDEX outbox_entity_idx ON outbox (entity_id)');
+    }
+    // Későbbi verziók: if (from < 4) { ... }
     await batch.commit(noResult: true);
     if (from >= 1 && from < 2 && to >= 2) await _backfillV2(db);
   }

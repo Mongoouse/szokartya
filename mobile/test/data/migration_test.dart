@@ -41,4 +41,27 @@ void main() {
     await v2.db.insert('outbox', {'kind': 'custom_word', 'entity_id': 'w9', 'payload': '{}', 'created_at': 2});
     await v2.close();
   });
+
+  test('v2 → v3: a kimenő sor megmarad, és hibabejelentést is elfogad', () async {
+    final path = '${(await Directory.systemTemp.createTemp('szokartya_mig_')).path}/db.sqlite';
+    final v2 = await openTestDatabase(path: path, version: 2);
+    await v2.db.insert('outbox', {'kind': 'review', 'entity_id': 'c1', 'payload': '{"a":1}', 'created_at': 5});
+    await expectLater(
+      v2.db.insert('outbox', {'kind': 'report', 'entity_id': 'r0', 'payload': '{}', 'created_at': 6}),
+      throwsA(anything), // v2-ben még nem engedélyezett típus
+    );
+    await v2.close();
+
+    final v3 = await openTestDatabase(path: path);
+    final store = LocalStore(v3);
+    expect((await store.outbox(kind: OutboxKind.review, limit: 10)).single.payload, {'a': 1});
+    await store.recordReport(id: 'r1', wordId: 'w1', cardType: null, category: 'OTHER', message: 'x', now: DateTime.utc(2026));
+    final report = (await store.outbox(kind: OutboxKind.report, limit: 10)).single;
+    expect(report.entityId, 'r1');
+    expect(report.payload, isNot(contains('cardType')));
+    // A sorrend (seq) folytatódik: az új bejegyzés a régi után jön.
+    final seqs = (await v3.db.query('outbox', orderBy: 'seq')).map((r) => r['entity_id']).toList();
+    expect(seqs, ['c1', 'r1']);
+    await v3.close();
+  });
 }
