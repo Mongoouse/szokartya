@@ -127,7 +127,8 @@ describe('Szinkronizáció (integráció)', () => {
       const tisch = await wordId(t.prisma, 'Tisch');
       await t.prisma.translation.updateMany({ where: { wordId: tisch, text: 'asztal' }, data: { senseNote: 'étkezőasztal' } });
       // Az átfedő ablakon túlra kell lépni, hogy csak a valódi változás jöjjön.
-      const page = await pull(cursor);
+      // Végiglapozva: az átfedő ablakba eső (frissen seedelt) szavak több lapot is kitölthetnek.
+      const page = await pullAll(cursor);
       const changed = page.words.find((w) => w.id === tisch);
       expect(changed).toBeDefined();
       expect(changed!.version).toBeGreaterThan(1);

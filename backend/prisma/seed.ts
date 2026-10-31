@@ -7,7 +7,8 @@
  *     többes számú főnevek, n-deklináció, elváló és visszaható igék, kettős
  *     segédige, elöljárós és esetvonzatok, rendhagyó fokozás;
  *  2. a `data/wortschatz.txt` szólista (A1–B1 alapszókincs, tömör formátumban,
- *     lásd `vocabulary.ts`).
+ *     lásd `vocabulary.ts`);
+ *  3. a B2 szókincs (`vocab/b2/`, névelővel, vonzattal, lásd `vocab/dsl.ts`).
  *
  * A szkript idempotens (lásd `seed-writer.ts`): többszöri futtatás sem hoz
  * létre duplikátumot.
@@ -26,6 +27,7 @@ import {
   ReflexiveType,
 } from '@prisma/client';
 import { SeedCategory, seedCategories, SeedWord, seedWord, wordKey } from './seed-writer';
+import { B2_CATEGORIES, B2_WORDS } from './vocab/b2';
 import { parseVocabulary } from './vocabulary';
 
 const prisma = new PrismaClient();
@@ -370,7 +372,8 @@ const VOCABULARY_FILE = join(__dirname, 'data', 'wortschatz.txt');
 
 async function main(): Promise<void> {
   const vocabulary = parseVocabulary(readFileSync(VOCABULARY_FILE, 'utf8'));
-  const all = [...WORDS, ...vocabulary];
+  const all = [...WORDS, ...vocabulary, ...B2_WORDS];
+  const categories = [...CATEGORIES, ...B2_CATEGORIES];
   const seen = new Set<string>();
   for (const w of all) {
     const key = wordKey(w);
@@ -380,11 +383,11 @@ async function main(): Promise<void> {
     seen.add(key);
   }
 
-  const categoryIds = await seedCategories(prisma, CATEGORIES);
+  const categoryIds = await seedCategories(prisma, categories);
   for (const w of all) {
     await seedWord(prisma, w, categoryIds);
   }
-  console.log(`Seed kész: ${CATEGORIES.length} kategória, ${all.length} szó.`);
+  console.log(`Seed kész: ${categories.length} kategória, ${all.length} szó.`);
 }
 
 main()

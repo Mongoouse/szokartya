@@ -205,3 +205,11 @@ npm run db:verify                            # kényszerek, triggerek, EXPLAIN �
 ```
 
 A `db:verify` 17 állítást ellenőriz, köztük: igei attribútum nem köthető főnévhez; elöljárós vonzat nem lehet alanyeset; nincs duplikált lemma a központi szótárban; `ease_factor ≥ 1.30`; `grade ∈ [0, 5]`; a `review_logs` nem módosítható; a no-op UPDATE nem lépteti a verziót; az esedékes-kártya lekérdezés a részleges indexet használja.
+
+## 7. B2 szókincs (seed)
+
+A seed három forrásból tölti a központi szótárt: a `seed.ts` sémamintái, az A1–B1 szólista (`prisma/data/wortschatz.txt`, lásd `docs/05-tovabbfejlesztes.md`) és a B2 szókincs (`prisma/vocab/b2/`).
+
+A B2 készlet 1558 szó 11 új és 7 meglévő tematikus kategóriában, plusz a `b2-wortschatz` gyűjtőkategóriában: főnevek névelővel, többes számmal és birtokos esettel (és ahol jellemző, elöljárós vonzattal); igék alapalakokkal, segédigével, elváló igekötővel, visszaható típussal és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók. Az A1–B1 listában már szereplő szavak itt nem ismétlődnek.
+
+A B2 lista saját tömör formátumot használ (`vocab/dsl.ts`), mert a vonzatot főnévnél és melléknévnél is, a birtokos esetet főnévnél is tárolja; az értelmező minden sort szigorúan ellenőriz (pl. az elváló igekötőnek a lemma elejének kell lennie, nincs ismétlődő vonzat), a szabályos alakokat (birtokos eset, fokozás) szabályból képzi, a kivételeket a sor adja meg. A `prisma/vocab/vocab.spec.ts` egységteszt adatbázis nélkül ellenőrzi a teljes készletet: darabszám, kategóriák, névelő és többes szám megléte, ütközés az A1–B1 listával, oszlopméretek.
