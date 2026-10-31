@@ -63,6 +63,35 @@ class SchedulerConfig {
   final int slowResponseMs;
   final double targetRetention;
   final double responseTimeEmaAlpha;
+
+  /// A felhasználó által választott célmegtartással (a profil beállítása).
+  SchedulerConfig withTargetRetention(double value) => SchedulerConfig(
+        learningStepsMinutes: learningStepsMinutes,
+        relearningStepsMinutes: relearningStepsMinutes,
+        graduatingIntervalDays: graduatingIntervalDays,
+        easyIntervalDays: easyIntervalDays,
+        secondIntervalDays: secondIntervalDays,
+        initialEaseFactor: initialEaseFactor,
+        minEaseFactor: minEaseFactor,
+        maxEaseFactor: maxEaseFactor,
+        lapseIntervalMultiplier: lapseIntervalMultiplier,
+        maxIntervalDays: maxIntervalDays,
+        slowResponseMs: slowResponseMs,
+        targetRetention: value,
+        responseTimeEmaAlpha: responseTimeEmaAlpha,
+      );
+}
+
+/// Az SM-2 alapintervallumai erre a felidézési valószínűségre vannak kalibrálva.
+const referenceRetention = 0.9;
+
+/// Intervallumszorzó a választott célmegtartáshoz: ln(R_cél) / ln(R_ref)
+/// (a szerver `retentionIntervalFactor` függvényének megfelelője).
+double retentionIntervalFactor(double targetRetention) {
+  if (!(targetRetention > 0 && targetRetention < 1)) {
+    throw RangeError('Érvénytelen célmegtartás: $targetRetention (0 és 1 közötti szám várt)');
+  }
+  return math.log(targetRetention) / math.log(referenceRetention);
 }
 
 /// Egy kártya ütemezési állapota (megváltoztathatatlan).
@@ -271,13 +300,14 @@ CardSchedulingState _applyReview(
   final repetitions = card.repetitions + 1;
   final scheduled = card.intervalDays;
   final actual = elapsedDays ?? scheduled.toDouble();
+  final factor = retentionIntervalFactor(config.targetRetention);
   final int candidate;
   if (actual >= scheduled) {
     final base = scheduled + (actual - scheduled) / 2;
     final floor = repetitions <= 2 ? config.secondIntervalDays : scheduled + 1;
-    candidate = [floor, scheduled + 1, (base * ease).round()].reduce(math.max);
+    candidate = [floor, scheduled + 1, (base * ease * factor).round()].reduce(math.max);
   } else {
-    candidate = math.max(scheduled, (actual * ease).round());
+    candidate = math.max(scheduled, (actual * ease * factor).round());
   }
   final interval = _clampI(candidate, 1, config.maxIntervalDays);
   return next.copyWith(

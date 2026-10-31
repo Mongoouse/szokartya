@@ -206,15 +206,10 @@ npm run db:verify                            # kényszerek, triggerek, EXPLAIN �
 
 A `db:verify` 17 állítást ellenőriz, köztük: igei attribútum nem köthető főnévhez; elöljárós vonzat nem lehet alanyeset; nincs duplikált lemma a központi szótárban; `ease_factor ≥ 1.30`; `grade ∈ [0, 5]`; a `review_logs` nem módosítható; a no-op UPDATE nem lépteti a verziót; az esedékes-kártya lekérdezés a részleges indexet használja.
 
-## 7. Szókészletek (seed)
+## 7. B2 szókincs (seed)
 
-A központi szótár tartalma a `backend/prisma/vocab/` könyvtárban van, önállóan betölthető készletekre bontva:
+A seed három forrásból tölti a központi szótárt: a `seed.ts` sémamintái, az A1–B1 szólista (`prisma/data/wortschatz.txt`, lásd `docs/05-tovabbfejlesztes.md`) és a B2 szókincs (`prisma/vocab/b2/`).
 
-| Készlet | Tartalom | Méret |
-|---|---|---|
-| `core` | a séma határeseteit lefedő minták (der See / die See, die Leute, der Student, sich freuen auf + Akk. …) | 15 szó |
-| `b2` | B2 szókincs 14 tematikus kategóriában: főnevek névelővel, többes számmal és birtokos esettel; igék alapalakokkal, segédigével és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók | ~1600 szó, ~650 vonzat |
+A B2 készlet 1558 szó 11 új és 7 meglévő tematikus kategóriában, plusz a `b2-wortschatz` gyűjtőkategóriában: főnevek névelővel, többes számmal és birtokos esettel (és ahol jellemző, elöljárós vonzattal); igék alapalakokkal, segédigével, elváló igekötővel, visszaható típussal és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók. Az A1–B1 listában már szereplő szavak itt nem ismétlődnek.
 
-A B2 lista tömör, soronkénti formátumban készült (egy szó = egy sor, lásd `vocab/dsl.ts`); az értelmező minden sort szigorúan ellenőriz (pl. az elváló igekötőnek a lemma elejének kell lennie, nincs ismétlődő vonzat), a szabályos alakokat (birtokos eset, fokozás) szabályból képzi, a kivételeket a sor adja meg. A `prisma/vocab/vocab.spec.ts` egységteszt a teljes készletet ellenőrzi adatbázis nélkül: darabszám, kategóriák, névelő és többes szám megléte, kulcsütközés a készletek között, oszlopméretek.
-
-`npm run db:seed` alapértelmezésben minden készletet betölt; `SEED_SETS=core` csak a mintákat (az integrációs tesztek így futnak, mert a lapozási tesztek kis katalógusra méretezettek).
+A B2 lista saját tömör formátumot használ (`vocab/dsl.ts`), mert a vonzatot főnévnél és melléknévnél is, a birtokos esetet főnévnél is tárolja; az értelmező minden sort szigorúan ellenőriz (pl. az elváló igekötőnek a lemma elejének kell lennie, nincs ismétlődő vonzat), a szabályos alakokat (birtokos eset, fokozás) szabályból képzi, a kivételeket a sor adja meg. A `prisma/vocab/vocab.spec.ts` egységteszt adatbázis nélkül ellenőrzi a teljes készletet: darabszám, kategóriák, névelő és többes szám megléte, ütközés az A1–B1 listával, oszlopméretek.

@@ -54,7 +54,7 @@ import {
   PartOfSpeech,
   ReflexiveType,
 } from '@prisma/client';
-import { SeedTranslation, SeedValency, SeedWord } from './types';
+import { SeedTranslation, SeedValency, SeedWord } from '../seed-writer';
 
 export interface ParseOptions {
   /** A halmaz minden szavának CEFR-szintje. */
@@ -129,15 +129,13 @@ const CASES: Record<string, { value: GrammaticalCase; label: string }> = {
  *                  előtagot a vonzat maga is megadhatja.
  * @param reflexive a szó alapértelmezés szerint visszaható-e (igéknél).
  */
-function parseValencies(
-  field: string | undefined,
-  head: string,
-  reflexive: boolean,
-  fail: (m: string) => never,
-): SeedValency[] {
+function parseValencies(field: string | undefined, head: string, reflexive: boolean, fail: (m: string) => never): SeedValency[] {
   if (!field) return [];
   const out: SeedValency[] = [];
-  for (const raw of field.split(';').map((s) => s.trim()).filter((s) => s !== '')) {
+  for (const raw of field
+    .split(';')
+    .map((s) => s.trim())
+    .filter((s) => s !== '')) {
     const eq = raw.indexOf('=');
     if (eq < 0) fail(`vonzat jelentés nélkül: „${raw}”`);
     let spec = raw.slice(0, eq).trim();

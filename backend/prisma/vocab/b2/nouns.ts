@@ -8,7 +8,6 @@ der Arbeitgeber | = | | munkáltató
 der Arbeitnehmer | = | | munkavállaló
 die Arbeitslosigkeit | - | | munkanélküliség
 der Arbeitsvertrag | ¨+e | | munkaszerződés
-die Bewerbung | +en | | jelentkezés; pályázat {állásra} | um+A = pályázat valamire
 der Lebenslauf | ¨+e | | önéletrajz
 das Vorstellungsgespräch | +e | | állásinterjú
 die Stelle | +n | | állás; hely
@@ -16,23 +15,19 @@ die Stellenanzeige | +n | | álláshirdetés
 der Betrieb | +e | | üzem; vállalat
 die Abteilung | +en | | osztály {cégnél}
 die Gehaltserhöhung | +en | | fizetésemelés
-das Gehalt | ¨+er | | fizetés {havi}
 der Lohn | ¨+e | | bér
 die Überstunde | +n | | túlóra
 die Teilzeit | - | | részmunkaidő
 die Vollzeit | - | | teljes munkaidő
 die Kündigung | +en | | felmondás
 die Kündigungsfrist | +en | | felmondási idő
-die Ausbildung | +en | | szakképzés
 die Weiterbildung | +en | | továbbképzés
 die Fortbildung | +en | | szakmai továbbképzés
 die Qualifikation | +en | | képesítés
-die Erfahrung | +en | | tapasztalat | mit+D = tapasztalat valamivel
 die Fähigkeit | +en | | képesség | zu+D = képesség valamire
 die Kenntnis | +se | | ismeret {gyakran többes számban}
 die Verantwortung | +en | | felelősség | für+A = felelősség valamiért
 der Auftrag | ¨+e | | megbízás; megrendelés
-die Besprechung | +en | | megbeszélés
 die Sitzung | +en | | ülés {értekezlet}
 die Tagesordnung | +en | | napirend
 das Protokoll | +e | | jegyzőkönyv
@@ -66,7 +61,6 @@ die Konkurrenz | - | | konkurencia; versenytársak
 der Zeitdruck | - | | időnyomás
 die Unterlage | +n | | dokumentum; irat
 das Zeugnis | +se | | bizonyítvány; munkáltatói igazolás
-der Vertrag | ¨+e | | szerződés
 die Probezeit | +en | | próbaidő
 die Bezahlung | +en | | fizetés; díjazás
 die Voraussetzung | +en | | előfeltétel | für+A = előfeltétele valaminek
@@ -162,7 +156,6 @@ die Gemeinschaft | +en | | közösség
 die Solidarität | - | | szolidaritás
 die Gerechtigkeit | - | | igazságosság
 das Ehrenamt | ¨+er | | önkéntes tisztség
-der Verein | +e | | egyesület
 die Rolle | +n | | szerep
 die Tradition | +en | | hagyomány
 der Brauch | ¨+e | | szokás {népszokás}
@@ -176,7 +169,6 @@ die Erziehung | - | | nevelés
 die Partnerschaft | +en | | párkapcsolat; partnerség
 die Ehe | +n | | házasság
 die Scheidung | +en | | válás
-die Beziehung | +en | | kapcsolat | zu+D = kapcsolat valakivel
 das Verhältnis | +se | | viszony | zu+D = viszony valakivel
 der Bewohner | = | | lakó
 der Einwohner | = | | lakos
@@ -228,7 +220,6 @@ der Befürworter | = | | támogató {híve valaminek}
 der Kritiker | = | | kritikus {személy}
 
 @umwelt
-die Umwelt | - | | környezet
 der Umweltschutz | - | | környezetvédelem
 die Umweltverschmutzung | +en | | környezetszennyezés
 der Klimawandel | - | | klímaváltozás
@@ -249,7 +240,6 @@ die Mülltrennung | - | | szelektív hulladékgyűjtés
 das Recycling | - | | újrahasznosítás
 die Verpackung | +en | | csomagolás
 der Verbrauch | - | | fogyasztás {anyagé, energiáé}
-die Landschaft | +en | | táj
 die Artenvielfalt | - | | fajgazdagság; biodiverzitás
 die Tierart | +en | | állatfaj
 das Aussterben | - | | kihalás
@@ -277,21 +267,18 @@ die Auswirkung | +en | | kihatás | auf+A = hatás valamire
 der Einfluss | ¨+e | | befolyás | auf+A = befolyás valamire
 
 @gesundheit
-die Gesundheit | - | | egészség
 die Behandlung | +en | | kezelés
 die Therapie | +n | | terápia
 die Untersuchung | +en | | vizsgálat
 die Diagnose | +n | | diagnózis
 das Symptom | +e | | tünet
 die Beschwerde | +n | | panasz; reklamáció | über+A = panasz valamire
-der Schmerz | +en | | fájdalom
 die Verletzung | +en | | sérülés
 die Wunde | +n | | seb
 die Infektion | +en | | fertőzés
 die Entzündung | +en | | gyulladás
 die Allergie | +n | | allergia | gegen+A = allergia valamire
 die Impfung | +en | | oltás | gegen+A = oltás valami ellen
-das Medikament | +e | | gyógyszer
 das Rezept | +e | | recept
 die Nebenwirkung | +en | | mellékhatás
 die Operation | +en | | műtét
@@ -428,7 +415,6 @@ die Auseinandersetzung | +en | | vita; összetűzés | mit+D = vita valakivel
 der Streit | +e | | veszekedés; vita
 das Missverständnis | +se | | félreértés
 die Absicht | +en | | szándék
-der Vorschlag | ¨+e | | javaslat
 die Empfehlung | +en | | ajánlás
 der Hinweis | +e | | utalás; tipp | auf+A = utalás valamire
 die Bitte | +n | | kérés | um+A = kérés valamire
@@ -505,7 +491,6 @@ die Schuld | - | | bűnösség; hiba {vétkesség} | an+D = felelősség valami�
 die Kultur | +en | | kultúra
 die Kunst | ¨+e | | művészet
 das Kunstwerk | +e | | műalkotás
-die Ausstellung | +en | | kiállítás
 die Aufführung | +en | | előadás {színházi}
 die Vorstellung | +en | | elképzelés; előadás; bemutatkozás | von+D = elképzelés valamiről
 das Theaterstück | +e | | színdarab
@@ -522,12 +507,9 @@ das Erlebnis | +se | | élmény
 das Abenteuer | = | | kaland
 die Freizeitbeschäftigung | +en | | szabadidős tevékenység
 das Denkmal | ¨+er | | emlékmű
-die Sehenswürdigkeit | +en | | látnivaló
 das Erbe | - | | örökség
 die Epoche | +n | | korszak
 das Jahrhundert | +e | | évszázad
-die Vergangenheit | +en | | múlt
-die Zukunft | - | | jövő
 die Gegenwart | - | | jelen
 der Geschmack | - | | ízlés; íz
 die Mode | +n | | divat
@@ -544,9 +526,7 @@ der Verlierer | = | | vesztes
 der Gewinner | = | | nyertes
 
 @wohnen
-die Miete | +n | | lakbér
 der Mieter | = | | bérlő
-der Vermieter | = | | bérbeadó; főbérlő
 pl Nebenkosten | | | rezsi; mellékköltségek
 der Mietvertrag | ¨+e | | bérleti szerződés
 die Wohngemeinschaft | +en | | lakóközösség {közös albérlet}
@@ -555,7 +535,6 @@ die Einrichtung | +en | | berendezés; intézmény
 das Möbelstück | +e | | bútordarab
 der Grundriss | +e | | alaprajz
 die Lage | +n | | fekvés; helyzet
-die Umgebung | +en | | környék
 die Nachbarschaft | +en | | szomszédság
 der Hausmeister | = | | gondnok
 die Hausordnung | +en | | házirend
@@ -583,15 +562,12 @@ die Wohnungsnot | - | | lakáshiány
 der Wohnraum | ¨+e | | lakótér
 
 @verkehr
-der Verkehr | - | | közlekedés; forgalom
 der Stau | +s | | dugó {forgalmi}
-die Verspätung | +en | | késés
 der Anschluss | ¨+e | | csatlakozás
 die Verbindung | +en | | összeköttetés; járat
 die Abfahrt | +en | | indulás
 die Ankunft | ¨+e | | érkezés
 der Aufenthalt | +e | | tartózkodás
-die Unterkunft | ¨+e | | szállás
 die Buchung | +en | | foglalás
 die Reservierung | +en | | helyfoglalás
 das Reiseziel | +e | | úti cél
@@ -619,12 +595,9 @@ die Rundreise | +n | | körutazás
 der Ausflug | ¨+e | | kirándulás
 
 @gefuehle
-die Freude | +n | | öröm | an+D = öröm valamiben
 die Trauer | - | | gyász; szomorúság | um+A = gyász valaki miatt
 die Wut | - | | düh | auf+A = düh valakire
-der Ärger | - | | bosszúság | über+A = bosszúság valami miatt
 die Enttäuschung | +en | | csalódás | über+A = csalódás valami miatt
-die Sorge | +n | | aggodalom; gond | um+A = aggódás valakiért
 die Hoffnung | +en | | remény | auf+A = remény valamire
 die Sehnsucht | ¨+e | | vágyakozás | nach+D = vágyakozás valami után
 die Eifersucht | - | | féltékenység | auf+A = féltékenység valakire
@@ -750,7 +723,6 @@ das Ansehen | - | | tekintély; hírnév
 der Ruf | +e | | hírnév; kiáltás
 das Image | +s | | imázs
 die Qualität | +en | | minőség
-die Größe | +n | | méret; nagyság
 das Gewicht | +e | | súly
 der Umfang | ¨+e | | terjedelem; kerület
 die Breite | +n | | szélesség

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CardType, Prisma, ReviewLog, UserProgress } from '@prisma/client';
+import { CardType, CefrLevel, Prisma, ReviewLog, UserProgress } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { WORD_DETAIL_INCLUDE, WordWithDetails } from '../words/word-detail';
 import type { KeysetStart } from './sync-cursor';
@@ -32,11 +32,23 @@ export class SyncRepository {
     });
   }
 
-  /** A felhasználó számára látható szavak (központi + saját) változásai. */
-  wordChanges(userId: string, start: KeysetStart, limit: number): Promise<WordWithDetails[]> {
+  /**
+   * A felhasználó számára látható szavak (központi + saját) változásai.
+   * Ha a felhasználó szűkítette a katalógust (`levels`), a központi szavak
+   * közül csak a választott szintűek, a szint nélküliek és a már felvett
+   * kártyák szavai jönnek le.
+   */
+  wordChanges(userId: string, start: KeysetStart, limit: number, levels: CefrLevel[] = []): Promise<WordWithDetails[]> {
+    const central: Prisma.WordWhereInput =
+      levels.length === 0
+        ? { ownerId: null }
+        : {
+            ownerId: null,
+            OR: [{ cefrLevel: { in: levels } }, { cefrLevel: null }, { progress: { some: { userId } } }],
+          };
     return this.prisma.word.findMany({
       where: {
-        AND: [{ OR: [{ ownerId: null }, { ownerId: userId }] }, keyset('updatedAt', start) as Prisma.WordWhereInput],
+        AND: [{ OR: [central, { ownerId: userId }] }, keyset('updatedAt', start) as Prisma.WordWhereInput],
       },
       orderBy: [{ updatedAt: 'asc' }, { id: 'asc' }],
       take: limit,

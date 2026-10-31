@@ -154,7 +154,6 @@ adv | ohnehin | amúgy is
 adv | keineswegs | semmiképp
 adv | durchaus | teljességgel; egészen
 adv | eher | inkább; korábban
-adv | inzwischen | időközben
 adv | mittlerweile | mostanra
 adv | bisher | eddig
 adv | ausschließlich | kizárólag

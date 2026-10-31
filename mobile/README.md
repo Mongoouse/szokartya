@@ -5,11 +5,11 @@ Offline-first mobilkliens (Android, iOS). Architektúra, szinkronizáció és d�
 
 ```
 lib/
-  core/        API kliens (auto token-frissítés), token tároló, konfiguráció, óra
-  domain/      SM-2 ütemező (a backend 1:1 megfelelője – offline ütemezéshez)
+  core/        API kliens (auto token-frissítés), token tároló, konfiguráció, óra (profil-időzóna), kiejtés (TTS)
+  domain/      SM-2 ütemező (a backend 1:1 megfelelője – offline ütemezéshez), gépelt válasz ellenőrzése
   data/        helyi SQLite (sqflite), DAO, modellek, repository-k
   sync/        szinkronizációs motor (push → pull)
-  features/    auth, home, study (szókártya-állapotgép), sync – Riverpod kontrollerek + UI
+  features/    auth, home, study (szókártya-állapotgép), stats, settings, words (szókereső, saját szó), sync
   providers.dart  függőségi gráf
 ```
 
@@ -28,6 +28,17 @@ flutter run --dart-define=API_BASE_URL=https://api.example.hu/api/v1
 ```sh
 flutter analyze
 flutter test                                   # egység- és komponenstesztek
-SZOKARTYA_E2E_API=http://localhost:3000/api/v1 \
-  flutter test --tags e2e                      # többeszközös szinkron valódi backenddel
+```
+
+Többeszközös szinkron valódi backenddel:
+
+```sh
+# macOS / Linux
+SZOKARTYA_E2E_API=http://localhost:3000/api/v1 flutter test --tags e2e
+```
+
+```powershell
+# Windows PowerShell
+$env:SZOKARTYA_E2E_API = "http://localhost:3000/api/v1"
+flutter test --tags e2e
 ```

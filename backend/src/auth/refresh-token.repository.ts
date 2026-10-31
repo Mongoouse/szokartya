@@ -53,4 +53,11 @@ export class RefreshTokenRepository {
     });
     return count;
   }
+
+  /** A megadott időpont előtt lejárt tokenek végleges törlése. @returns a törölt sorok száma. */
+  async deleteExpiredBefore(before: Date, db: DbClient = this.prisma): Promise<number> {
+    // A rotációs lánc (replaced_by_id) ON DELETE SET NULL, így a sorrend közömbös.
+    const { count } = await db.refreshToken.deleteMany({ where: { expiresAt: { lt: before } } });
+    return count;
+  }
 }

@@ -7,7 +7,7 @@ import { assertTestDatabase, TEST_DATABASE_URL } from './test-database';
  * Egyszer, az összes integrációs teszt előtt:
  *  1. a tesztadatbázis létrehozása, ha nem létezik;
  *  2. a séma teljes újraépítése a migrációkból (ugyanaz a kód, ami élesben fut);
- *  3. a központi szókatalógus alap mintakészletének betöltése (seed).
+ *  3. a központi szókatalógus betöltése (seed).
  */
 export default async function globalSetup(): Promise<void> {
   assertTestDatabase(TEST_DATABASE_URL);
@@ -21,8 +21,7 @@ export default async function globalSetup(): Promise<void> {
     await prisma.$disconnect();
   }
 
-  // Csak az alap mintakészlet: a lapozási tesztek kis katalógusra méretezettek.
-  const env = { ...process.env, DATABASE_URL: TEST_DATABASE_URL, SEED_SETS: 'core' };
+  const env = { ...process.env, DATABASE_URL: TEST_DATABASE_URL };
   const cwd = join(__dirname, '..', '..');
   execSync('npx prisma migrate deploy', { cwd, env, stdio: 'pipe' });
   execSync('npx tsx prisma/seed.ts', { cwd, env, stdio: 'pipe' });

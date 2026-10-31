@@ -5,21 +5,12 @@
 export const B2_VERBS = `
 @gefuehle
 sich beschäftigen | beschäftigt | beschäftigte | beschäftigt | h | r | foglalkozik | mit+D = foglalkozik valamivel
-interessieren | interessiert | interessierte | interessiert | h | r | érdekel | sich für+A = érdeklődik valami iránt
-sich erinnern | erinnert | erinnerte | erinnert | h | r | emlékszik | an+A = emlékszik valamire
-ärgern | ärgert | ärgerte | geärgert | h | r | bosszant | sich über+A = bosszankodik valami miatt
 sich aufregen | regt auf | regte auf | aufgeregt | h | r | felizgatja magát | über+A = felháborodik valamin
 sich bedanken | bedankt | bedankte | bedankt | h | r | köszönetet mond | bei+D = köszönetet mond valakinek; für+A = megköszön valamit
 sich bemühen | bemüht | bemühte | bemüht | h | r | igyekszik; fáradozik | um+A = fáradozik valamiért
-sich beschweren | beschwert | beschwerte | beschwert | h | r | panaszkodik | über+A = panaszkodik valamire; bei+D = panaszt tesz valakinél
-sich entschuldigen | entschuldigt | entschuldigte | entschuldigt | h | r | bocsánatot kér | bei+D = bocsánatot kér valakitől; für+A = bocsánatot kér valamiért
-sich gewöhnen | gewöhnt | gewöhnte | gewöhnt | h | r | hozzászokik | an+A = hozzászokik valamihez
-sich kümmern | kümmert | kümmerte | gekümmert | h | r | gondoskodik | um+A = gondoskodik valakiről/valamiről
 sich konzentrieren | konzentriert | konzentrierte | konzentriert | h | r | koncentrál | auf+A = koncentrál valamire
-sich verlassen | verlässt | verließ | verlassen | h | i | számít; támaszkodik | auf+A = számít valakire/valamire
 sich verlieben | verliebt | verliebte | verliebt | h | r | beleszeret | in+A = beleszeret valakibe
 sich sehnen | sehnt | sehnte | gesehnt | h | r | vágyakozik | nach+D = vágyik valami után
-sich fürchten | fürchtet | fürchtete | gefürchtet | h | r | fél | vor+D = fél valamitől
 sich wundern | wundert | wunderte | gewundert | h | r | csodálkozik | über+A = csodálkozik valamin
 sich schämen | schämt | schämte | geschämt | h | r | szégyelli magát | für+A = szégyelli magát valamiért
 begeistern | begeistert | begeisterte | begeistert | h | r | lelkesít | für+A = lelkesít valamiért; sich für+A = lelkesedik valamiért
@@ -29,7 +20,6 @@ sich hüten | hütet | hütete | gehütet | h | r | óvakodik | vor+D = óvakodi
 sich langweilen | langweilt | langweilte | gelangweilt | h | r | unatkozik
 sich wohlfühlen | fühlt wohl | fühlte wohl | wohlgefühlt | h | r | jól érzi magát
 sich entspannen | entspannt | entspannte | entspannt | h | r | lazít; kikapcsolódik
-sich ausruhen | ruht aus | ruhte aus | ausgeruht | h | r | kipiheni magát
 sich erholen | erholt | erholte | erholt | h | r | kipiheni magát; felépül | von+D = kipiheni magát valamiből
 verzweifeln | verzweifelt | verzweifelte | verzweifelt | s | r | kétségbe esik | an+D = kétségbe esik valami miatt
 bereuen | bereut | bereute | bereut | h | r | megbán
@@ -47,7 +37,6 @@ ertragen | erträgt | ertrug | ertragen | h | i | elvisel
 aushalten | hält aus | hielt aus | ausgehalten | h | i | kibír
 leiden | leidet | litt | gelitten | h | i | szenved | an+D = szenved valamiben {betegség}; unter+D = szenved valamitől
 träumen | träumt | träumte | geträumt | h | r | álmodik | von+D = álmodik valamiről
-hoffen | hofft | hoffte | gehofft | h | r | remél | auf+A = remél valamit
 befürchten | befürchtet | befürchtete | befürchtet | h | r | tart valamitől; attól fél, hogy
 
 @kommunikation
@@ -64,16 +53,12 @@ sich auseinandersetzen | setzt auseinander | setzte auseinander | auseinanderges
 sich verabreden | verabredet | verabredete | verabredet | h | r | találkozót beszél meg | mit+D = találkozót beszél meg valakivel
 sich ausdrücken | drückt aus | drückte aus | ausgedrückt | h | r | kifejezi magát
 bitten | bittet | bat | gebeten | h | i | kér | um+A = kér valamit
-danken | dankt | dankte | gedankt | h | r | köszön | D = megköszön valakinek; für+A = köszön valamit
-diskutieren | diskutiert | diskutierte | diskutiert | h | r | megvitat | über+A = vitatkozik valamiről; mit+D = vitatkozik valakivel
-glauben | glaubt | glaubte | geglaubt | h | r | hisz | an+A = hisz valamiben; D = hisz valakinek
 gratulieren | gratuliert | gratulierte | gratuliert | h | r | gratulál | D = gratulál valakinek; zu+D = gratulál valamihez
 hinweisen | weist hin | wies hin | hingewiesen | h | i | utal; felhívja a figyelmet | auf+A = utal valamire
 klagen | klagt | klagte | geklagt | h | r | panaszkodik {siránkozik}; pert indít | über+A = panaszkodik valamire; gegen+A = beperel valakit
 nachdenken | denkt nach | dachte nach | nachgedacht | h | m | gondolkodik | über+A = gondolkodik valamin
 reagieren | reagiert | reagierte | reagiert | h | r | reagál | auf+A = reagál valamire
 überreden | überredet | überredete | überredet | h | r | rábeszél | zu+D = rábeszél valamire
-überzeugen | überzeugt | überzeugte | überzeugt | h | r | meggyőz | von+D = meggyőz valamiről
 verhandeln | verhandelt | verhandelte | verhandelt | h | r | tárgyal | über+A = tárgyal valamiről; mit+D = tárgyal valakivel
 warnen | warnt | warnte | gewarnt | h | r | figyelmeztet | vor+D = figyelmeztet valamire
 zustimmen | stimmt zu | stimmte zu | zugestimmt | h | r | egyetért; hozzájárul | D = egyetért valakivel/valamivel
@@ -120,10 +105,8 @@ richten | richtet | richtete | gerichtet | h | r | irányít; intéz | an+A = in
 
 @abstrakt
 achten | achtet | achtete | geachtet | h | r | figyel; tisztel | auf+A = figyel valamire
-ankommen | kommt an | kam an | angekommen | s | i | megérkezik | auf+A = múlik valamin
 aufhören | hört auf | hörte auf | aufgehört | h | r | abbahagy | mit+D = abbahagy valamit
 beitragen | trägt bei | trug bei | beigetragen | h | i | hozzájárul | zu+D = hozzájárul valamihez
-bestehen | besteht | bestand | bestanden | h | i | áll {valamiből}; letesz {vizsgát} | aus+D = áll valamiből; auf+D = ragaszkodik valamihez; in+D = valamiben rejlik
 beruhen | beruht | beruhte | beruht | h | r | alapul | auf+D = alapul valamin
 gelten | gilt | galt | gegolten | h | i | érvényes; számít | für+A = érvényes valamire
 halten | hält | hielt | gehalten | h | i | tart | von+D = véleménye van valamiről; für+A = tart valakit valaminek; sich an+A = betart valamit
@@ -133,8 +116,6 @@ neigen | neigt | neigte | geneigt | h | r | hajlik; hajlamos | zu+D = hajlamos v
 profitieren | profitiert | profitierte | profitiert | h | r | profitál | von+D = profitál valamiből
 rechnen | rechnet | rechnete | gerechnet | h | r | számol | mit+D = számol valamivel; auf+A = számít valakire
 riechen | riecht | roch | gerochen | h | i | szagol; illatozik | nach+D = valami szaga van
-sterben | stirbt | starb | gestorben | s | i | meghal | an+D = meghal valamiben
-teilnehmen | nimmt teil | nahm teil | teilgenommen | h | i | részt vesz | an+D = részt vesz valamin
 verfügen | verfügt | verfügte | verfügt | h | r | rendelkezik | über+A = rendelkezik valamivel
 vergleichen | vergleicht | verglich | verglichen | h | i | összehasonlít | mit+D = összehasonlít valamivel
 verlangen | verlangt | verlangte | verlangt | h | r | követel; kíván | nach+D = vágyik valamire; von+D = elvár valakitől
@@ -172,9 +153,7 @@ sich eignen | eignet | eignete | geeignet | h | r | alkalmas | für+A = alkalmas
 entwickeln | entwickelt | entwickelte | entwickelt | h | r | fejleszt | sich zu+D = valamivé fejlődik
 sich stützen | stützt | stützte | gestützt | h | r | támaszkodik | auf+A = támaszkodik valamire
 sich wehren | wehrt | wehrte | gewehrt | h | r | védekezik | gegen+A = védekezik valami ellen
-sorgen | sorgt | sorgte | gesorgt | h | r | gondoskodik | für+A = gondoskodik valamiről; sich um+A = aggódik valakiért
 trennen | trennt | trennte | getrennt | h | r | szétválaszt; szelektál | von+D = elválaszt valamitől; sich von+D = szakít valakivel
-sich(D) vorstellen | stellt vor | stellte vor | vorgestellt | h | r | elképzel | A = elképzel valamit
 sich(D) merken | merkt | merkte | gemerkt | h | r | megjegyez | A = megjegyez valamit
 sich(D) überlegen | überlegt | überlegte | überlegt | h | r | átgondol; megfontol | A = átgondol valamit
 sich(D) einbilden | bildet ein | bildete ein | eingebildet | h | r | képzelődik | A = bebeszél magának valamit
@@ -202,7 +181,6 @@ sich verpflichten | verpflichtet | verpflichtete | verpflichtet | h | r | kötel
 sich vertragen | verträgt | vertrug | vertragen | h | i | kijön {valakivel} | mit+D = jól kijön valakivel
 sich anpassen | passt an | passte an | angepasst | h | r | alkalmazkodik | an+A = alkalmazkodik valamihez
 sich auskennen | kennt aus | kannte aus | ausgekannt | h | m | kiismeri magát | mit+D = ért valamihez; in+D = kiismeri magát valahol
-entscheiden | entscheidet | entschied | entschieden | h | i | dönt | über+A = dönt valamiről; sich für+A = valami mellett dönt; sich gegen+A = valami ellen dönt
 beschließen | beschließt | beschloss | beschlossen | h | i | elhatároz; határoz
 vermuten | vermutet | vermutete | vermutet | h | r | feltételez; gyanít
 ahnen | ahnt | ahnte | geahnt | h | r | sejt; megérez
@@ -238,18 +216,15 @@ ermöglichen | ermöglicht | ermöglichte | ermöglicht | h | r | lehetővé tes
 erleichtern | erleichtert | erleichterte | erleichtert | h | r | megkönnyít | D+A = megkönnyít valakinek valamit
 erschweren | erschwert | erschwerte | erschwert | h | r | megnehezít | D+A = megnehezít valakinek valamit
 verhindern | verhindert | verhinderte | verhindert | h | r | megakadályoz
-vermeiden | vermeidet | vermied | vermieden | h | i | elkerül
 bewältigen | bewältigt | bewältigte | bewältigt | h | r | megbirkózik
 lösen | löst | löste | gelöst | h | r | megold; old
 umgehen | geht um | ging um | umgegangen | s | i | bánik | mit+D = bánik valamivel/valakivel
 schaffen | schafft | schaffte | geschafft | h | r | véghezvisz; sikerül
 erzielen | erzielt | erzielte | erzielt | h | r | elér {eredményt}
-erreichen | erreicht | erreichte | erreicht | h | r | elér
 gelangen | gelangt | gelangte | gelangt | s | r | eljut | zu+D = eljut valamihez; an+A = eljut valahová
 geraten | gerät | geriet | geraten | s | i | kerül {helyzetbe} | in+A = belekerül valamibe
 stoßen | stößt | stieß | gestoßen | b | i | lök; ütközik | auf+A = rábukkan valamire
 scheitern | scheitert | scheiterte | gescheitert | s | r | kudarcot vall | an+D = elbukik valamin
-gewinnen | gewinnt | gewann | gewonnen | h | i | nyer | gegen+A = nyer valaki ellen
 siegen | siegt | siegte | gesiegt | h | r | győz | über+A = legyőz valakit
 verringern | verringert | verringerte | verringert | h | r | csökkent | um+A = csökkent valamennyivel
 reduzieren | reduziert | reduzierte | reduziert | h | r | redukál; lecsökkent | auf+A = lecsökkent valamennyire
@@ -293,7 +268,6 @@ entfernen | entfernt | entfernte | entfernt | h | r | eltávolít
 befestigen | befestigt | befestigte | befestigt | h | r | felerősít | an+D = rögzít valamin
 
 @arbeit
-sich bewerben | bewirbt | bewarb | beworben | h | i | jelentkezik; pályázik | um+A = pályázik valamire; bei+D = jelentkezik valahová {cégnél}
 sich einsetzen | setzt ein | setzte ein | eingesetzt | h | r | kiáll; síkra száll | für+A = kiáll valami mellett
 sich engagieren | engagiert | engagierte | engagiert | h | r | elkötelezetten tevékenykedik | für+A = síkra száll valamiért
 sich beteiligen | beteiligt | beteiligte | beteiligt | h | r | részt vesz | an+D = részt vesz valamiben
@@ -328,7 +302,6 @@ kündigen | kündigt | kündigte | gekündigt | h | r | felmond | D = felmond va
 einstellen | stellt ein | stellte ein | eingestellt | h | r | alkalmaz {munkára}; beállít; leállít
 entlassen | entlässt | entließ | entlassen | h | i | elbocsát | aus+D = elbocsát valahonnan
 befördern | befördert | beförderte | befördert | h | r | előléptet; szállít | zu+D = előléptet valamivé
-verdienen | verdient | verdiente | verdient | h | r | keres {pénzt}; megérdemel | an+D = keres valamin
 leisten | leistet | leistete | geleistet | h | r | teljesít; nyújt; megengedheti magának {sich D leisten}
 mitwirken | wirkt mit | wirkte mit | mitgewirkt | h | r | közreműködik | an+D = közreműködik valamiben; bei+D = közreműködik valaminél
 zusammenarbeiten | arbeitet zusammen | arbeitete zusammen | zusammengearbeitet | h | r | együttműködik | mit+D = együttműködik valakivel
@@ -337,7 +310,6 @@ unterschreiben | unterschreibt | unterschrieb | unterschrieben | h | i | aláír
 einreichen | reicht ein | reichte ein | eingereicht | h | r | benyújt | bei+D = benyújt valakinél
 nachweisen | weist nach | wies nach | nachgewiesen | h | i | igazol; kimutat | D+A = igazol valakinek valamit
 bestätigen | bestätigt | bestätigte | bestätigt | h | r | megerősít; igazol
-unterstützen | unterstützt | unterstützte | unterstützt | h | r | támogat | bei+D = támogat valakit valamiben
 fördern | fördert | förderte | gefördert | h | r | elősegít; támogat {fejleszt}
 zwingen | zwingt | zwang | gezwungen | h | i | kényszerít | zu+D = kényszerít valamire
 veranlassen | veranlasst | veranlasste | veranlasst | h | r | elrendel; rávesz | zu+D = rávesz valamire
@@ -453,13 +425,9 @@ programmieren | programmiert | programmierte | programmiert | h | r | programoz
 
 @verkehr
 begleiten | begleitet | begleitete | begleitet | h | r | elkísér
-besichtigen | besichtigt | besichtigte | besichtigt | h | r | megtekint
-übernachten | übernachtet | übernachtete | übernachtet | h | r | megszáll; éjszakázik
 verreisen | verreist | verreiste | verreist | s | r | elutazik
-buchen | bucht | buchte | gebucht | h | r | lefoglal
 stornieren | storniert | stornierte | storniert | h | r | lemond {foglalást}; sztornóz
 verpassen | verpasst | verpasste | verpasst | h | r | lekésik; elmulaszt
-umsteigen | steigt um | stieg um | umgestiegen | s | i | átszáll | in+A = átszáll valamire; auf+A = átáll valamire
 überholen | überholt | überholte | überholt | h | r | megelőz {járművel}
 abbiegen | biegt ab | bog ab | abgebogen | s | i | bekanyarodik
 transportieren | transportiert | transportierte | transportiert | h | r | szállít; fuvaroz
@@ -467,7 +435,6 @@ sich aufhalten | hält auf | hielt auf | aufgehalten | h | i | tartózkodik
 sich verlaufen | verläuft | verlief | verlaufen | h | i | eltéved {gyalog}
 
 @wohnen
-umziehen | zieht um | zog um | umgezogen | s | i | költözik | nach+D = elköltözik valahová; in+A = beköltözik valahová
 einrichten | richtet ein | richtete ein | eingerichtet | h | r | berendez; létrehoz
 renovieren | renoviert | renovierte | renoviert | h | r | felújít
 heizen | heizt | heizte | geheizt | h | r | fűt

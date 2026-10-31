@@ -1,9 +1,10 @@
 import { CefrLevel, GrammaticalGender, NumberType, PartOfSpeech, ReflexiveType } from '@prisma/client';
-import { B2_SET } from './b2';
-import { CORE_SET } from './core';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { SeedWord, wordKey } from '../seed-writer';
+import { parseVocabulary } from '../vocabulary';
+import { B2_CATEGORIES, B2_WORDS } from './b2';
 import { parseAdjectives, parseNouns, parseVerbs, regularComparison, umlaut } from './dsl';
-import { selectSets } from './index';
-import { SeedWord } from './types';
 
 const opts = { level: CefrLevel.B2, baseCategory: 'b2-wortschatz', source: 'teszt' };
 
@@ -53,7 +54,10 @@ describe('szólista-értelmező', () => {
     expect(bew!.attributes!.data).toMatchObject({ present3sg: 'bewirbt sich', isSeparable: false, separablePrefix: null });
     expect(bew!.valencies![0]!.pattern).toBe('sich bewerben um + Akk.');
 
-    const [vorwerfen] = parseVerbs('vorwerfen | wirft vor | warf vor | vorgeworfen | h | i | szemére vet | D+A = szemére vet valakinek valamit', opts);
+    const [vorwerfen] = parseVerbs(
+      'vorwerfen | wirft vor | warf vor | vorgeworfen | h | i | szemére vet | D+A = szemére vet valakinek valamit',
+      opts,
+    );
     expect(vorwerfen!.valencies![0]).toMatchObject({ governedCase: 'DATIVE', pattern: 'vorwerfen + Dat. + Akk.', isReflexive: false });
   });
 
@@ -66,7 +70,12 @@ describe('szólista-értelmező', () => {
 
     const [hoch, schuld] = parseAdjectives('hoch | höher, am höchsten | magas\nschuld | - präd | hibás | an+D = hibás valamiben', opts);
     expect(hoch!.attributes!.data).toMatchObject({ comparative: 'höher', isIrregularComparison: true, isPredicativeOnly: false });
-    expect(schuld!.attributes!.data).toEqual({ comparative: null, superlative: null, isIrregularComparison: false, isPredicativeOnly: true });
+    expect(schuld!.attributes!.data).toEqual({
+      comparative: null,
+      superlative: null,
+      isIrregularComparison: false,
+      isPredicativeOnly: true,
+    });
   });
 
   it.each([
@@ -83,7 +92,7 @@ describe('szólista-értelmező', () => {
 });
 
 describe('B2 szókészlet', () => {
-  const words = B2_SET.words;
+  const words = B2_WORDS;
   const of = (pos: PartOfSpeech): SeedWord[] => words.filter((w) => w.partOfSpeech === pos);
 
   it('legalább 800, célként ~1000+ rekord', () => {
@@ -91,7 +100,9 @@ describe('B2 szókészlet', () => {
   });
 
   it('minden szó B2 szintű, a gyűjtő- és egy tematikus kategóriában', () => {
-    const slugs = new Set(selectSets(undefined).categories.map((c) => c.slug));
+    // Az alap seed (seed.ts) kategóriái közül azok, amelyeket a B2 szavak is használnak.
+    const base = ['arbeit', 'gesundheit', 'kommunikation', 'bildung', 'verkehr', 'gefuehle', 'menschen'];
+    const slugs = new Set([...base, ...B2_CATEGORIES.map((c) => c.slug)]);
     for (const w of words) {
       expect(w.cefrLevel).toBe(CefrLevel.B2);
       expect(w.categories[0]).toBe('b2-wortschatz');
@@ -100,9 +111,10 @@ describe('B2 szókészlet', () => {
     }
   });
 
-  it('nincs ismétlődő szó, és nem ütközik az alap mintakészlettel', () => {
-    expect(() => selectSets('core,b2')).not.toThrow();
-    expect(selectSets(undefined).words).toHaveLength(CORE_SET.words.length + words.length);
+  it('nincs ismétlődő szó, és nem ismétli az A1–B1 szólistát', () => {
+    const basic = parseVocabulary(readFileSync(join(__dirname, '..', 'data', 'wortschatz.txt'), 'utf8'));
+    const keys = [...basic, ...words].map(wordKey);
+    expect(new Set(keys).size).toBe(keys.length);
   });
 
   it('minden főnévnek van névelője (kivéve a csak többes számúakat) és birtokos esete', () => {
@@ -139,9 +151,5 @@ describe('B2 szókészlet', () => {
         expect(v.meaning.length).toBeLessThanOrEqual(300);
       }
     }
-  });
-
-  it('ismeretlen készletnév hibát ad', () => {
-    expect(() => selectSets('c1')).toThrow(/Ismeretlen szókészlet/);
   });
 });

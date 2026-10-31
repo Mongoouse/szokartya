@@ -18,7 +18,10 @@ describe('szinkronizációs kurzor', () => {
     ['nem base64 JSON', 'garbage!!'],
     ['ismeretlen verzió', Buffer.from(JSON.stringify({ v: 2, final: true, streams: {} })).toString('base64url')],
     ['hibás időbélyeg', Buffer.from(JSON.stringify({ v: 1, final: false, streams: { words: { t: 'x', id: ID } } })).toString('base64url')],
-    ['hiányzó id', Buffer.from(JSON.stringify({ v: 1, final: false, streams: { words: { t: '2026-01-01T00:00:00Z' } } })).toString('base64url')],
+    [
+      'hiányzó id',
+      Buffer.from(JSON.stringify({ v: 1, final: false, streams: { words: { t: '2026-01-01T00:00:00Z' } } })).toString('base64url'),
+    ],
   ])('érvénytelen kurzor (%s) → 400', (_label, raw) => {
     expect(() => decodeCursor(raw)).toThrow(BadRequestException);
   });

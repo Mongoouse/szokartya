@@ -4,7 +4,6 @@
  */
 export const B2_ADJECTIVES = `
 @gefuehle
-abhängig | | függő | von+D = függ valamitől/valakitől
 unabhängig | - | független | von+D = független valamitől
 angewiesen | - | ráutalt | auf+A = rá van utalva valamire
 begeistert | | lelkes | von+D = lelkes valamiért
@@ -16,7 +15,6 @@ betroffen | - | érintett; megrendült | von+D = érintett valamiben
 beteiligt | - | részes; résztvevő | an+D = részt vesz valamiben
 bewusst | | tudatos | G = tudatában van valaminek
 einverstanden | - präd | egyetért | mit+D = egyetért valamivel
-enttäuscht | | csalódott | von+D = csalódott valakiben; über+A = csalódott valami miatt
 fähig | | képes | zu+D = képes valamire
 froh | | boldog; örül | über+A = örül valaminek
 gespannt | | izgatottan várakozó | auf+A = kíváncsi valamire
@@ -25,18 +23,14 @@ gewohnt | - | megszokott | A = hozzá van szokva valamihez
 interessiert | | érdeklődő | an+D = érdeklődik valami iránt
 neidisch | | irigy | auf+A = irigy valakire
 eifersüchtig | | féltékeny | auf+A = féltékeny valakire
-schuld | - präd | hibás; vétkes | an+D = hibás valamiben
 sicher | | biztos | G = biztos valamiben
 überzeugt | | meggyőződött | von+D = meg van győződve valamiről
 verliebt | | szerelmes | in+A = szerelmes valakibe
-zufrieden | | elégedett | mit+D = elégedett valamivel
 wütend | | dühös | auf+A = dühös valakire; über+A = dühös valami miatt
 böse | | mérges; gonosz | auf+A = haragszik valakire
 dankbar | | hálás | für+A = hálás valamiért; D = hálás valakinek
 überrascht | | meglepett | von+D = meglepődött valamin; über+A = meglepődött valami miatt
 erstaunt | | csodálkozó | über+A = csodálkozik valamin
-traurig | | szomorú | über+A = szomorú valami miatt
-glücklich | | boldog {szerencsés} | über+A = boldog valami miatt
 entsetzt | | elborzadt; megdöbbent | über+A = megdöbbent valamin
 empört | | felháborodott | über+A = felháborodott valamin
 erfreut | | örvendő | über+A = örül valaminek
@@ -53,8 +47,6 @@ gestresst | | stresszes
 verheiratet | - | házas | mit+D = házas valakivel
 verwandt | - | rokon | mit+D = rokona valakinek
 befreundet | - | barátságban levő | mit+D = barátja valakinek
-freundlich | | barátságos | zu+D = barátságos valakivel
-höflich | | udvarias | zu+D = udvarias valakivel
 ehrlich | | őszinte | zu+D = őszinte valakivel
 streng | | szigorú | mit+D = szigorú valakivel
 geduldig | | türelmes | mit+D = türelmes valakivel
@@ -62,7 +54,6 @@ ungeduldig | | türelmetlen
 sparsam | | takarékos | mit+D = takarékos valamivel
 vorsichtig | | óvatos | mit+D = óvatos valamivel
 aufmerksam | | figyelmes | auf+A = felfigyel valamire
-neugierig | | kíváncsi | auf+A = kíváncsi valamire
 skeptisch | | szkeptikus | gegenüber+D = szkeptikus valamivel szemben
 kritisch | | kritikus | gegenüber+D = kritikus valamivel szemben
 tolerant | | toleráns | gegenüber+D = toleráns valakivel szemben
@@ -70,8 +61,6 @@ verständnisvoll | | megértő | gegenüber+D = megértő valakivel szemben
 gerecht | | igazságos | gegenüber+D = igazságos valakivel szemben
 ungerecht | | igazságtalan
 berühmt | | híres | für+A = híres valamiről
-zuverlässig | | megbízható
-selbstständig | | önálló
 hilfsbereit | | segítőkész
 zurückhaltend | | visszafogott
 selbstbewusst | | magabiztos
@@ -106,7 +95,6 @@ charakteristisch | | jellegzetes | für+A = jellegzetes valamire
 nützlich | | hasznos | für+A = hasznos valakinek
 offen | | nyitott | für+A = nyitott valamire
 vergleichbar | - | összehasonlítható | mit+D = összehasonlítható valamivel
-frei | | szabad; mentes | von+D = mentes valamitől
 informiert | | tájékozott | über+A = tájékozott valamiről
 wert | - präd | értékes {megér valamit} | A = megér valamit; G = méltó valamire
 voll | | teli | von+D = tele valamivel; mit+D = megtöltve valamivel

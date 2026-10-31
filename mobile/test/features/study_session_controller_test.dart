@@ -85,7 +85,7 @@ void main() {
   test('megfordítás: válasz fázis, intervallum-előnézet minden gombhoz', () async {
     await start();
     await settled();
-    controller().reveal();
+    await controller().reveal();
     final s = container.read(studySessionProvider);
     expect(s.phase, StudyPhase.answer);
     expect(s.preview.keys, containsAll([1, 3, 4, 5]));
@@ -105,7 +105,7 @@ void main() {
   test('értékelés: helyi mentés, következő kártya, szinkron ütemezése; a tanulási lépcsős kártya visszakerül a sor végére', () async {
     await start();
     await settled();
-    controller().reveal();
+    await controller().reveal();
     await controller().grade(4); // c0 → LEARNING (10 perc), ma még esedékes
 
     final s = container.read(studySessionProvider);
@@ -122,7 +122,7 @@ void main() {
     await start(newCards: 2);
     await settled();
     for (var i = 0; i < 2; i++) {
-      controller().reveal();
+      await controller().reveal();
       await controller().grade(5);
     }
     final s = container.read(studySessionProvider);
@@ -134,7 +134,7 @@ void main() {
   test('hiba esetén a pontosság nem nő; dupla koppintás csak egy értékelést rögzít', () async {
     await start();
     await settled();
-    controller().reveal();
+    await controller().reveal();
     await Future.wait([controller().grade(1), controller().grade(1)]);
     final s = container.read(studySessionProvider);
     expect(s.reviewed, 1);
@@ -146,17 +146,19 @@ void main() {
     await start();
     await settled();
     await Future<void>.delayed(const Duration(milliseconds: 60));
-    controller().reveal();
+    await controller().reveal();
     await controller().grade(4);
     final log = (await db.db.query('review_log')).single;
     expect(log['response_time_ms'] as int, greaterThanOrEqualTo(50));
   });
 
   test('a nap végén túl esedékes tanulási kártya nem kerül vissza a sorba', () async {
-    clock.time = localDayBounds(DateTime.utc(2026, 3, 10, 12)).end.subtract(const Duration(minutes: 5));
+    // A „nap” a profil időzónája (Europe/Budapest) szerint ér véget, nem az eszközé.
+    clock.time = localDayBounds(DateTime.utc(2026, 3, 10, 12), timeZone: 'Europe/Budapest').end.subtract(const Duration(minutes: 5));
+    expect(clock.now(), DateTime.utc(2026, 3, 10, 22, 55));
     await start(newCards: 1);
     await settled();
-    controller().reveal();
+    await controller().reveal();
     await controller().grade(4); // 10 perc múlva esedékes → már holnap
     expect(container.read(studySessionProvider).phase, StudyPhase.finished);
     clock.time = DateTime.utc(2026, 3, 10, 9);

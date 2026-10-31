@@ -34,4 +34,12 @@ export class AppConfigService {
   get throttleEnabled(): boolean {
     return this.config.get('THROTTLE_ENABLED', { infer: true });
   }
+
+  get logLevel(): string {
+    return this.config.get('LOG_LEVEL', { infer: true });
+  }
+
+  get logPretty(): boolean {
+    return this.config.get('LOG_PRETTY', { infer: true });
+  }
 }

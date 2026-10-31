@@ -45,11 +45,12 @@ A push tartalmazza a kliens aktuális óráját (`clientTime`). A szerver kiszá
 ### Push – `POST /sync/push`
 ```json
 { "clientTime": "…", "deviceId": "…",
+  "customWords": [{ "id": "<kliens uuid>", "lemma": "Fernweh", "partOfSpeech": "NOUN", "gender": "NEUTER", "translations": ["…"] }],
   "enrollments": [{ "progressId": "<kliens uuid>", "wordId": "…", "cardType": "RECOGNITION" }],
   "cardChanges": [{ "progressId": "…", "baseVersion": 3, "changedAt": "…", "isSuspended": true }],
   "reviews":     [{ "reviewId": "<kliens uuid>", "progressId": "…", "grade": 4, "responseTimeMs": 2100, "reviewedAt": "…" }] }
 ```
-- Feldolgozási sorrend: felvételek → jelzők → értékelések (`reviewedAt` szerint rendezve).
+- Feldolgozási sorrend: saját szavak → felvételek → jelzők → értékelések (`reviewedAt` szerint rendezve). A kliens is ebben a függőségi sorrendben ürít: ha egy előbbi típusból több vár, mint ami egy kötegbe fér, a későbbiek a következő kérésre maradnak.
 - **Idempotens:** a `reviewId` és a kártya természetes kulcsa alapján az ismételt köteg nem okoz duplikációt (`duplicate`, `exists`).
 - Tételenkénti eredmény: `created/exists/applied/duplicate/conflict/rejected`. Egy hibás tétel nem buktatja el a köteget; infrastruktúra-hiba (pl. adatbázis) viszont igen, hogy a kliens újrapróbálja.
 - Az értékelés ugyanazon a kódúton megy, mint a REST végpont (`RepetitionService.applyReview`: `FOR UPDATE` zár, idempotencia, tranzakció).
@@ -74,9 +75,9 @@ A push tartalmazza a kliens aktuális óráját (`clientTime`). A szerver kiszá
 - Ha ugyanarra a (szó, típus) párra helyben más azonosítójú kártya van, azt a szerver azonosítójára írjuk át (kártya, napló és outbox hivatkozások együtt).
 
 ### Szinkron ütemezése
-- belépés után azonnal; értékelés / felvétel után 5 mp-es kötegeléssel; 5 percenként; lehúzással (pull-to-refresh);
+- belépés után azonnal; értékelés / felvétel után 5 mp-es kötegeléssel; 5 percenként; lehúzással (pull-to-refresh); az app előtérbe kerülésekor; a hálózat visszatértekor;
 - hálózati hiba → offline jelzés a fejlécben, a munka folytatható;
-- kijelentkezés előtt szinkron; ha marad feltöltetlen módosítás, megerősítést kér (a helyi adatok törlődnek).
+- kijelentkezés előtt szinkron; ha marad feltöltetlen módosítás, a helyi adatok megmaradnak, és ugyanannak a felhasználónak a következő belépésekor feltöltődnek (más fiókkal belépve törlődnek).
 
 ### Szókártya-állapotgép (`StudySessionController`)
 ```
@@ -86,7 +87,7 @@ loading ──► question ──reveal()──► answer ──grade(q)──�
 - **Gombok:** Nem tudtam (1) · Nehéz (3) · Jó (4) · Könnyű (5), alattuk az ütemező előnézete (pl. „10 perc”, „4 nap”).
 - A tanulási lépcsőn maradt kártyák (1–10 perc) a munkamenet végére visszakerülnek.
 - Mentés közben a gombok tiltva (dupla koppintás ellen).
-- Kártyatípusok: felismerés (de → hu), felidézés (hu → de), névelő (`___ Tisch` → der). A hátlapon: többes szám, igei alapalakok segédigével, fokozás, vonzatok jelentéssel, példamondat.
+- Kártyatípusok: felismerés (de → hu), felidézés (hu → de, gépelt válasszal is), névelő (`___ Tisch` → der), többes szám, igei alapalakok, vonzat (lásd [05-tovabbfejlesztes.md](05-tovabbfejlesztes.md)). A hátlapon: többes szám, igei alapalakok segédigével, fokozás, vonzatok jelentéssel, példamondat.
 
 ## 5. Ellenőrzés
 
@@ -98,6 +99,7 @@ loading ──► question ──reveal()──► answer ──grade(q)──�
 
 ## 6. Ismert korlátok
 
-- A teljes központi szókatalógus lejön minden eszközre (néhány ezer szónál ez néhány MB; ennél nagyobb katalógusnál szintenkénti előfizetés javasolt).
-- A „mai nap” a kliensen az eszköz időzónája, a szerveren a profilban beállított időzóna szerint számít; eltérés esetén a napi keret határa eltolódhat.
+- ~~A teljes központi szókatalógus lejön minden eszközre~~ – Fázis 5 óta a profilban választható, mely CEFR szintek szinkronizálódjanak.
+- ~~A „mai nap” a kliensen az eszköz időzónája szerint számít~~ – Fázis 5 óta a kliens is a profil időzónáját használja.
 - A felfüggesztés/törlés LWW-je kártyaszintű: két eszköz egymással ellentétes, egyidejű offline jelzőmódosításánál a későbbi nyer (ez szándékos).
+- Bezárt appnál nincs háttérszinkron (csak előtérben, illetve induláskor).
