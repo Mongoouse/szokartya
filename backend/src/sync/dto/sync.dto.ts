@@ -16,6 +16,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { CreateCustomWordDto, CustomWordStatus } from '../../words/dto/custom-word.dto';
 import { WordDto } from '../../words/dto/word.dto';
 import type { WordWithDetails } from '../../words/word-detail';
 
@@ -231,6 +232,17 @@ export class PushRequestDto {
   @MaxLength(128)
   deviceId?: string;
 
+  @ApiProperty({
+    type: [CreateCustomWordDto],
+    maxItems: MAX_PUSH_ITEMS,
+    description: 'Offline létrehozott saját szavak (az id kötelező) – a kártyafelvételek előtt dolgozódnak fel',
+  })
+  @IsArray()
+  @ArrayMaxSize(MAX_PUSH_ITEMS)
+  @ValidateNested({ each: true })
+  @Type(() => CreateCustomWordDto)
+  customWords: CreateCustomWordDto[] = [];
+
   @ApiProperty({ type: [EnrollmentChangeDto], maxItems: MAX_PUSH_ITEMS })
   @IsArray()
   @ArrayMaxSize(MAX_PUSH_ITEMS)
@@ -293,10 +305,17 @@ export class ReviewResultItemDto {
   @ApiPropertyOptional() reason?: string;
 }
 
+export class CustomWordPushResultDto {
+  @ApiProperty({ format: 'uuid' }) wordId!: string;
+  @ApiProperty({ enum: CustomWordStatus, enumName: 'CustomWordStatus' }) status!: CustomWordStatus;
+  @ApiPropertyOptional() reason?: string;
+}
+
 export class PushResponseDto {
   @ApiProperty() serverTime!: Date;
   @ApiProperty({ description: 'Becsült órakülönbség (szerver − kliens, ms); 2 s fölött korrigálva' })
   clockOffsetMs!: number;
+  @ApiProperty({ type: [CustomWordPushResultDto] }) customWords!: CustomWordPushResultDto[];
   @ApiProperty({ type: [EnrollmentResultDto] }) enrollments!: EnrollmentResultDto[];
   @ApiProperty({ type: [CardChangeResultDto] }) cardChanges!: CardChangeResultDto[];
   @ApiProperty({ type: [ReviewResultItemDto] }) reviews!: ReviewResultItemDto[];

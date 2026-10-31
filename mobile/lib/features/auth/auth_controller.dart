@@ -33,22 +33,32 @@ class AuthController extends AsyncNotifier<UserProfile?> {
             ),
       );
 
-  /// Kilépés előtt megpróbáljuk feltölteni a várakozó módosításokat, hogy a
-  /// helyi adatok törlésével ne vesszen el tanulási előzmény.
-  /// @returns false, ha maradt fel nem töltött módosítás (a UI megerősítést kér).
+  /// Kilépés előtt megpróbáljuk feltölteni a várakozó módosításokat. Ha ez
+  /// nem sikerül (offline), a helyi adatok megmaradnak, és a következő
+  /// belépéskor feltöltődnek – így kilépéssel nem vész el tanulási előzmény.
+  /// @returns false, ha maradt fel nem töltött módosítás és nincs [force]
+  /// (a UI ilyenkor tájékoztat és megerősítést kér).
   Future<bool> signOut({bool force = false}) async {
-    if (!force) {
-      try {
-        await ref.read(syncEngineProvider).sync();
-      } on ApiException {
-        // offline – lásd lent
-      }
-      if (await ref.read(localStoreProvider).outboxCount() > 0) return false;
+    try {
+      await ref.read(syncEngineProvider).sync();
+    } on ApiException {
+      // offline – lásd lent
     }
-    await ref.read(authRepositoryProvider).logout();
+    final pending = await ref.read(localStoreProvider).outboxCount() > 0;
+    if (pending && !force) return false;
+    await ref.read(authRepositoryProvider).logout(keepLocalData: pending);
     state = const AsyncData(null);
     return true;
   }
+
+  /// Fiók törlése a szerveren és helyben. Hibás jelszónál [UnauthorizedException]-t dob.
+  Future<void> deleteAccount(String password) async {
+    await ref.read(authRepositoryProvider).deleteAccount(password);
+    state = const AsyncData(null);
+  }
+
+  /// A profil frissítése (beállítások mentése után).
+  void updateProfile(UserProfile profile) => state = AsyncData(profile);
 
   Future<void> _authenticate(Future<UserProfile> Function() action) async {
     state = const AsyncLoading<UserProfile?>();

@@ -1,7 +1,8 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CardState, CardType, PartOfSpeech } from '@prisma/client';
+import { CardState } from '@prisma/client';
 import { localDayBounds } from '../common/utils/time-zone';
-import { PrismaService } from '../prisma/prisma.service';
+import { isCardTypeApplicable } from '../words/card-applicability';
+import { DbClient, PrismaService } from '../prisma/prisma.service';
 import { UsersRepository } from '../users/users.repository';
 import { WordsRepository } from '../words/words.repository';
 import {
@@ -155,7 +156,7 @@ export class RepetitionService {
       const scheduled = scheduleReview(
         state,
         { grade: input.grade as Grade, responseTimeMs: input.responseTimeMs, reviewedAt },
-        this.schedulerConfig,
+        await this.configFor(userId, tx),
       );
 
       await this.repo.updateProgress(card.id, toProgressUpdate(scheduled.card), tx);
@@ -213,8 +214,8 @@ export class RepetitionService {
 
       const cards = words.flatMap((w) =>
         dto.cardTypes
-          // Névelőkártya csak nemmel rendelkező főnévnél értelmes (die Leute-nél nem).
-          .filter((t) => t !== CardType.GENDER || (w.partOfSpeech === PartOfSpeech.NOUN && w.nounAttributes?.gender))
+          // Pl. névelőkártya csak nemmel rendelkező főnévnél értelmes (die Leute-nél nem).
+          .filter((t) => isCardTypeApplicable(w, t))
           .map((cardType) => ({ userId, wordId: w.id, cardType })),
       );
 
@@ -266,6 +267,13 @@ export class RepetitionService {
       errorRateLast30Days: accuracy === null ? null : round3(1 - accuracy),
       avgResponseMsLast30Days: metrics.avgResponseMs,
     };
+  }
+
+  /** Az ütemező konfigurációja a felhasználó választott célmegtartásával. */
+  private async configFor(userId: string, db: DbClient): Promise<SchedulerConfig> {
+    const user = await this.users.findActiveById(userId, db);
+    const targetRetention = user?.targetRetention.toNumber() ?? this.schedulerConfig.targetRetention;
+    return targetRetention === this.schedulerConfig.targetRetention ? this.schedulerConfig : { ...this.schedulerConfig, targetRetention };
   }
 
   private async requireUser(userId: string) {

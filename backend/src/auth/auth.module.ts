@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AppConfigService } from '../config/app-config.service';
 import { UsersModule } from '../users/users.module';
+import { AccountController } from './account.controller';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
 import { RefreshTokenRepository } from './refresh-token.repository';
+import { TokenCleanupService } from './token-cleanup.service';
 import { TokenService } from './token.service';
 
 @Module({
@@ -21,7 +23,7 @@ import { TokenService } from './token.service';
       }),
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, PasswordService, RefreshTokenRepository, TokenService],
+  controllers: [AuthController, AccountController],
+  providers: [AuthService, PasswordService, RefreshTokenRepository, TokenService, TokenCleanupService],
 })
 export class AuthModule {}

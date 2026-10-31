@@ -1,16 +1,19 @@
 /**
  * Mintaadatok a központi (kurált) szótárhoz.
  *
- * A szkript idempotens: minden rekord determinisztikus UUID-t kap (UUID v5 a
- * természetes kulcsból), és `upsert`-tel kerül be, így többszöri futtatás sem
- * hoz létre duplikátumot. Egy szó összes rekordja egyetlen tranzakcióban íródik.
+ * Két forrás:
+ *  1. az alábbi, kézzel kidolgozott szavak – szándékosan lefedik a séma
+ *     határeseteit: azonos alakú szavak (der See / die See), csak egyes / csak
+ *     többes számú főnevek, n-deklináció, elváló és visszaható igék, kettős
+ *     segédige, elöljárós és esetvonzatok, rendhagyó fokozás;
+ *  2. a `data/wortschatz.txt` szólista (A1–B1 alapszókincs, tömör formátumban,
+ *     lásd `vocabulary.ts`).
  *
- * A minták szándékosan lefedik a séma határeseteit: azonos alakú szavak
- * (der See / die See), csak egyes / csak többes számú főnevek, n-deklináció,
- * elváló és visszaható igék, kettős segédige, elöljárós és esetvonzatok,
- * rendhagyó fokozás.
+ * A szkript idempotens (lásd `seed-writer.ts`): többszöri futtatás sem hoz
+ * létre duplikátumot.
  */
-import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   AuxiliaryVerb,
   CefrLevel,
@@ -19,76 +22,13 @@ import {
   GrammaticalGender,
   NumberType,
   PartOfSpeech,
-  Prisma,
   PrismaClient,
   ReflexiveType,
 } from '@prisma/client';
+import { SeedCategory, seedCategories, SeedWord, seedWord, wordKey } from './seed-writer';
+import { parseVocabulary } from './vocabulary';
 
 const prisma = new PrismaClient();
-
-/** Rögzített névtér a seed-azonosítókhoz (RFC 4122 UUID v5). */
-const SEED_NAMESPACE = 'b7c2a4f0-6a51-4f3e-9d0e-2c1f5e8a9b10';
-
-/** Determinisztikus UUID v5 egy természetes kulcsból. */
-function seedId(key: string): string {
-  const ns = Buffer.from(SEED_NAMESPACE.replace(/-/g, ''), 'hex');
-  const hash = createHash('sha1').update(ns).update(key, 'utf8').digest();
-  const bytes = hash.subarray(0, 16);
-  bytes[6] = (bytes[6]! & 0x0f) | 0x50; // verzió: 5
-  bytes[8] = (bytes[8]! & 0x3f) | 0x80; // variáns: RFC 4122
-  const hex = bytes.toString('hex');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
-}
-
-// ---------------------------------------------------------------------------
-// Seed adatszerkezetek
-// ---------------------------------------------------------------------------
-
-interface SeedTranslation {
-  text: string;
-  senseNote?: string;
-}
-
-interface SeedValency {
-  preposition: string | null;
-  governedCase: GrammaticalCase;
-  isReflexive?: boolean;
-  pattern: string;
-  meaning: string;
-  examples?: SeedExample[];
-}
-
-interface SeedExample {
-  sentence: string;
-  translation: string;
-}
-
-type SeedAttributes =
-  | { kind: 'noun'; data: Omit<Prisma.NounAttributesUncheckedCreateInput, 'wordId' | 'partOfSpeech'> }
-  | { kind: 'verb'; data: Omit<Prisma.VerbAttributesUncheckedCreateInput, 'wordId' | 'partOfSpeech'> }
-  | { kind: 'adjective'; data: Omit<Prisma.AdjectiveAttributesUncheckedCreateInput, 'wordId' | 'partOfSpeech'> };
-
-interface SeedWord {
-  lemma: string;
-  partOfSpeech: PartOfSpeech;
-  homographNo?: number;
-  cefrLevel: CefrLevel;
-  ipa?: string;
-  frequencyRank?: number;
-  categories: string[];
-  /** Az első elem az elsődleges fordítás. */
-  translations: [SeedTranslation, ...SeedTranslation[]];
-  attributes?: SeedAttributes;
-  valencies?: SeedValency[];
-  examples?: SeedExample[];
-}
-
-interface SeedCategory {
-  slug: string;
-  nameHu: string;
-  nameDe: string;
-  parent?: string;
-}
 
 // ---------------------------------------------------------------------------
 // Adatok
@@ -105,6 +45,18 @@ const CATEGORIES: SeedCategory[] = [
   { slug: 'verkehr', nameHu: 'Közlekedés', nameDe: 'Verkehr' },
   { slug: 'gefuehle', nameHu: 'Érzelmek', nameDe: 'Gefühle' },
   { slug: 'grundwortschatz', nameHu: 'Alapszókincs', nameDe: 'Grundwortschatz' },
+  { slug: 'familie', nameHu: 'Család', nameDe: 'Familie', parent: 'menschen' },
+  { slug: 'koerper', nameHu: 'Test', nameDe: 'Körper' },
+  { slug: 'gesundheit', nameHu: 'Egészség', nameDe: 'Gesundheit' },
+  { slug: 'arbeit', nameHu: 'Munka', nameDe: 'Arbeit' },
+  { slug: 'freizeit', nameHu: 'Szabadidő', nameDe: 'Freizeit' },
+  { slug: 'zeit', nameHu: 'Idő', nameDe: 'Zeit' },
+  { slug: 'stadt', nameHu: 'Város', nameDe: 'Stadt' },
+  { slug: 'kleidung', nameHu: 'Ruházat', nameDe: 'Kleidung', parent: 'alltag' },
+  { slug: 'wetter', nameHu: 'Időjárás', nameDe: 'Wetter', parent: 'natur' },
+  { slug: 'tiere', nameHu: 'Állatok', nameDe: 'Tiere', parent: 'natur' },
+  { slug: 'reisen', nameHu: 'Utazás', nameDe: 'Reisen' },
+  { slug: 'kommunikation', nameHu: 'Kommunikáció', nameDe: 'Kommunikation' },
 ];
 
 const WORDS: SeedWord[] = [
@@ -411,120 +363,28 @@ const WORDS: SeedWord[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Írás
+// Futtatás
 // ---------------------------------------------------------------------------
 
-function wordKey(w: SeedWord): string {
-  return `word:de:${w.partOfSpeech}:${w.lemma}:${w.homographNo ?? 1}`;
-}
-
-async function seedCategories(): Promise<Map<string, string>> {
-  const ids = new Map<string, string>();
-  for (const c of CATEGORIES) {
-    const id = seedId(`category:${c.slug}`);
-    const parentId = c.parent ? ids.get(c.parent) : undefined;
-    if (c.parent && !parentId) {
-      throw new Error(`Ismeretlen szülőkategória: ${c.parent} (${c.slug})`);
-    }
-    const data = { slug: c.slug, nameHu: c.nameHu, nameDe: c.nameDe, parentId: parentId ?? null };
-    await prisma.category.upsert({ where: { id }, create: { id, ...data }, update: data });
-    ids.set(c.slug, id);
-  }
-  return ids;
-}
-
-async function seedAttributes(tx: Prisma.TransactionClient, wordId: string, attrs: SeedAttributes): Promise<void> {
-  switch (attrs.kind) {
-    case 'noun':
-      await tx.nounAttributes.upsert({ where: { wordId }, create: { wordId, ...attrs.data }, update: attrs.data });
-      return;
-    case 'verb':
-      await tx.verbAttributes.upsert({ where: { wordId }, create: { wordId, ...attrs.data }, update: attrs.data });
-      return;
-    case 'adjective':
-      await tx.adjectiveAttributes.upsert({ where: { wordId }, create: { wordId, ...attrs.data }, update: attrs.data });
-      return;
-  }
-}
-
-async function seedExamples(
-  tx: Prisma.TransactionClient,
-  wordId: string,
-  keyPrefix: string,
-  examples: SeedExample[],
-  valencyId: string | null,
-): Promise<void> {
-  for (const [i, ex] of examples.entries()) {
-    const id = seedId(`${keyPrefix}:example:${i}`);
-    const data = { wordId, valencyId, sentence: ex.sentence, translation: ex.translation, sortOrder: i };
-    await tx.exampleSentence.upsert({ where: { id }, create: { id, ...data }, update: data });
-  }
-}
-
-async function seedWord(w: SeedWord, categoryIds: Map<string, string>): Promise<void> {
-  const key = wordKey(w);
-  const wordId = seedId(key);
-
-  await prisma.$transaction(async (tx) => {
-    const wordData = {
-      language: 'de',
-      lemma: w.lemma,
-      partOfSpeech: w.partOfSpeech,
-      homographNo: w.homographNo ?? 1,
-      cefrLevel: w.cefrLevel,
-      ipa: w.ipa ?? null,
-      frequencyRank: w.frequencyRank ?? null,
-    };
-    await tx.word.upsert({ where: { id: wordId }, create: { id: wordId, ...wordData }, update: wordData });
-
-    if (w.attributes) {
-      await seedAttributes(tx, wordId, w.attributes);
-    }
-
-    for (const [i, t] of w.translations.entries()) {
-      const id = seedId(`${key}:translation:hu:${t.text}`);
-      const data = { wordId, language: 'hu', text: t.text, senseNote: t.senseNote ?? null, isPrimary: i === 0, sortOrder: i };
-      await tx.translation.upsert({ where: { id }, create: { id, ...data }, update: data });
-    }
-
-    for (const [i, v] of (w.valencies ?? []).entries()) {
-      const vKey = `${key}:valency:${v.preposition ?? '-'}:${v.governedCase}:${v.isReflexive ?? false}`;
-      const id = seedId(vKey);
-      const data = {
-        wordId,
-        preposition: v.preposition,
-        governedCase: v.governedCase,
-        isReflexive: v.isReflexive ?? false,
-        pattern: v.pattern,
-        meaning: v.meaning,
-        sortOrder: i,
-      };
-      await tx.valency.upsert({ where: { id }, create: { id, ...data }, update: data });
-      await seedExamples(tx, wordId, vKey, v.examples ?? [], id);
-    }
-
-    await seedExamples(tx, wordId, key, w.examples ?? [], null);
-
-    for (const slug of w.categories) {
-      const categoryId = categoryIds.get(slug);
-      if (!categoryId) {
-        throw new Error(`Ismeretlen kategória: ${slug} (${w.lemma})`);
-      }
-      await tx.wordCategory.upsert({
-        where: { wordId_categoryId: { wordId, categoryId } },
-        create: { wordId, categoryId },
-        update: {},
-      });
-    }
-  });
-}
+const VOCABULARY_FILE = join(__dirname, 'data', 'wortschatz.txt');
 
 async function main(): Promise<void> {
-  const categoryIds = await seedCategories();
-  for (const w of WORDS) {
-    await seedWord(w, categoryIds);
+  const vocabulary = parseVocabulary(readFileSync(VOCABULARY_FILE, 'utf8'));
+  const all = [...WORDS, ...vocabulary];
+  const seen = new Set<string>();
+  for (const w of all) {
+    const key = wordKey(w);
+    if (seen.has(key)) {
+      throw new Error(`Kétszer szereplő szó: ${key} – azonos alakú szónál adj meg homográf-sorszámot (#2)`);
+    }
+    seen.add(key);
   }
-  console.log(`Seed kész: ${CATEGORIES.length} kategória, ${WORDS.length} szó.`);
+
+  const categoryIds = await seedCategories(prisma, CATEGORIES);
+  for (const w of all) {
+    await seedWord(prisma, w, categoryIds);
+  }
+  console.log(`Seed kész: ${CATEGORIES.length} kategória, ${all.length} szó.`);
 }
 
 main()

@@ -9,6 +9,7 @@ import 'package:szokartya/core/api/token_store.dart';
 import 'package:szokartya/core/config/app_config.dart';
 import 'package:szokartya/data/local/app_database.dart';
 import 'package:szokartya/data/local/local_store.dart';
+import 'package:szokartya/data/models/custom_word_input.dart';
 import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/repositories/auth_repository.dart';
 import 'package:szokartya/data/models/user_settings.dart';
@@ -218,5 +219,72 @@ void main() {
   test('az eszközazonosító stabil a futások között', () async {
     final first = await engine.deviceId();
     expect(await engine.deviceId(), first);
+  });
+
+  test('nagy kimenő sor: az értékelés csak a kártyája felvétele után megy fel (köteghatáron át)', () async {
+    final words = [for (var i = 0; i < 110; i++) wordJson(id: 'bw$i', lemma: 'Wort$i')];
+    await store.applyServerWords(words);
+    await store.enrollLocally([
+      for (var i = 0; i < 110; i++)
+        for (final t in [CardType.recognition, CardType.production]) (id: 'bc$i-${t.wire}', wordId: 'bw$i', type: t),
+    ], clock.now());
+    await study.review((await store.card('bc109-PRODUCTION'))!, grade: 4, responseTimeMs: 1000);
+
+    await engine.sync();
+    expect(server.pushes, hasLength(2));
+    expect(server.pushes[0]['enrollments'] as List, hasLength(200));
+    expect(server.pushes[0]['reviews'] as List, isEmpty);
+    expect(server.pushes[1]['enrollments'] as List, hasLength(20));
+    expect((server.pushes[1]['reviews'] as List).single, containsPair('progressId', 'bc109-PRODUCTION'));
+  });
+
+  group('saját szavak', () {
+    Future<String> addWord() async => (await study.addCustomWord(const CustomWordInput(
+          lemma: 'Fernweh',
+          partOfSpeech: 'NOUN',
+          gender: 'NEUTER',
+          translations: ['vágyakozás'],
+        )))
+            .id;
+
+    test('a saját szó ugyanabban a kérésben, a kártyafelvételekkel együtt kerül fel', () async {
+      final id = await addWord();
+      server.onPush = (body) => {
+            'customWords': [
+              for (final w in (body['customWords'] as List).cast<Json>()) {'wordId': w['id'], 'status': 'created'},
+            ],
+            'enrollments': [
+              for (final e in (body['enrollments'] as List).cast<Json>())
+                {'progressId': e['progressId'], 'status': 'created', 'serverProgressId': e['progressId']},
+            ],
+            'cardChanges': <Json>[],
+            'reviews': <Json>[],
+          };
+      final report = await engine.sync();
+      final body = server.pushes.single;
+      expect((body['customWords'] as List).single, containsPair('id', id));
+      expect((body['enrollments'] as List).map((e) => (e as Json)['wordId']).toSet(), {id});
+      expect(report.rejected, 0);
+      expect(await store.outboxCount(), 0);
+    });
+
+    test('elutasított saját szó: a szó és kártyái helyben is törlődnek', () async {
+      final id = await addWord();
+      server.onPush = (body) => {
+            'customWords': [
+              {'wordId': id, 'status': 'rejected', 'reason': 'invalid'},
+            ],
+            'enrollments': [
+              for (final e in (body['enrollments'] as List).cast<Json>())
+                {'progressId': e['progressId'], 'status': 'rejected', 'reason': 'word_not_found'},
+            ],
+            'cardChanges': <Json>[],
+            'reviews': <Json>[],
+          };
+      final report = await engine.sync();
+      expect(report.rejected, 4); // a szó + 3 kártya
+      expect(await study.searchWords(customOnly: true), isEmpty);
+      expect((await db.db.query('cards', where: 'deleted = 0')).where((c) => c['word_id'] == id), isEmpty);
+    });
   });
 }

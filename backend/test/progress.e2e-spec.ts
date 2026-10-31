@@ -32,7 +32,10 @@ describe('Tanulási haladás (integráció)', () => {
   }
 
   const submit = (progressId: string, body: Record<string, unknown>) =>
-    t.http.post(`${API}/study/cards/${progressId}/reviews`).set(user.auth).send({ reviewId: uuid(), responseTimeMs: 2000, ...body });
+    t.http
+      .post(`${API}/study/cards/${progressId}/reviews`)
+      .set(user.auth)
+      .send({ reviewId: uuid(), responseTimeMs: 2000, ...body });
 
   // ---------------------------------------------------------------------------
   describe('kártyafelvétel', () => {
@@ -280,7 +283,10 @@ describe('Tanulási haladás (integráció)', () => {
       expect(words).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ display: 'der Tisch', noun: expect.objectContaining({ article: 'der', pluralForm: 'Tische' }) }),
-          expect.objectContaining({ lemma: 'warten', valencies: [expect.objectContaining({ pattern: 'warten auf + Akk.', caseAbbreviation: 'Akk.' })] }),
+          expect.objectContaining({
+            lemma: 'warten',
+            valencies: [expect.objectContaining({ pattern: 'warten auf + Akk.', caseAbbreviation: 'Akk.' })],
+          }),
         ]),
       );
     });

@@ -52,6 +52,14 @@ class SyncController extends Notifier<SyncStatus> {
     _debounceTimer = Timer(_debounce, syncNow);
   }
 
+  /// Az app előtérbe kerülésekor (háttérben töltött idő után) azonnal szinkronizálunk.
+  void onResumed() => unawaited(syncNow());
+
+  /// A kapcsolat visszatértekor: ha offline voltunk, rögtön feltöltjük a sort.
+  void onConnectivityChanged({required bool online}) {
+    if (online && state.offline) unawaited(syncNow());
+  }
+
   Future<void> syncNow() async {
     _debounceTimer?.cancel();
     if (state.running) return;

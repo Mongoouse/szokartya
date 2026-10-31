@@ -19,7 +19,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     response.status(status).json({ statusCode: status, message, error: HttpStatus[status] });
   }
 
-  private map(e: Prisma.PrismaClientKnownRequestError): [number, string] {
+  private map(e: Prisma.PrismaClientKnownRequestError): [HttpStatus, string] {
     switch (e.code) {
       case 'P2002': // unique constraint
         return [HttpStatus.CONFLICT, 'Az erőforrás már létezik'];

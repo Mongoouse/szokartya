@@ -2,16 +2,32 @@ import '../../domain/sm2_scheduler.dart';
 import 'word.dart';
 
 enum CardType {
-  recognition('RECOGNITION'),
-  production('PRODUCTION'),
-  gender('GENDER');
+  recognition('RECOGNITION', 'Felismerés (német → magyar)'),
+  production('PRODUCTION', 'Felidézés (magyar → német)'),
+  gender('GENDER', 'Névelő (der / die / das)'),
+  plural('PLURAL', 'Többes szám'),
+  verbForms('VERB_FORMS', 'Igei alapalakok'),
+  valency('VALENCY', 'Vonzat (elöljáró + eset)');
 
-  const CardType(this.wire);
+  const CardType(this.wire, this.label);
 
   final String wire;
 
+  /// Megjelenítési név (beállítások, statisztika).
+  final String label;
+
   static CardType parse(String value) =>
       values.firstWhere((t) => t.wire == value, orElse: () => throw FormatException('Ismeretlen kártyatípus: $value'));
+
+  /// Képezhető-e ilyen kártya a szóból – a szerver `isCardTypeApplicable`
+  /// szabályainak megfelelője (különben a szerver elutasítaná a felvételt).
+  bool appliesTo(Word w) => switch (this) {
+        CardType.recognition || CardType.production => true,
+        CardType.gender => w.hasGender,
+        CardType.plural => w.hasPlural,
+        CardType.verbForms => w.hasVerbForms,
+        CardType.valency => w.hasValency,
+      };
 }
 
 /// Egy tanulókártya a helyi adatbázisból: ütemezési állapot + a szó.

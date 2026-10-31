@@ -79,7 +79,10 @@ export class RepetitionController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Tanulási statisztika', description: 'Kártyák állapot szerint, esedékesség, pontosság, hibagyakoriság, reakcióidő.' })
+  @ApiOperation({
+    summary: 'Tanulási statisztika',
+    description: 'Kártyák állapot szerint, esedékesség, pontosság, hibagyakoriság, reakcióidő.',
+  })
   @ApiOkResponse({ type: StudyStatsDto })
   stats(@CurrentUser() user: AuthenticatedUser): Promise<StudyStatsDto> {
     return this.repetition.getStats(user.id);

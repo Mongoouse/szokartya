@@ -5,8 +5,12 @@ import '../../data/models/user_settings.dart';
 import '../../domain/sm2_scheduler.dart';
 import '../../providers.dart';
 import '../auth/auth_controller.dart';
+import '../settings/settings_screen.dart';
+import '../stats/stats_screen.dart';
 import '../study/study_screen.dart';
 import '../sync/sync_controller.dart';
+import '../words/custom_word_screen.dart';
+import '../words/word_browser_screen.dart';
 import 'home_summary_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -25,8 +29,21 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           _SyncIndicator(status: sync),
           PopupMenuButton<String>(
-            onSelected: (v) => v == 'logout' ? _signOut(context, ref) : null,
-            itemBuilder: (_) => const [PopupMenuItem(value: 'logout', child: Text('Kijelentkezés'))],
+            tooltip: 'Menü',
+            onSelected: (v) => switch (v) {
+              'stats' => _open(context, ref, const StatsScreen()),
+              'words' => _open(context, ref, const WordBrowserScreen()),
+              'custom' => _open(context, ref, const CustomWordScreen()),
+              'settings' => _open(context, ref, SettingsScreen(profile: profile)),
+              _ => _signOut(context, ref),
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'stats', child: Text('Statisztika')),
+              PopupMenuItem(value: 'words', child: Text('Szókereső')),
+              PopupMenuItem(value: 'custom', child: Text('Új saját szó')),
+              PopupMenuItem(value: 'settings', child: Text('Beállítások')),
+              PopupMenuItem(value: 'logout', child: Text('Kijelentkezés')),
+            ],
           ),
         ],
       ),
@@ -82,6 +99,28 @@ class HomeScreen extends ConsumerWidget {
                     ),
                 ],
               ),
+              if (s.categories.any((c) => c.unenrolled > 0)) ...[
+                const SizedBox(height: 24),
+                Text('Témakörök', style: Theme.of(context).textTheme.titleMedium),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    for (final c in s.categories)
+                      if (c.unenrolled > 0)
+                        ActionChip(
+                          label: Text('${c.nameHu} (${c.unenrolled})'),
+                          tooltip: '${c.nameHu}: ${c.unenrolled} új szó felvétele',
+                          onPressed: () => _enrollCategory(context, ref, c.slug, c.nameHu),
+                        ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.search),
+                label: const Text('Szókereső'),
+                onPressed: () => _open(context, ref, const WordBrowserScreen()),
+              ),
               if (s.pendingSync > 0) ...[
                 const SizedBox(height: 24),
                 Text('${s.pendingSync} módosítás vár feltöltésre', style: Theme.of(context).textTheme.bodySmall),
@@ -102,6 +141,20 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _enrollCategory(BuildContext context, WidgetRef ref, String slug, String name) async {
+    final created = await ref.read(studyRepositoryProvider).enrollCategory(slug);
+    ref.invalidate(homeSummaryProvider);
+    ref.read(syncControllerProvider.notifier).scheduleSync();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$created új kártya ($name)')));
+    }
+  }
+
+  Future<void> _open(BuildContext context, WidgetRef ref, Widget screen) async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => screen));
+    ref.invalidate(homeSummaryProvider);
+  }
+
   Future<void> _signOut(BuildContext context, WidgetRef ref) async {
     final auth = ref.read(authControllerProvider.notifier);
     if (await auth.signOut()) return;
@@ -111,7 +164,8 @@ class HomeScreen extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         title: const Text('Feltöltetlen módosítások'),
         content: const Text(
-          'Vannak még fel nem töltött értékelések (nincs kapcsolat). Kijelentkezéskor ezek elvesznek.',
+          'Vannak még fel nem töltött értékelések (nincs kapcsolat). Ezek ezen az eszközön megmaradnak, '
+          'és a következő bejelentkezéskor feltöltődnek. Ha itt másik fiókkal lépsz be, elvesznek.',
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Mégse')),

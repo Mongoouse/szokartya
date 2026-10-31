@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { WORD_DETAIL_INCLUDE } from '../words/word-detail';
 import { DbClient, PrismaService } from '../prisma/prisma.service';
 
 export interface CreateUserData {
@@ -33,9 +34,34 @@ export class UsersRepository {
 
   update(
     id: string,
-    data: Partial<Pick<User, 'displayName' | 'timezone' | 'dailyNewCardsLimit' | 'dailyReviewLimit'>>,
+    data: Partial<Pick<User, 'displayName' | 'timezone' | 'dailyNewCardsLimit' | 'dailyReviewLimit' | 'catalogLevels'>> & {
+      targetRetention?: number;
+    },
     db: DbClient = this.prisma,
   ): Promise<User> {
     return db.user.update({ where: { id }, data });
+  }
+
+  /** Végleges törlés; a kapcsolódó sorokat az adatbázis kaszkádolva törli. */
+  async delete(id: string, db: DbClient = this.prisma): Promise<void> {
+    await db.user.delete({ where: { id } });
+  }
+
+  /** Az adatexporthoz: saját szavak, kártyák (a szó alakjával) és a teljes értékelési napló. */
+  async exportData(userId: string) {
+    const [customWords, cards, reviewLogs] = await this.prisma.$transaction([
+      this.prisma.word.findMany({
+        where: { ownerId: userId, deletedAt: null },
+        include: WORD_DETAIL_INCLUDE,
+        orderBy: { createdAt: 'asc' },
+      }),
+      this.prisma.userProgress.findMany({
+        where: { userId },
+        include: { word: { select: { lemma: true } } },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      }),
+      this.prisma.reviewLog.findMany({ where: { userId }, orderBy: [{ reviewedAt: 'asc' }, { id: 'asc' }] }),
+    ]);
+    return { customWords, cards, reviewLogs };
   }
 }

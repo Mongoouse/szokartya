@@ -1,0 +1,85 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Kalibrációs görbe a teszthalmazon</title>
+<rect width='640' height='640' fill='#ffffff'/>
+<line x1='70' x2='590' y1='562' y2='562' stroke='#e4e3df'/>
+<text x='62' y='566' text-anchor='end' fill='#52514e'>0,0</text>
+<line x1='70' x2='590' y1='476' y2='476' stroke='#e4e3df'/>
+<text x='62' y='480' text-anchor='end' fill='#52514e'>0,2</text>
+<line x1='70' x2='590' y1='390' y2='390' stroke='#e4e3df'/>
+<text x='62' y='394' text-anchor='end' fill='#52514e'>0,4</text>
+<line x1='70' x2='590' y1='304' y2='304' stroke='#e4e3df'/>
+<text x='62' y='308' text-anchor='end' fill='#52514e'>0,6</text>
+<line x1='70' x2='590' y1='218' y2='218' stroke='#e4e3df'/>
+<text x='62' y='222' text-anchor='end' fill='#52514e'>0,8</text>
+<line x1='70' x2='590' y1='132' y2='132' stroke='#e4e3df'/>
+<text x='62' y='136' text-anchor='end' fill='#52514e'>1,0</text>
+<line x1='70' x2='70' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='70' y='580' text-anchor='middle' fill='#52514e'>0,0</text>
+<line x1='174' x2='174' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='174' y='580' text-anchor='middle' fill='#52514e'>0,2</text>
+<line x1='278' x2='278' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='278' y='580' text-anchor='middle' fill='#52514e'>0,4</text>
+<line x1='382' x2='382' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='382' y='580' text-anchor='middle' fill='#52514e'>0,6</text>
+<line x1='486' x2='486' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='486' y='580' text-anchor='middle' fill='#52514e'>0,8</text>
+<line x1='590' x2='590' y1='132' y2='562' stroke='#e4e3df'/>
+<text x='590' y='580' text-anchor='middle' fill='#52514e'>1,0</text>
+<line x1='70' x2='590' y1='562' y2='562' stroke='#52514e'/>
+<text x='330' y='602' text-anchor='middle' fill='#0b0b0b'>Előre jelzett felidézési valószínűség (sáv átlaga)</text>
+<text transform='translate(24 347) rotate(-90)' text-anchor='middle' fill='#0b0b0b'>Tényleges felidézési arány</text>
+<line x1='70' y1='562' x2='590' y2='132' stroke='#8a8984' stroke-dasharray='4 4'/>
+<text x='132.4' y='504.4' fill='#8a8984' transform='rotate(-39.6 132.4 504.4)'>tökéletes kalibráció</text>
+<path d='M534.4 197.3' fill='none' stroke='#2a78d6' stroke-width='2' />
+<line x1='534.3978158244338' x2='534.3978158244338' y1='200.15487128701443' y2='194.63612846937798' stroke='#2a78d6' stroke-opacity='0.5'/>
+<circle cx='534.4' cy='197.3' r='4.5' fill='#2a78d6' stroke='#ffffff' stroke-width='1.5'/>
+<path d='M369.1 266.4 L422.0 220.7 L467.2 201.0 L495.1 184.6' fill='none' stroke='#eb6834' stroke-width='2' stroke-dasharray='6 3'/>
+<line x1='369.07089471116416' x2='369.07089471116416' y1='340.83671728734737' y2='209.19592867470732' stroke='#eb6834' stroke-opacity='0.5'/>
+<rect x='364.6' y='261.9' width='9' height='9' rx='1' fill='#eb6834' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='421.9731690331403' x2='421.9731690331403' y1='236.84992802044502' y2='206.52067224448786' stroke='#eb6834' stroke-opacity='0.5'/>
+<rect x='417.5' y='216.2' width='9' height='9' rx='1' fill='#eb6834' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='467.20772557132096' x2='467.20772557132096' y1='204.51322162893058' y2='197.6519574959645' stroke='#eb6834' stroke-opacity='0.5'/>
+<rect x='462.7' y='196.5' width='9' height='9' rx='1' fill='#eb6834' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='495.054226690354' x2='495.054226690354' y1='189.52827202017568' y2='180.01236238516225' stroke='#eb6834' stroke-opacity='0.5'/>
+<rect x='490.6' y='180.1' width='9' height='9' rx='1' fill='#eb6834' stroke='#ffffff' stroke-width='1.5'/>
+<path d='M365.9 340.1 L419.2 278.5 L461.2 234.8 L515.9 198.1 L554.2 160.8' fill='none' stroke='#1baf7a' stroke-width='2' stroke-dasharray='2 3'/>
+<line x1='365.8771581292634' x2='365.8771581292634' y1='412.1863000850648' y2='269.4720812282723' stroke='#1baf7a' stroke-opacity='0.5'/>
+<path d='M365.9 334.70000000000005 L370.84999999999997 343.70000000000005 L360.95 343.70000000000005 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='419.2340773957363' x2='419.2340773957363' y1='292.6551946137414' y2='264.90134109256866' stroke='#1baf7a' stroke-opacity='0.5'/>
+<path d='M419.2 273.1 L424.15 282.1 L414.25 282.1 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='461.2472853536722' x2='461.2472853536722' y1='242.43225428560908' y2='227.63230838384396' stroke='#1baf7a' stroke-opacity='0.5'/>
+<path d='M461.2 229.4 L466.15 238.4 L456.25 238.4 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='515.8802530892159' x2='515.8802530892159' y1='202.87371745966107' y2='193.6800259835294' stroke='#1baf7a' stroke-opacity='0.5'/>
+<path d='M515.9 192.7 L520.85 201.7 L510.95 201.7 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='554.153694002892' x2='554.153694002892' y1='164.11683735828245' y2='157.7953783548794' stroke='#1baf7a' stroke-opacity='0.5'/>
+<path d='M554.2 155.4 L559.1500000000001 164.4 L549.25 164.4 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/>
+<path d='M367.3 295.9 L413.0 269.2 L462.0 228.4 L515.4 192.1 L554.0 159.1' fill='none' stroke='#6250d6' stroke-width='2' />
+<line x1='367.3009783409111' x2='367.3009783409111' y1='325.41008038763107' y2='268.3185743150029' stroke='#6250d6' stroke-opacity='0.5'/>
+<path d='M367.3 290.04999999999995 L372.25 295.9 L367.3 301.75 L362.35 295.9 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='413.0202589463508' x2='413.0202589463508' y1='281.17801511279526' y2='257.78692781777505' stroke='#6250d6' stroke-opacity='0.5'/>
+<path d='M413 263.34999999999997 L417.95 269.2 L413 275.05 L408.05 269.2 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='461.9780390722812' x2='461.9780390722812' y1='235.83749098850558' y2='221.26789435403515' stroke='#6250d6' stroke-opacity='0.5'/>
+<path d='M462 222.55 L466.95 228.4 L462 234.25 L457.05 228.4 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='515.396679797833' x2='515.396679797833' y1='196.6038442872487' y2='187.7771207496471' stroke='#6250d6' stroke-opacity='0.5'/>
+<path d='M515.4 186.25 L520.35 192.1 L515.4 197.95 L510.45 192.1 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<line x1='554.0190778162241' x2='554.0190778162241' y1='162.47384235169073' y2='155.98796579927273' stroke='#6250d6' stroke-opacity='0.5'/>
+<path d='M554 153.25 L558.95 159.1 L554 164.95 L549.05 159.1 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/>
+<path d='M366.5 297.6 L413.4 269.6 L462.5 232.7 L515.3 191.4 L554.7 158.0' fill='none' stroke='#52514e' stroke-width='2' stroke-dasharray='1 3'/>
+<line x1='366.49634387515636' x2='366.49634387515636' y1='329.4133239402736' y2='267.8713201005712' stroke='#52514e' stroke-opacity='0.5'/>
+<path d='M362 293.1 L371 302.1 M362 302.1 L371 293.1' stroke='#52514e' stroke-width='2' stroke-linecap='round'/>
+<line x1='413.36411534052564' x2='413.36411534052564' y1='281.7079438993729' y2='257.94094103354405' stroke='#52514e' stroke-opacity='0.5'/>
+<path d='M408.9 265.1 L417.9 274.1 M408.9 274.1 L417.9 265.1' stroke='#52514e' stroke-width='2' stroke-linecap='round'/>
+<line x1='462.47414262278653' x2='462.47414262278653' y1='240.17679657823567' y2='225.65949543436267' stroke='#52514e' stroke-opacity='0.5'/>
+<path d='M458 228.2 L467 237.2 M458 237.2 L467 228.2' stroke='#52514e' stroke-width='2' stroke-linecap='round'/>
+<line x1='515.2649701800358' x2='515.2649701800358' y1='196.02111649918118' y2='187.1032585725835' stroke='#52514e' stroke-opacity='0.5'/>
+<path d='M510.79999999999995 186.9 L519.8 195.9 M510.79999999999995 195.9 L519.8 186.9' stroke='#52514e' stroke-width='2' stroke-linecap='round'/>
+<line x1='554.7273028487418' x2='554.7273028487418' y1='161.32399449935997' y2='155.0311357916363' stroke='#52514e' stroke-opacity='0.5'/>
+<path d='M550.2 153.5 L559.2 162.5 M550.2 162.5 L559.2 153.5' stroke='#52514e' stroke-width='2' stroke-linecap='round'/>
+<text x='20' y='26' font-size='15' font-weight='600' fill='#0b0b0b'>Kalibrációs görbe a teszthalmazon</text><text x='20' y='46' fill='#52514e'>szimuláció, FSRS-4.5 (perturbált súlyok)</text>
+<line x1='20' x2='44' y1='74' y2='74' stroke='#2a78d6' stroke-width='2' /><circle cx='32' cy='74' r='4' fill='#2a78d6' stroke='#ffffff' stroke-width='1.5'/><text x='52' y='78' fill='#0b0b0b'>SM-2</text>
+<line x1='270' x2='294' y1='74' y2='74' stroke='#eb6834' stroke-width='2' stroke-dasharray='6 3'/><rect x='278' y='70' width='8' height='8' rx='1' fill='#eb6834' stroke='#ffffff' stroke-width='1.5'/><text x='302' y='78' fill='#0b0b0b'>SM-2 (utólag kalibrálva)</text>
+<line x1='20' x2='44' y1='94' y2='94' stroke='#1baf7a' stroke-width='2' stroke-dasharray='2 3'/><path d='M32 89.2 L36.4 97.2 L27.6 97.2 Z' fill='#1baf7a' stroke='#ffffff' stroke-width='1.5'/><text x='52' y='98' fill='#0b0b0b'>FSRS-4.5 (alapsúlyok)</text>
+<line x1='270' x2='294' y1='94' y2='94' stroke='#6250d6' stroke-width='2' /><path d='M282 88.8 L286.4 94 L282 99.2 L277.6 94 Z' fill='#6250d6' stroke='#ffffff' stroke-width='1.5'/><text x='302' y='98' fill='#0b0b0b'>FSRS-4.5 (személyre illesztve)</text>
+<line x1='20' x2='44' y1='114' y2='114' stroke='#52514e' stroke-width='2' stroke-dasharray='1 3'/><path d='M28 110 L36 118 M28 118 L36 110' stroke='#52514e' stroke-width='2' stroke-linecap='round'/><text x='52' y='118' fill='#0b0b0b'>Orákulum (valódi p)</text>
+<text x='20' y='628' fill='#52514e' font-size='11'>Sávok: 0,1 szélesek, legalább 20 minta; függőleges vonal: 95%-os Wilson-intervallum. Teszthalmaz, n = 12042.</text>
+</svg>

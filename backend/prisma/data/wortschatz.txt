@@ -1,0 +1,506 @@
+# =============================================================================
+# Központi szókincs (A1–B1) – a `prisma/import-vocabulary.ts` formátumában.
+#
+# Soronként egy szó, mezőelválasztó: |   Többértékű mező: ; (fordítások) , (kategóriák)
+# Üres sor és # kezdetű sor: megjegyzés.
+#
+# Főnév:     N|szint|névelő|alak|többes szám|fordítások|kategóriák|példa|jelzők
+#              névelő: der / die / das, csak többes számú főnévnél: pl
+#              többes szám: - = csak egyes számú (Singularetantum)
+#              jelzők: n = gyenge (n-)deklináció
+# Ige:       V|szint|alak|E/3 jelen|E/3 Präteritum|segédige + Partizip II|típus|fordítások|kategóriák|példa|vonzat
+#              alak: elváló igekötő ·-tal (an·kommen), visszaható: „sich ” / „sich(D) ” előtag
+#              típus: r = gyenge, i = erős, m = vegyes
+# Melléknév: A|szint|alak|középfok|felsőfok|fordítások|kategóriák|példa|jelzők
+#              nem fokozható: - -   jelzők: ! = rendhagyó fokozás, p = csak állítmányi
+# Egyéb:     X|szint|szófaj|alak|fordítások|kategóriák|példa
+#
+# példa:  német mondat = magyar fordítás
+# vonzat: elöljáró:eset:jelentés  (eset: A = Akk., D = Dat., G = Gen.; elöljáró nélkül: -)
+# =============================================================================
+
+# --- Család és emberek --------------------------------------------------------
+N|A1|der|Vater|Väter|apa|familie|Mein Vater arbeitet in Wien. = Az apám Bécsben dolgozik.
+N|A1|die|Mutter|Mütter|anya|familie|Meine Mutter kocht gern. = Az anyám szeret főzni.
+N|A1|pl|Eltern|Eltern|szülők|familie
+N|A1|das|Kind|Kinder|gyerek|familie|Das Kind spielt im Garten. = A gyerek a kertben játszik.
+N|A1|der|Sohn|Söhne|fiú (gyermek)|familie
+N|A1|die|Tochter|Töchter|lány (gyermek)|familie
+N|A1|der|Bruder|Brüder|fivér, fiútestvér|familie
+N|A1|die|Schwester|Schwestern|nővér, lánytestvér|familie
+N|A1|die|Familie|Familien|család|familie
+N|A1|der|Mann|Männer|férfi;férj|menschen,familie
+N|A1|die|Frau|Frauen|nő;feleség|menschen,familie
+N|A1|der|Freund|Freunde|barát|menschen
+N|A1|die|Freundin|Freundinnen|barátnő|menschen
+N|A1|der|Junge|Jungen|fiú|menschen||n
+N|A1|das|Mädchen|Mädchen|lány|menschen
+N|A1|der|Mensch|Menschen|ember|menschen||n
+N|A1|der|Herr|Herren|úr|menschen||n
+N|A1|der|Name|Namen|név|menschen|Wie ist Ihr Name? = Mi a neve?|n
+N|A2|der|Kollege|Kollegen|kolléga|arbeit,menschen||n
+N|A2|der|Nachbar|Nachbarn|szomszéd|menschen||n
+N|A2|die|Großmutter|Großmütter|nagymama|familie
+N|A2|der|Großvater|Großväter|nagyapa|familie
+N|A2|der|Onkel|Onkel|nagybácsi|familie
+N|A2|die|Tante|Tanten|nagynéni|familie
+N|B1|die|Hochzeit|Hochzeiten|esküvő|familie
+N|B1|die|Beziehung|Beziehungen|kapcsolat|menschen
+
+# --- Test és egészség ------------------------------------------------------------
+N|A1|der|Kopf|Köpfe|fej|koerper
+N|A1|die|Hand|Hände|kéz|koerper
+N|A1|das|Auge|Augen|szem|koerper
+N|A1|der|Fuß|Füße|láb (lábfej)|koerper
+N|A2|das|Bein|Beine|láb|koerper
+N|A2|der|Arm|Arme|kar|koerper
+N|A2|der|Bauch|Bäuche|has|koerper
+N|A2|der|Rücken|Rücken|hát|koerper
+N|A2|das|Ohr|Ohren|fül|koerper
+N|A2|die|Nase|Nasen|orr|koerper
+N|A2|der|Mund|Münder|száj|koerper
+N|A2|der|Zahn|Zähne|fog|koerper
+N|A2|das|Herz|Herzen|szív|koerper
+N|A1|der|Arzt|Ärzte|orvos|gesundheit,arbeit
+N|A2|die|Ärztin|Ärztinnen|orvosnő|gesundheit,arbeit
+N|A2|das|Krankenhaus|Krankenhäuser|kórház|gesundheit
+N|A2|die|Apotheke|Apotheken|gyógyszertár|gesundheit
+N|A2|das|Medikament|Medikamente|gyógyszer|gesundheit
+N|A2|das|Fieber|-|láz|gesundheit
+N|A2|die|Gesundheit|-|egészség|gesundheit
+N|B1|der|Schmerz|Schmerzen|fájdalom|gesundheit
+N|B1|die|Krankheit|Krankheiten|betegség|gesundheit
+A|A1|krank|kränker|am kränksten|beteg|gesundheit|Ich bin heute krank. = Ma beteg vagyok.
+A|A2|gesund|gesünder|am gesündesten|egészséges|gesundheit
+
+# --- Étel és ital ----------------------------------------------------------------
+N|A1|das|Brot|Brote|kenyér|lebensmittel
+N|A1|das|Wasser|-|víz|lebensmittel
+N|A1|der|Kaffee|Kaffees|kávé|lebensmittel
+N|A1|der|Tee|Tees|tea|lebensmittel
+N|A1|das|Ei|Eier|tojás|lebensmittel
+N|A1|der|Apfel|Äpfel|alma|lebensmittel
+N|A1|das|Fleisch|-|hús|lebensmittel
+N|A1|der|Käse|-|sajt|lebensmittel
+N|A1|die|Butter|-|vaj|lebensmittel
+N|A1|das|Obst|-|gyümölcs|lebensmittel
+N|A1|das|Gemüse|-|zöldség|lebensmittel
+N|A1|der|Saft|Säfte|gyümölcslé|lebensmittel
+N|A1|das|Bier|Biere|sör|lebensmittel
+N|A1|der|Wein|Weine|bor|lebensmittel
+N|A1|der|Zucker|-|cukor|lebensmittel
+N|A1|das|Salz|-|só|lebensmittel
+N|A1|die|Kartoffel|Kartoffeln|burgonya|lebensmittel
+N|A1|der|Fisch|Fische|hal|lebensmittel,tiere
+N|A2|die|Tomate|Tomaten|paradicsom|lebensmittel
+N|A2|die|Suppe|Suppen|leves|lebensmittel
+N|A2|der|Kuchen|Kuchen|sütemény, torta|lebensmittel
+N|A2|das|Frühstück|Frühstücke|reggeli|lebensmittel,zeit
+N|A2|das|Mittagessen|Mittagessen|ebéd|lebensmittel
+N|A2|das|Abendessen|Abendessen|vacsora|lebensmittel
+N|A2|das|Restaurant|Restaurants|étterem|lebensmittel,stadt
+N|A2|die|Rechnung|Rechnungen|számla|lebensmittel|Die Rechnung, bitte! = A számlát, kérem!
+V|A1|essen|isst|aß|hat gegessen|i|eszik|lebensmittel|Wir essen um sieben Uhr. = Hétkor eszünk.
+V|A1|trinken|trinkt|trank|hat getrunken|i|iszik|lebensmittel
+V|A1|kochen|kocht|kochte|hat gekocht|r|főz|lebensmittel,haushalt
+V|A2|schmecken|schmeckt|schmeckte|hat geschmeckt|r|ízlik|lebensmittel|Die Suppe schmeckt mir. = Ízlik a leves.|-:D:ízlik valakinek
+A|A1|lecker|leckerer|am leckersten|finom, ízletes|lebensmittel
+A|A2|süß|süßer|am süßesten|édes|lebensmittel
+A|A2|scharf|schärfer|am schärfsten|csípős;éles|lebensmittel
+
+# --- Lakás és háztartás ---------------------------------------------------------
+N|A1|das|Haus|Häuser|ház|haushalt
+N|A1|die|Wohnung|Wohnungen|lakás|haushalt|Die Wohnung hat drei Zimmer. = A lakásnak három szobája van.
+N|A1|das|Zimmer|Zimmer|szoba|haushalt
+N|A1|die|Küche|Küchen|konyha|haushalt
+N|A1|das|Bad|Bäder|fürdőszoba|haushalt
+N|A1|das|Bett|Betten|ágy|haushalt
+N|A1|der|Stuhl|Stühle|szék|haushalt
+N|A1|die|Tür|Türen|ajtó|haushalt
+N|A1|das|Fenster|Fenster|ablak|haushalt
+N|A2|der|Schrank|Schränke|szekrény|haushalt
+N|A2|das|Sofa|Sofas|kanapé|haushalt
+N|A2|die|Lampe|Lampen|lámpa|haushalt
+N|A2|der|Schlüssel|Schlüssel|kulcs|haushalt
+N|A2|der|Garten|Gärten|kert|haushalt,natur
+N|A2|der|Kühlschrank|Kühlschränke|hűtőszekrény|haushalt
+N|A2|die|Miete|Mieten|lakbér|haushalt
+N|B1|der|Vermieter|Vermieter|bérbeadó|haushalt
+V|A1|wohnen|wohnt|wohnte|hat gewohnt|r|lakik|haushalt|Ich wohne in Budapest. = Budapesten lakom.
+V|A2|putzen|putzt|putzte|hat geputzt|r|takarít|haushalt
+V|A2|waschen|wäscht|wusch|hat gewaschen|i|mos|haushalt
+V|A2|sich waschen#2|wäscht sich|wusch sich|hat gewaschen|i|mosakszik|haushalt
+V|A2|auf·räumen|räumt auf|räumte auf|hat aufgeräumt|r|rendet rak|haushalt
+V|B1|um·ziehen|zieht um|zog um|ist umgezogen|i|elköltözik|haushalt
+A|A1|groß|größer|am größten|nagy|grundwortschatz
+A|A1|klein|kleiner|am kleinsten|kicsi|grundwortschatz
+A|A2|hell|heller|am hellsten|világos|haushalt
+A|A2|dunkel|dunkler|am dunkelsten|sötét|haushalt
+A|A2|sauber|sauberer|am saubersten|tiszta|haushalt
+A|A2|schmutzig|schmutziger|am schmutzigsten|piszkos|haushalt
+A|A2|bequem|bequemer|am bequemsten|kényelmes|haushalt
+
+# --- Város és közlekedés --------------------------------------------------------
+N|A1|die|Stadt|Städte|város|stadt
+N|A1|die|Straße|Straßen|utca|stadt,verkehr
+N|A1|der|Bahnhof|Bahnhöfe|pályaudvar|verkehr
+N|A1|der|Zug|Züge|vonat|verkehr|Der Zug hat Verspätung. = A vonat késik.
+N|A1|der|Bus|Busse|busz|verkehr
+N|A1|das|Auto|Autos|autó|verkehr
+N|A1|das|Fahrrad|Fahrräder|kerékpár|verkehr
+N|A1|die|Fahrkarte|Fahrkarten|menetjegy|verkehr
+N|A1|der|Flughafen|Flughäfen|repülőtér|verkehr,reisen
+N|A1|das|Flugzeug|Flugzeuge|repülőgép|verkehr,reisen
+N|A1|die|Haltestelle|Haltestellen|megálló|verkehr
+N|A2|die|U-Bahn|U-Bahnen|metró|verkehr
+N|A2|die|Ampel|Ampeln|közlekedési lámpa|verkehr
+N|A2|die|Kreuzung|Kreuzungen|kereszteződés|verkehr
+N|A2|der|Verkehr|-|közlekedés, forgalom|verkehr
+N|A2|die|Verspätung|Verspätungen|késés|verkehr
+N|A1|der|Supermarkt|Supermärkte|szupermarket|stadt
+N|A1|die|Bank|Banken|bank|stadt
+N|A1|die|Post|-|posta|stadt
+N|A2|die|Kirche|Kirchen|templom|stadt
+N|A2|das|Museum|Museen|múzeum|stadt,freizeit
+N|A2|der|Platz|Plätze|tér;hely|stadt
+N|A2|die|Brücke|Brücken|híd|stadt
+N|B1|die|Umgebung|Umgebungen|környék|stadt
+V|A1|gehen|geht|ging|ist gegangen|i|megy (gyalog)|verkehr|Ich gehe zu Fuß. = Gyalog megyek.
+V|A1|kommen|kommt|kam|ist gekommen|i|jön|grundwortschatz
+V|A1|an·kommen|kommt an|kam an|ist angekommen|i|megérkezik|verkehr,reisen
+V|A1|ab·fahren|fährt ab|fuhr ab|ist abgefahren|i|elindul (jármű)|verkehr
+V|A1|ein·steigen|steigt ein|stieg ein|ist eingestiegen|i|beszáll|verkehr
+V|A1|aus·steigen|steigt aus|stieg aus|ist ausgestiegen|i|kiszáll|verkehr
+V|A2|um·steigen|steigt um|stieg um|ist umgestiegen|i|átszáll|verkehr
+V|A2|fliegen|fliegt|flog|ist geflogen|i|repül|verkehr,reisen
+V|A2|laufen|läuft|lief|ist gelaufen|i|fut;gyalogol|verkehr,freizeit
+A|A1|weit|weiter|am weitesten|messze, távol|verkehr
+A|A1|nah|näher|am nächsten|közeli|verkehr||!
+A|A2|pünktlich|pünktlicher|am pünktlichsten|pontos|verkehr,zeit
+
+# --- Utazás ---------------------------------------------------------------------
+N|A1|der|Urlaub|Urlaube|szabadság (üdülés)|reisen,freizeit
+N|A1|das|Hotel|Hotels|szálloda|reisen
+N|A1|der|Koffer|Koffer|bőrönd|reisen
+N|A2|die|Reise|Reisen|utazás|reisen
+N|A2|der|Pass|Pässe|útlevél|reisen
+N|A2|das|Ausland|-|külföld|reisen
+N|A2|das|Meer|Meere|tenger|reisen,natur
+N|A2|der|Strand|Strände|strand|reisen,natur
+N|B1|die|Unterkunft|Unterkünfte|szállás|reisen
+N|B1|die|Sehenswürdigkeit|Sehenswürdigkeiten|látványosság|reisen
+V|A2|reisen|reist|reiste|ist gereist|r|utazik|reisen
+V|A2|buchen|bucht|buchte|hat gebucht|r|lefoglal|reisen
+V|A2|übernachten|übernachtet|übernachtete|hat übernachtet|r|megszáll, éjszakázik|reisen
+V|B1|besichtigen|besichtigt|besichtigte|hat besichtigt|r|megtekint|reisen
+
+# --- Idő ------------------------------------------------------------------------
+N|A1|der|Tag|Tage|nap|zeit
+N|A1|die|Woche|Wochen|hét|zeit
+N|A1|der|Monat|Monate|hónap|zeit
+N|A1|das|Jahr|Jahre|év|zeit
+N|A1|die|Stunde|Stunden|óra (időtartam)|zeit
+N|A1|die|Minute|Minuten|perc|zeit
+N|A1|die|Uhr|Uhren|óra (szerkezet);órakor|zeit|Es ist drei Uhr. = Három óra van.
+N|A1|der|Morgen|Morgen|reggel|zeit
+N|A1|der|Abend|Abende|este|zeit
+N|A1|die|Nacht|Nächte|éjszaka|zeit
+N|A1|das|Wochenende|Wochenenden|hétvége|zeit,freizeit
+N|A2|der|Termin|Termine|időpont, megbeszélt időpont|zeit,arbeit
+N|A2|der|Geburtstag|Geburtstage|születésnap|zeit,familie
+N|A2|der|Frühling|Frühlinge|tavasz|zeit,wetter
+N|A2|der|Sommer|Sommer|nyár|zeit,wetter
+N|A2|der|Herbst|Herbste|ősz|zeit,wetter
+N|A2|der|Winter|Winter|tél|zeit,wetter
+N|B1|die|Zukunft|-|jövő|zeit
+N|B1|die|Vergangenheit|-|múlt|zeit
+X|A1|ADVERB|heute|ma|zeit
+X|A1|ADVERB|morgen|holnap|zeit
+X|A1|ADVERB|gestern|tegnap|zeit
+X|A1|ADVERB|jetzt|most|zeit
+X|A1|ADVERB|immer|mindig|zeit
+X|A1|ADVERB|oft|gyakran|zeit
+X|A1|ADVERB|nie|soha|zeit
+X|A1|ADVERB|manchmal|néha|zeit
+X|A1|ADVERB|bald|hamarosan|zeit
+X|A2|ADVERB|früher|régebben, korábban|zeit
+X|A2|ADVERB|danach|azután|zeit
+X|B1|ADVERB|inzwischen|közben, időközben|zeit
+A|A1|spät|später|am spätesten|késő|zeit
+A|A1|früh|früher|am frühesten|korai|zeit
+
+# --- Munka és tanulás -----------------------------------------------------------
+N|A1|die|Arbeit|Arbeiten|munka|arbeit
+N|A1|der|Beruf|Berufe|foglalkozás, szakma|arbeit
+N|A1|das|Büro|Büros|iroda|arbeit
+N|A1|der|Lehrer|Lehrer|tanár|bildung,arbeit
+N|A1|die|Lehrerin|Lehrerinnen|tanárnő|bildung,arbeit
+N|A1|die|Schule|Schulen|iskola|bildung
+N|A1|das|Buch|Bücher|könyv|bildung
+N|A1|die|Sprache|Sprachen|nyelv|bildung,kommunikation
+N|A1|das|Wort|Wörter|szó|bildung,kommunikation
+N|A1|die|Frage|Fragen|kérdés|bildung,kommunikation
+N|A1|die|Antwort|Antworten|válasz|bildung,kommunikation
+N|A2|die|Universität|Universitäten|egyetem|bildung
+N|A2|die|Prüfung|Prüfungen|vizsga|bildung|Morgen habe ich eine Prüfung. = Holnap vizsgám van.
+N|A2|der|Kurs|Kurse|tanfolyam|bildung
+N|A2|die|Firma|Firmen|cég|arbeit
+N|A2|der|Chef|Chefs|főnök|arbeit
+N|A2|das|Gehalt|Gehälter|fizetés|arbeit
+N|A2|die|Besprechung|Besprechungen|megbeszélés|arbeit
+N|B1|die|Bewerbung|Bewerbungen|pályázat, jelentkezés|arbeit
+N|B1|die|Erfahrung|Erfahrungen|tapasztalat|arbeit
+N|B1|die|Ausbildung|Ausbildungen|szakképzés|bildung,arbeit
+N|B1|der|Vertrag|Verträge|szerződés|arbeit
+V|A1|arbeiten|arbeitet|arbeitete|hat gearbeitet|r|dolgozik|arbeit
+V|A1|lernen|lernt|lernte|hat gelernt|r|tanul|bildung
+V|A1|lesen|liest|las|hat gelesen|i|olvas|bildung
+V|A1|schreiben|schreibt|schrieb|hat geschrieben|i|ír|bildung,kommunikation
+V|A1|machen|macht|machte|hat gemacht|r|csinál|grundwortschatz
+V|A1|verstehen|versteht|verstand|hat verstanden|i|ért|kommunikation|Ich verstehe dich nicht. = Nem értelek.
+V|A2|studieren|studiert|studierte|hat studiert|r|egyetemen tanul|bildung
+V|A2|wissen|weiß|wusste|hat gewusst|m|tud (tudomása van)|grundwortschatz
+V|A2|kennen|kennt|kannte|hat gekannt|m|ismer|grundwortschatz
+V|A2|denken|denkt|dachte|hat gedacht|m|gondol|grundwortschatz|Ich denke oft an dich. = Gyakran gondolok rád.|an:A:gondol valakire/valamire
+V|A2|bringen|bringt|brachte|hat gebracht|m|hoz|grundwortschatz
+V|A2|vergessen|vergisst|vergaß|hat vergessen|i|elfelejt|grundwortschatz
+V|B1|sich bewerben|bewirbt sich|bewarb sich|hat beworben|i|pályázik, jelentkezik|arbeit||um:A:pályázik valamire
+V|B1|verdienen|verdient|verdiente|hat verdient|r|keres (pénzt)|arbeit
+V|B1|teil·nehmen|nimmt teil|nahm teil|hat teilgenommen|i|részt vesz|bildung,arbeit||an:D:részt vesz valamin
+A|A2|fleißig|fleißiger|am fleißigsten|szorgalmas|bildung,arbeit
+A|A2|schwierig|schwieriger|am schwierigsten|nehéz, bonyolult|bildung
+A|A1|leicht|leichter|am leichtesten|könnyű|grundwortschatz
+A|A1|schwer|schwerer|am schwersten|nehéz|grundwortschatz
+
+# --- Szabadidő ------------------------------------------------------------------
+N|A1|das|Hobby|Hobbys|hobbi|freizeit
+N|A1|der|Sport|-|sport|freizeit
+N|A1|die|Musik|-|zene|freizeit
+N|A1|der|Film|Filme|film|freizeit
+N|A2|das|Kino|Kinos|mozi|freizeit,stadt
+N|A2|das|Theater|Theater|színház|freizeit,stadt
+N|A2|das|Konzert|Konzerte|koncert|freizeit
+N|A2|das|Spiel|Spiele|játék;mérkőzés|freizeit
+N|A2|die|Party|Partys|buli|freizeit
+N|A2|das|Lied|Lieder|dal|freizeit
+N|B1|die|Ausstellung|Ausstellungen|kiállítás|freizeit
+N|B1|der|Verein|Vereine|egyesület, klub|freizeit
+V|A1|spielen|spielt|spielte|hat gespielt|r|játszik|freizeit
+V|A1|schwimmen|schwimmt|schwamm|ist geschwommen|i|úszik|freizeit
+V|A1|tanzen|tanzt|tanzte|hat getanzt|r|táncol|freizeit
+V|A1|singen|singt|sang|hat gesungen|i|énekel|freizeit
+V|A1|sehen|sieht|sah|hat gesehen|i|lát|grundwortschatz
+V|A1|fern·sehen|sieht fern|sah fern|hat ferngesehen|i|tévét néz|freizeit
+V|A1|hören|hört|hörte|hat gehört|r|hall;hallgat|grundwortschatz
+V|A2|sich interessieren|interessiert sich|interessierte sich|hat interessiert|r|érdeklődik|freizeit||für:A:érdeklődik valami iránt
+V|A2|wandern|wandert|wanderte|ist gewandert|r|túrázik|freizeit,natur
+V|A2|sich treffen|trifft sich|traf sich|hat getroffen|i|találkozik|freizeit,menschen||mit:D:találkozik valakivel
+V|A2|ein·laden|lädt ein|lud ein|hat eingeladen|i|meghív|freizeit||zu:D:meghív valamire
+V|B1|sich aus·ruhen|ruht sich aus|ruhte sich aus|hat ausgeruht|r|kipiheni magát|freizeit
+A|A1|langweilig|langweiliger|am langweiligsten|unalmas|freizeit
+A|A1|interessant|interessanter|am interessantesten|érdekes|freizeit
+A|A2|lustig|lustiger|am lustigsten|vicces|freizeit,gefuehle
+
+# --- Ruházat és vásárlás ----------------------------------------------------------
+N|A1|die|Hose|Hosen|nadrág|kleidung
+N|A1|das|Hemd|Hemden|ing|kleidung
+N|A1|der|Schuh|Schuhe|cipő|kleidung
+N|A1|die|Jacke|Jacken|dzseki, kabát|kleidung
+N|A1|das|Kleid|Kleider|ruha (női)|kleidung
+N|A2|der|Mantel|Mäntel|kabát|kleidung
+N|A2|der|Pullover|Pullover|pulóver|kleidung
+N|A2|die|Größe|Größen|méret|kleidung
+N|A1|das|Geld|Gelder|pénz|stadt
+N|A1|der|Preis|Preise|ár|stadt
+N|A2|das|Geschäft|Geschäfte|üzlet|stadt
+N|A2|die|Kasse|Kassen|pénztár|stadt
+V|A1|kaufen|kauft|kaufte|hat gekauft|r|vásárol|stadt
+V|A1|kosten|kostet|kostete|hat gekostet|r|kerül valamibe|stadt|Was kostet das? = Mennyibe kerül?
+V|A1|bezahlen|bezahlt|bezahlte|hat bezahlt|r|fizet|stadt
+V|A2|an·ziehen|zieht an|zog an|hat angezogen|i|felvesz (ruhát)|kleidung
+V|A2|tragen|trägt|trug|hat getragen|i|visel;hord|kleidung
+V|A2|passen|passt|passte|hat gepasst|r|illik, jó (méret)|kleidung||-:D:jó valakire
+V|A2|gefallen|gefällt|gefiel|hat gefallen|i|tetszik|kleidung,gefuehle|Das Kleid gefällt mir. = Tetszik nekem a ruha.|-:D:tetszik valakinek
+A|A1|teuer|teurer|am teuersten|drága|stadt
+A|A1|billig|billiger|am billigsten|olcsó|stadt
+A|A1|neu|neuer|am neuesten|új|grundwortschatz
+A|A1|alt|älter|am ältesten|régi;öreg|grundwortschatz
+A|A2|modern|moderner|am modernsten|modern|kleidung
+
+# --- Természet, időjárás, állatok ---------------------------------------------
+N|A1|das|Wetter|-|időjárás|wetter
+N|A1|die|Sonne|Sonnen|nap (égitest)|wetter,natur
+N|A1|der|Regen|-|eső|wetter
+N|A2|der|Schnee|-|hó|wetter
+N|A2|der|Wind|Winde|szél|wetter
+N|A2|die|Wolke|Wolken|felhő|wetter
+N|A2|das|Gewitter|Gewitter|zivatar|wetter
+N|A2|die|Temperatur|Temperaturen|hőmérséklet|wetter
+N|A1|der|Hund|Hunde|kutya|tiere
+N|A1|die|Katze|Katzen|macska|tiere
+N|A2|der|Vogel|Vögel|madár|tiere
+N|A2|das|Pferd|Pferde|ló|tiere
+N|A2|die|Kuh|Kühe|tehén|tiere
+N|A2|der|Baum|Bäume|fa|natur
+N|A2|die|Blume|Blumen|virág|natur
+N|A2|der|Wald|Wälder|erdő|natur
+N|A2|der|Berg|Berge|hegy|natur
+N|A2|der|Fluss|Flüsse|folyó|natur
+N|B1|die|Umwelt|-|környezet|natur
+N|B1|die|Landschaft|Landschaften|táj|natur
+V|A1|regnen|regnet|regnete|hat geregnet|r|esik (az eső)|wetter|Heute regnet es. = Ma esik az eső.
+V|A2|schneien|schneit|schneite|hat geschneit|r|havazik|wetter
+V|A2|scheinen|scheint|schien|hat geschienen|i|süt (a nap);látszik|wetter
+A|A1|warm|wärmer|am wärmsten|meleg|wetter
+A|A1|kalt|kälter|am kältesten|hideg|wetter
+A|A1|heiß|heißer|am heißesten|forró|wetter
+A|A2|kühl|kühler|am kühlsten|hűvös|wetter
+A|A2|sonnig|sonniger|am sonnigsten|napos|wetter
+A|A2|nass|nässer|am nässesten|nedves|wetter
+
+# --- Kommunikáció -------------------------------------------------------------
+N|A1|das|Telefon|Telefone|telefon|kommunikation
+N|A1|das|Handy|Handys|mobiltelefon|kommunikation
+N|A1|der|Brief|Briefe|levél|kommunikation
+N|A1|die|Nachricht|Nachrichten|üzenet;hír|kommunikation
+N|A2|die|Adresse|Adressen|cím|kommunikation
+N|A2|das|Gespräch|Gespräche|beszélgetés|kommunikation
+N|A2|die|Meinung|Meinungen|vélemény|kommunikation
+N|B1|die|Entschuldigung|Entschuldigungen|bocsánatkérés|kommunikation
+N|B1|der|Vorschlag|Vorschläge|javaslat|kommunikation
+V|A1|sprechen|spricht|sprach|hat gesprochen|i|beszél|kommunikation||mit:D:beszél valakivel
+V|A1|sagen|sagt|sagte|hat gesagt|r|mond|kommunikation
+V|A1|fragen|fragt|fragte|hat gefragt|r|kérdez|kommunikation||nach:D:rákérdez valamire
+V|A1|antworten|antwortet|antwortete|hat geantwortet|r|válaszol|kommunikation||auf:A:válaszol valamire
+V|A1|heißen|heißt|hieß|hat geheißen|i|hívják valahogy|kommunikation|Ich heiße Anna. = Annának hívnak.
+V|A1|an·rufen|ruft an|rief an|hat angerufen|i|felhív (telefonon)|kommunikation
+V|A2|erzählen|erzählt|erzählte|hat erzählt|r|mesél|kommunikation||von:D:mesél valamiről
+V|A2|erklären|erklärt|erklärte|hat erklärt|r|elmagyaráz|kommunikation
+V|A2|sich entschuldigen|entschuldigt sich|entschuldigte sich|hat entschuldigt|r|bocsánatot kér|kommunikation||für:A:bocsánatot kér valamiért
+V|B1|sich beschweren|beschwert sich|beschwerte sich|hat beschwert|r|panaszt tesz|kommunikation||über:A:panaszkodik valamire
+V|B1|überzeugen|überzeugt|überzeugte|hat überzeugt|r|meggyőz|kommunikation||von:D:meggyőz valamiről
+V|B1|diskutieren|diskutiert|diskutierte|hat diskutiert|r|vitatkozik, megvitat|kommunikation||über:A:megvitat valamit
+V|B1|sich erinnern|erinnert sich|erinnerte sich|hat erinnert|r|emlékszik|kommunikation,gefuehle||an:A:emlékszik valamire
+
+# --- Érzelmek ----------------------------------------------------------------
+N|A2|die|Liebe|-|szerelem, szeretet|gefuehle
+N|A2|das|Glück|-|szerencse;boldogság|gefuehle
+N|A2|die|Freude|Freuden|öröm|gefuehle
+N|B1|die|Sorge|Sorgen|aggodalom|gefuehle
+N|B1|der|Ärger|-|bosszúság|gefuehle
+V|A1|lieben|liebt|liebte|hat geliebt|r|szeret (szerelemmel)|gefuehle
+V|A1|mögen|mag|mochte|hat gemocht|i|kedvel|gefuehle
+V|A2|lachen|lacht|lachte|hat gelacht|r|nevet|gefuehle||über:A:nevet valamin
+V|A2|weinen|weint|weinte|hat geweint|r|sír|gefuehle
+V|A2|hoffen|hofft|hoffte|hat gehofft|r|remél|gefuehle||auf:A:reménykedik valamiben
+V|B1|sich ärgern|ärgert sich|ärgerte sich|hat geärgert|r|bosszankodik|gefuehle||über:A:bosszankodik valamin
+V|B1|sich sorgen|sorgt sich|sorgte sich|hat gesorgt|r|aggódik|gefuehle||um:A:aggódik valakiért
+V|B1|sich fürchten|fürchtet sich|fürchtete sich|hat gefürchtet|r|fél|gefuehle||vor:D:fél valamitől
+A|A1|glücklich|glücklicher|am glücklichsten|boldog|gefuehle
+A|A1|traurig|trauriger|am traurigsten|szomorú|gefuehle
+A|A2|müde|müder|am müdesten|fáradt|gefuehle,gesundheit
+A|A2|nervös|nervöser|am nervösesten|ideges|gefuehle
+A|A2|zufrieden|zufriedener|am zufriedensten|elégedett|gefuehle||mit:D:elégedett valamivel
+A|B1|enttäuscht|enttäuschter|am enttäuschtesten|csalódott|gefuehle
+A|B1|neugierig|neugieriger|am neugierigsten|kíváncsi|gefuehle
+A|B1|schuld|-|-|hibás|gefuehle||p
+
+# --- Alapszókincs -------------------------------------------------------------
+V|A1|sein|ist|war|ist gewesen|i|van;lenni|grundwortschatz|Ich bin müde. = Fáradt vagyok.
+V|A1|haben|hat|hatte|hat gehabt|i|van neki, birtokol|grundwortschatz
+V|A1|werden|wird|wurde|ist geworden|i|válik valamivé, lesz|grundwortschatz
+V|A1|geben|gibt|gab|hat gegeben|i|ad|grundwortschatz
+V|A1|nehmen|nimmt|nahm|hat genommen|i|vesz, elvesz|grundwortschatz
+V|A1|finden|findet|fand|hat gefunden|i|talál|grundwortschatz
+V|A1|suchen|sucht|suchte|hat gesucht|r|keres|grundwortschatz
+V|A1|brauchen|braucht|brauchte|hat gebraucht|r|szüksége van|grundwortschatz
+V|A1|wollen|will|wollte|hat gewollt|i|akar|grundwortschatz
+V|A1|können|kann|konnte|hat gekonnt|m|tud, képes|grundwortschatz
+V|A1|müssen|muss|musste|hat gemusst|m|kell|grundwortschatz
+V|A1|dürfen|darf|durfte|hat gedurft|m|szabad, megengedett|grundwortschatz
+V|A1|sollen|soll|sollte|hat gesollt|r|kellene|grundwortschatz
+V|A1|stehen|steht|stand|hat gestanden|i|áll|grundwortschatz
+V|A1|liegen|liegt|lag|hat gelegen|i|fekszik|grundwortschatz
+V|A1|sitzen|sitzt|saß|hat gesessen|i|ül|grundwortschatz
+V|A1|schlafen|schläft|schlief|hat geschlafen|i|alszik|grundwortschatz
+V|A1|öffnen|öffnet|öffnete|hat geöffnet|r|kinyit|grundwortschatz
+V|A1|schließen|schließt|schloss|hat geschlossen|i|bezár|grundwortschatz
+V|A1|beginnen|beginnt|begann|hat begonnen|i|kezd, elkezdődik|grundwortschatz
+V|A1|bleiben|bleibt|blieb|ist geblieben|i|marad|grundwortschatz
+V|A1|zeigen|zeigt|zeigte|hat gezeigt|r|mutat|grundwortschatz
+V|A1|glauben|glaubt|glaubte|hat geglaubt|r|hisz|grundwortschatz||an:A:hisz valamiben
+V|A1|wiederholen|wiederholt|wiederholte|hat wiederholt|r|megismétel|bildung
+V|A1|auf·stehen|steht auf|stand auf|ist aufgestanden|i|felkel|zeit
+V|A1|mit·kommen|kommt mit|kam mit|ist mitgekommen|i|vele jön|grundwortschatz
+V|A2|vor·bereiten|bereitet vor|bereitete vor|hat vorbereitet|r|előkészít|bildung,arbeit
+V|A2|bekommen|bekommt|bekam|hat bekommen|i|kap|grundwortschatz
+V|A2|verlieren|verliert|verlor|hat verloren|i|elveszít|grundwortschatz
+V|A2|gewinnen|gewinnt|gewann|hat gewonnen|i|nyer|freizeit
+V|A2|danken|dankt|dankte|hat gedankt|r|megköszön|kommunikation||-:D:megköszön valakinek
+V|A2|gehören|gehört|gehörte|hat gehört|r|tartozik valakihez|grundwortschatz||-:D:valakié
+V|A2|benutzen|benutzt|benutzte|hat benutzt|r|használ|grundwortschatz
+V|A2|entscheiden|entscheidet|entschied|hat entschieden|i|dönt|grundwortschatz
+V|A2|versuchen|versucht|versuchte|hat versucht|r|megpróbál|grundwortschatz
+V|A2|passieren|passiert|passierte|ist passiert|r|történik|grundwortschatz
+V|A2|sterben|stirbt|starb|ist gestorben|i|meghal|menschen
+V|B1|sich kümmern|kümmert sich|kümmerte sich|hat gekümmert|r|gondoskodik|menschen||um:A:gondoskodik valakiről
+V|B1|sich gewöhnen|gewöhnt sich|gewöhnte sich|hat gewöhnt|r|hozzászokik|grundwortschatz||an:A:hozzászokik valamihez
+V|B1|sich vor·stellen|stellt sich vor|stellte sich vor|hat vorgestellt|r|bemutatkozik|kommunikation
+V|B1|sich(D) vor·stellen#2|stellt sich vor|stellte sich vor|hat vorgestellt|r|elképzel|grundwortschatz
+V|B1|sich verlassen|verlässt sich|verließ sich|hat verlassen|i|támaszkodik, megbízik|menschen||auf:A:számít valakire
+V|B1|bestehen|besteht|bestand|hat bestanden|i|áll valamiből;letesz (vizsgát)|bildung||aus:D:áll valamiből
+V|B1|erreichen|erreicht|erreichte|hat erreicht|r|elér|grundwortschatz
+V|B1|vermeiden|vermeidet|vermied|hat vermieden|i|elkerül|grundwortschatz
+V|B1|unterstützen|unterstützt|unterstützte|hat unterstützt|r|támogat|menschen
+A|A1|viel|mehr|am meisten|sok|grundwortschatz||!
+A|A1|gern|lieber|am liebsten|szívesen|grundwortschatz||!
+A|A1|lang|länger|am längsten|hosszú|grundwortschatz
+A|A1|kurz|kürzer|am kürzesten|rövid|grundwortschatz
+A|A1|jung|jünger|am jüngsten|fiatal|menschen
+A|A1|schön|schöner|am schönsten|szép|grundwortschatz
+A|A1|richtig|richtiger|am richtigsten|helyes|bildung
+A|A1|falsch|falscher|am falschesten|hibás, rossz|bildung
+A|A1|wichtig|wichtiger|am wichtigsten|fontos|grundwortschatz
+A|A1|frei|freier|am freiesten|szabad|grundwortschatz
+A|A2|hoch|höher|am höchsten|magas|grundwortschatz||!
+A|A2|möglich|-|-|lehetséges|grundwortschatz
+A|A2|ähnlich|ähnlicher|am ähnlichsten|hasonló|grundwortschatz
+A|A2|freundlich|freundlicher|am freundlichsten|barátságos|menschen
+A|A2|höflich|höflicher|am höflichsten|udvarias|menschen
+A|A2|ruhig|ruhiger|am ruhigsten|nyugodt, csendes|grundwortschatz
+A|A2|laut|lauter|am lautesten|hangos|grundwortschatz
+A|A2|ledig|-|-|nőtlen, hajadon|familie
+A|B1|abhängig|abhängiger|am abhängigsten|függő|grundwortschatz||von:D:függ valamitől
+A|B1|zuverlässig|zuverlässiger|am zuverlässigsten|megbízható|menschen
+A|B1|selbstständig|selbstständiger|am selbstständigsten|önálló|arbeit
+A|B1|tot|-|-|halott|menschen
+
+# --- Funkciószavak ---------------------------------------------------------------
+X|A1|PREPOSITION|mit|-val/-vel|grundwortschatz|Ich fahre mit dem Bus. = Busszal megyek.
+X|A1|PREPOSITION|ohne|nélkül|grundwortschatz
+X|A1|PREPOSITION|für|számára, -ért|grundwortschatz
+X|A1|PREPOSITION|nach|után;-ba/-be (városba, országba)|grundwortschatz
+X|A1|PREPOSITION|bei|-nál/-nél|grundwortschatz
+X|A1|PREPOSITION|zwischen|között|grundwortschatz
+X|A2|PREPOSITION|wegen|miatt|grundwortschatz
+X|A2|PREPOSITION|während|alatt, közben|grundwortschatz,zeit
+X|A1|CONJUNCTION|und|és|grundwortschatz
+X|A1|CONJUNCTION|aber|de|grundwortschatz
+X|A1|CONJUNCTION|oder|vagy|grundwortschatz
+X|A1|CONJUNCTION|weil|mert|grundwortschatz|Ich bleibe zu Hause, weil ich krank bin. = Otthon maradok, mert beteg vagyok.
+X|A2|CONJUNCTION|dass|hogy|grundwortschatz
+X|A2|CONJUNCTION|wenn|ha;amikor|grundwortschatz
+X|A2|CONJUNCTION|obwohl|habár, bár|grundwortschatz
+X|B1|CONJUNCTION|damit|azért, hogy|grundwortschatz
+X|A1|ADVERB|hier|itt|grundwortschatz
+X|A1|ADVERB|dort|ott|grundwortschatz
+X|A1|ADVERB|sehr|nagyon|grundwortschatz
+X|A1|ADVERB|auch|is|grundwortschatz
+X|A1|ADVERB|vielleicht|talán|grundwortschatz
+X|A2|ADVERB|leider|sajnos|grundwortschatz
+X|A2|ADVERB|zusammen|együtt|grundwortschatz
+X|B1|ADVERB|trotzdem|mégis, ennek ellenére|grundwortschatz
+X|A1|PHRASE|Guten Tag|jó napot|kommunikation
+X|A1|PHRASE|Wie geht's?|hogy vagy?|kommunikation
+X|A1|PHRASE|Entschuldigung!|elnézést!|kommunikation
+X|A2|PHRASE|Viel Glück!|sok szerencsét!|kommunikation
