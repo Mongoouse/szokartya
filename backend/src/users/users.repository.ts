@@ -47,9 +47,9 @@ export class UsersRepository {
     await db.user.delete({ where: { id } });
   }
 
-  /** Az adatexporthoz: saját szavak, kártyák (a szó alakjával) és a teljes értékelési napló. */
+  /** Az adatexporthoz: saját szavak, kártyák (a szó alakjával), a teljes értékelési napló és a hibabejelentések. */
   async exportData(userId: string) {
-    const [customWords, cards, reviewLogs] = await this.prisma.$transaction([
+    const [customWords, cards, reviewLogs, reports] = await this.prisma.$transaction([
       this.prisma.word.findMany({
         where: { ownerId: userId, deletedAt: null },
         include: WORD_DETAIL_INCLUDE,
@@ -61,7 +61,12 @@ export class UsersRepository {
         orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
       }),
       this.prisma.reviewLog.findMany({ where: { userId }, orderBy: [{ reviewedAt: 'asc' }, { id: 'asc' }] }),
+      this.prisma.wordReport.findMany({
+        where: { userId },
+        include: { word: { select: { lemma: true } } },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      }),
     ]);
-    return { customWords, cards, reviewLogs };
+    return { customWords, cards, reviewLogs, reports };
   }
 }

@@ -1,5 +1,7 @@
 import { ConflictException, HttpException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { ReportSubmitResultDto, ReportSubmitStatus } from '../reports/dto/report.dto';
+import { ReportsService } from '../reports/reports.service';
 import { RepetitionService } from '../repetition/repetition.service';
 import { UsersRepository } from '../users/users.repository';
 import { isCardTypeApplicable } from '../words/card-applicability';
@@ -57,6 +59,7 @@ export class SyncService {
     private readonly repetition: RepetitionService,
     private readonly users: UsersRepository,
     private readonly wordsService: WordsService,
+    private readonly reportsService: ReportsService,
   ) {}
 
   // -------------------------------------------------------------------------
@@ -96,7 +99,7 @@ export class SyncService {
 
   /**
    * A kliens kimenő sorának (outbox) feldolgozása. Sorrend: saját szavak → kártyafelvételek →
-   * jelzőmódosítások → értékelések (időrendben), mert a későbbiek hivatkozhatnak
+   * jelzőmódosítások → értékelések (időrendben) → hibabejelentések, mert a későbbiek hivatkozhatnak
    * az offline létrehozott kártyákra. Minden tétel önállóan sikerül vagy bukik;
    * az eredményt tételenként adjuk vissza. Infrastruktúra-hiba (pl. adatbázis
    * nem elérhető) viszont az egész kérést elbuktatja, hogy a kliens újrapróbálja.
@@ -145,7 +148,17 @@ export class SyncService {
       );
     }
 
-    return { serverTime: now, clockOffsetMs: rawOffset, customWords, enrollments, cardChanges, reviews };
+    // Hibabejelentések: csak a szóra hivatkoznak (saját szóra is), ezért a saját szavak után bárhol jöhetnek.
+    const reports: ReportSubmitResultDto[] = [];
+    for (const r of dto.reports ?? []) {
+      if (!r.id) {
+        reports.push({ reportId: '', status: ReportSubmitStatus.REJECTED, reason: 'id_required' });
+        continue;
+      }
+      reports.push(await this.reportsService.submit(userId, { ...r, createdAt: r.createdAt && toServerTime(r.createdAt) }, now));
+    }
+
+    return { serverTime: now, clockOffsetMs: rawOffset, customWords, enrollments, cardChanges, reviews, reports };
   }
 
   private async applyEnrollment(userId: string, e: EnrollmentChangeDto): Promise<EnrollmentResultDto> {

@@ -1,3 +1,4 @@
+import { ReportDto } from '../reports/dto/report.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProgressSyncDto } from '../sync/dto/sync.dto';
 import { WordDto } from '../words/dto/word.dto';
@@ -32,6 +33,7 @@ export class UsersService {
       customWords: data.customWords.map(WordDto.fromEntity),
       cards: data.cards.map((c) => ({ ...ProgressSyncDto.fromEntity(c), word: c.word.lemma })),
       reviewLogs: data.reviewLogs.map(ExportedReviewLogDto.fromEntity),
+      reports: data.reports.map((r) => ({ ...ReportDto.fromEntity(r), word: r.word.lemma })),
     };
   }
 }

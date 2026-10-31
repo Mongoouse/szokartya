@@ -1,3 +1,4 @@
+import { MyReportDto } from '../../reports/dto/report.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ReviewLog } from '@prisma/client';
 import { ProgressSyncDto } from '../../sync/dto/sync.dto';
@@ -53,4 +54,5 @@ export class UserExportDto {
   @ApiProperty({ type: [WordDto] }) customWords!: WordDto[];
   @ApiProperty({ type: [ExportedCardDto] }) cards!: ExportedCardDto[];
   @ApiProperty({ type: [ExportedReviewLogDto] }) reviewLogs!: ExportedReviewLogDto[];
+  @ApiProperty({ type: [MyReportDto] }) reports!: MyReportDto[];
 }

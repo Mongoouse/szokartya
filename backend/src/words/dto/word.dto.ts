@@ -8,6 +8,7 @@ import {
   NumberType,
   PartOfSpeech,
   ReflexiveType,
+  WordReviewStatus,
 } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min } from 'class-validator';
@@ -170,6 +171,14 @@ export class WordDto {
   @ApiProperty({ description: 'Saját (felhasználó által felvett) szó-e' })
   isCustom!: boolean;
 
+  @ApiPropertyOptional({
+    enum: WordReviewStatus,
+    enumName: 'WordReviewStatus',
+    nullable: true,
+    description: 'Központi szónál az emberi ellenőrzöttség; saját szónál null',
+  })
+  reviewStatus!: WordReviewStatus | null;
+
   @ApiPropertyOptional({ type: NounInfoDto, nullable: true })
   noun!: NounInfoDto | null;
 
@@ -211,6 +220,7 @@ export class WordDto {
       ipa: word.ipa,
       audioUrl: word.audioUrl,
       isCustom: word.ownerId !== null,
+      reviewStatus: word.ownerId === null ? word.reviewStatus : null,
       noun: noun
         ? {
             gender: noun.gender,
