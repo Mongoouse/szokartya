@@ -97,7 +97,9 @@ class SyncEngine {
     final enrollmentsPending = wordsPending || enrollments.length == _batchSize;
     final changes = enrollmentsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.cardChange, limit: _batchSize);
     final reviews = enrollmentsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.review, limit: _batchSize);
-    final all = [...customWords, ...enrollments, ...changes, ...reviews];
+    // A bejelentés csak szóra hivatkozik (akár offline felvett saját szóra), kártyára nem.
+    final reports = wordsPending ? <OutboxEntry>[] : await _store.outbox(kind: OutboxKind.report, limit: _batchSize);
+    final all = [...customWords, ...enrollments, ...changes, ...reviews, ...reports];
     if (all.isEmpty) return (0, 0);
 
     final Json response;
@@ -109,6 +111,7 @@ class SyncEngine {
         'enrollments': enrollments.map((e) => e.payload).toList(),
         'cardChanges': changes.map((e) => e.payload).toList(),
         'reviews': reviews.map((e) => e.payload).toList(),
+        'reports': reports.map((e) => e.payload).toList(),
       });
     } on ApiException {
       await _store.incrementOutboxAttempts(all);
@@ -140,6 +143,14 @@ class SyncEngine {
     }
     rejected += _countRejected(response['cardChanges']);
     rejected += _countRejected(response['reviews']);
+    // Régebbi szerver (reports mező nélkül) – a bejelentés ilyenkor elveszne, ezért
+    // csak akkor vesszük ki a sorból, ha a szerver válaszolt rá.
+    final reportResults = response['reports'] as List?;
+    if (reportResults == null && reports.isNotEmpty) {
+      all.removeWhere((e) => e.kind == OutboxKind.report);
+    } else {
+      rejected += _countRejected(reportResults ?? const []);
+    }
 
     // Minden tétel végleges választ kapott (applied / duplicate / conflict /
     // rejected) – a konfliktusos és elutasított tételek állapotát a pull javítja.

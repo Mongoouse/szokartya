@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/user_settings.dart';
 import '../../domain/sm2_scheduler.dart';
 import '../../providers.dart';
+import '../admin/admin_screen.dart';
 import '../auth/auth_controller.dart';
+import '../reports/my_reports_screen.dart';
 import '../settings/settings_screen.dart';
 import '../stats/stats_screen.dart';
 import '../study/study_screen.dart';
@@ -35,14 +37,18 @@ class HomeScreen extends ConsumerWidget {
               'words' => _open(context, ref, const WordBrowserScreen()),
               'custom' => _open(context, ref, const CustomWordScreen()),
               'settings' => _open(context, ref, SettingsScreen(profile: profile)),
+              'reports' => _open(context, ref, const MyReportsScreen()),
+              'admin' => _open(context, ref, const AdminScreen()),
               _ => _signOut(context, ref),
             },
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'stats', child: Text('Statisztika')),
-              PopupMenuItem(value: 'words', child: Text('Szókereső')),
-              PopupMenuItem(value: 'custom', child: Text('Új saját szó')),
-              PopupMenuItem(value: 'settings', child: Text('Beállítások')),
-              PopupMenuItem(value: 'logout', child: Text('Kijelentkezés')),
+            itemBuilder: (_) => [
+              const PopupMenuItem(value: 'stats', child: Text('Statisztika')),
+              const PopupMenuItem(value: 'words', child: Text('Szókereső')),
+              const PopupMenuItem(value: 'custom', child: Text('Új saját szó')),
+              const PopupMenuItem(value: 'reports', child: Text('Bejelentéseim')),
+              if (profile.isAdmin) const PopupMenuItem(value: 'admin', child: Text('Adminisztráció')),
+              const PopupMenuItem(value: 'settings', child: Text('Beállítások')),
+              const PopupMenuItem(value: 'logout', child: Text('Kijelentkezés')),
             ],
           ),
         ],

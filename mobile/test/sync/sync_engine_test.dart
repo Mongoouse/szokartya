@@ -12,6 +12,7 @@ import 'package:szokartya/data/local/local_store.dart';
 import 'package:szokartya/data/models/custom_word_input.dart';
 import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/repositories/auth_repository.dart';
+import 'package:szokartya/data/repositories/report_repository.dart';
 import 'package:szokartya/data/models/user_settings.dart';
 import 'package:szokartya/data/repositories/study_repository.dart';
 import 'package:szokartya/sync/sync_engine.dart';
@@ -285,6 +286,81 @@ void main() {
       expect(report.rejected, 4); // a szó + 3 kártya
       expect(await study.searchWords(customOnly: true), isEmpty);
       expect((await db.db.query('cards', where: 'deleted = 0')).where((c) => c['word_id'] == id), isEmpty);
+    });
+  });
+
+  group('hibabejelentés', () {
+    late ReportRepository reports;
+    setUp(() => reports = ReportRepository(store: store, api: ApiClient(config: const AppConfig(apiBaseUrl: 'x'), tokenStore: InMemoryTokenStore()), clock: clock));
+
+    test('offline rögzített bejelentés a következő szinkronnal felmegy, utána kikerül a sorból', () async {
+      final id = await reports.report(wordId: 'w1', category: ReportCategory.translation, message: '  rossz jelentés ', cardType: CardType.recognition);
+      expect(await store.outboxCount(), 1);
+      server.onPush = (body) => {
+            'enrollments': <Json>[],
+            'cardChanges': <Json>[],
+            'reviews': <Json>[],
+            'reports': [
+              for (final r in (body['reports'] as List).cast<Json>()) {'reportId': r['id'], 'status': 'created'},
+            ],
+          };
+      final result = await engine.sync();
+      final sent = (server.pushes.single['reports'] as List).single as Json;
+      expect(sent, {
+        'id': id,
+        'wordId': 'w1',
+        'cardType': 'RECOGNITION',
+        'category': 'TRANSLATION',
+        'message': 'rossz jelentés',
+        'createdAt': clock.now().toIso8601String(),
+      });
+      expect(result.rejected, 0);
+      expect(await store.outboxCount(), 0);
+    });
+
+    test('hálózati hiba: a bejelentés megmarad és később felmegy', () async {
+      await reports.report(wordId: 'w1', category: ReportCategory.other, message: 'x');
+      server.failPushTimes = 1;
+      await expectLater(engine.sync(), throwsA(isA<NetworkException>()));
+      expect(await store.outboxCount(), 1);
+      server.onPush = (body) => {
+            'enrollments': <Json>[],
+            'cardChanges': <Json>[],
+            'reviews': <Json>[],
+            'reports': [
+              for (final r in (body['reports'] as List).cast<Json>()) {'reportId': r['id'], 'status': 'exists'},
+            ],
+          };
+      await engine.sync();
+      expect(await store.outboxCount(), 0);
+    });
+
+    test('elutasított bejelentés (pl. közben törölt szó) számít, és nem próbálkozik újra', () async {
+      await reports.report(wordId: 'w1', category: ReportCategory.other, message: 'x');
+      server.onPush = (body) => {
+            'enrollments': <Json>[],
+            'cardChanges': <Json>[],
+            'reviews': <Json>[],
+            'reports': [
+              for (final r in (body['reports'] as List).cast<Json>()) {'reportId': r['id'], 'status': 'rejected', 'reason': 'unknown_word'},
+            ],
+          };
+      final result = await engine.sync();
+      expect(result.rejected, 1);
+      expect(await store.outboxCount(), 0);
+    });
+
+    test('régi szerver (reports mező nélküli válasz): a bejelentés a sorban marad', () async {
+      await enrollAndReview();
+      await reports.report(wordId: 'w1', category: ReportCategory.other, message: 'x');
+      await engine.sync(); // az alapértelmezett hamis szerver nem ismeri a reports mezőt
+      expect((await store.outbox(kind: OutboxKind.report, limit: 10)), hasLength(1));
+      expect(await store.outboxCount(), 1);
+    });
+
+    test('üres üzenet nem rögzíthető', () async {
+      expect(() => reports.report(wordId: 'w1', category: ReportCategory.other, message: '   '), throwsArgumentError);
+      expect(await store.outboxCount(), 0);
     });
   });
 }

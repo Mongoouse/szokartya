@@ -13,7 +13,8 @@ enum OutboxKind {
   customWord('custom_word'),
   enroll('enroll'),
   cardChange('card_change'),
-  review('review');
+  review('review'),
+  report('report');
 
   const OutboxKind(this.wire);
 
@@ -305,6 +306,32 @@ class LocalStore {
         r.reviewedAt,
       );
     });
+  }
+
+  /// Hibabejelentés offline rögzítése: a következő szinkron tölti fel (push `reports`).
+  /// Az azonosítót a kliens adja, így az ismételt feltöltés idempotens.
+  Future<void> recordReport({
+    required String id,
+    required String wordId,
+    required CardType? cardType,
+    required String category,
+    required String message,
+    required DateTime now,
+  }) {
+    return _db.transaction((txn) => _enqueue(
+          txn,
+          OutboxKind.report,
+          id,
+          {
+            'id': id,
+            'wordId': wordId,
+            'cardType': ?cardType?.wire,
+            'category': category,
+            'message': message,
+            'createdAt': now.toUtc().toIso8601String(),
+          },
+          now,
+        ));
   }
 
   /// Felfüggesztés offline (LWW-vel szinkronizálódik).

@@ -13,6 +13,7 @@ class UserProfile {
     required this.dailyReviewLimit,
     this.targetRetention = 0.9,
     this.catalogLevels = const [],
+    this.role = 'USER',
   });
 
   factory UserProfile.fromJson(Json json) => UserProfile(
@@ -24,6 +25,7 @@ class UserProfile {
         dailyReviewLimit: (json['dailyReviewLimit'] as num?)?.toInt() ?? 200,
         targetRetention: (json['targetRetention'] as num?)?.toDouble() ?? 0.9,
         catalogLevels: (json['catalogLevels'] as List?)?.cast<String>() ?? const [],
+        role: json['role'] as String? ?? 'USER',
       );
 
   factory UserProfile.decode(String raw) => UserProfile.fromJson(jsonDecode(raw) as Json);
@@ -41,6 +43,11 @@ class UserProfile {
   /// A szinkronizált katalógus CEFR szintjei; üres = mind.
   final List<String> catalogLevels;
 
+  /// USER vagy ADMIN – az admin látja a szókincs-ellenőrzés és a bejelentések képernyőit.
+  final String role;
+
+  bool get isAdmin => role == 'ADMIN';
+
   String get greetingName => displayName ?? email.split('@').first;
 
   Json toJson() => {
@@ -52,6 +59,7 @@ class UserProfile {
         'dailyReviewLimit': dailyReviewLimit,
         'targetRetention': targetRetention,
         'catalogLevels': catalogLevels,
+        'role': role,
       };
 
   String encode() => jsonEncode(toJson());

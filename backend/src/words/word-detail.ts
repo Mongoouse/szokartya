@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, WordReviewStatus } from '@prisma/client';
 
 /**
  * A kártyán megjelenő teljes szóadat betöltési terve (egyetlen Prisma
@@ -17,8 +17,17 @@ export const WORD_DETAIL_INCLUDE = {
 export type WordWithDetails = Prisma.WordGetPayload<{ include: typeof WORD_DETAIL_INCLUDE }>;
 
 /**
- * Láthatóság: a központi szótár (owner_id IS NULL) és a felhasználó saját szavai.
+ * Láthatóság: a központi szótár (owner_id IS NULL) – az admin által elutasított
+ * szavak nélkül – és a felhasználó saját szavai.
  */
 export function visibleWordsWhere(userId: string): Prisma.WordWhereInput {
-  return { deletedAt: null, OR: [{ ownerId: null }, { ownerId: userId }] };
+  return {
+    deletedAt: null,
+    OR: [{ ownerId: null, reviewStatus: { not: WordReviewStatus.REJECTED } }, { ownerId: userId }],
+  };
+}
+
+/** Elutasított központi szó: a kliensek felé törölt szóként (tombstone) jelenik meg. */
+export function isRejectedCentralWord(word: { ownerId: string | null; reviewStatus: WordReviewStatus }): boolean {
+  return word.ownerId === null && word.reviewStatus === WordReviewStatus.REJECTED;
 }

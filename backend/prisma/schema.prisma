@@ -133,6 +133,42 @@ enum CardState {
   @@map("card_state")
 }
 
+/// Felhasználói szerepkör. Az ADMIN ellenőrzi a központi szókincset és kezeli
+/// a hibabejelentéseket (`/admin/*` végpontok).
+enum UserRole {
+  USER
+  ADMIN
+
+  @@map("user_role")
+}
+
+/// A központi szótár egy szavának emberi ellenőrzöttsége.
+enum WordReviewStatus {
+  UNREVIEWED // még senki nem nézte át (pl. importált vagy generált nyersanyag)
+  VERIFIED //   admin átnézte és helyesnek találta
+  REJECTED //   hibás – a felhasználóknak nem jelenik meg (a pull tombstone-ként küldi)
+
+  @@map("word_review_status")
+}
+
+/// A hibabejelentés tárgya – a hibák típusonkénti statisztikájához.
+enum ReportCategory {
+  TRANSLATION // rossz vagy hiányzó jelentés
+  GRAMMAR //     névelő, többes szám, igealak, vonzat
+  SPELLING //    elírás
+  OTHER
+
+  @@map("report_category")
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED //  a hibát javították
+  DISMISSED // nem hiba / nem javítandó
+
+  @@map("report_status")
+}
+
 // -----------------------------------------------------------------------------
 // Felhasználók és munkamenetek
 // -----------------------------------------------------------------------------
@@ -157,6 +193,7 @@ model User {
   /// A szinkronizált központi szókatalógus CEFR szintjei; üres = mind.
   /// A saját és a már felvett szavak szinttől függetlenül szinkronizálódnak.
   catalogLevels      CefrLevel[] @default([]) @map("catalog_levels")
+  role               UserRole    @default(USER)
   createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
   deletedAt          DateTime?   @map("deleted_at") @db.Timestamptz(3)
@@ -165,6 +202,9 @@ model User {
   ownedWords    Word[]         @relation("WordOwner")
   progress      UserProgress[]
   reviewLogs    ReviewLog[]
+  reviewedWords   Word[]       @relation("WordReviewer")
+  reports         WordReport[] @relation("ReportAuthor")
+  resolvedReports WordReport[] @relation("ReportResolver")
 
   // [SQL] CHECK: email formátum, napi limitek tartománya, target_retention tartománya.
   @@map("users")
@@ -222,12 +262,18 @@ model Word {
   frequencyRank Int?         @map("frequency_rank")
   /// NULL = központi (kurált) szótár; egyébként a felhasználó saját szava.
   ownerId       String?      @map("owner_id") @db.Uuid
+  /// Emberi ellenőrzöttség (csak a központi szótárban értelmes; a saját szavaké UNREVIEWED marad).
+  reviewStatus  WordReviewStatus @default(UNREVIEWED) @map("review_status")
+  reviewedAt    DateTime?    @map("reviewed_at") @db.Timestamptz(3)
+  reviewedById  String?      @map("reviewed_by_id") @db.Uuid
   version       Int          @default(1)
   createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
   deletedAt     DateTime?    @map("deleted_at") @db.Timestamptz(3)
 
   owner               User?                @relation("WordOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  reviewedBy          User?                @relation("WordReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reports             WordReport[]
   nounAttributes      NounAttributes?
   verbAttributes      VerbAttributes?
   adjectiveAttributes AdjectiveAttributes?
@@ -244,6 +290,8 @@ model Word {
   @@unique([ownerId, language, lemma, partOfSpeech, homographNo], map: "words_identity_key")
   @@index([language, cefrLevel, partOfSpeech])
   @@index([updatedAt])
+  /// Az admin ellenőrzési sora: központi szavak státusz szerint.
+  @@index([reviewStatus, ownerId])
   /// Részleges egyezéses keresés (ILIKE '%…%', similarity) trigram GIN indexszel.
   @@index([lemma(ops: raw("gin_trgm_ops"))], map: "words_lemma_trgm_idx", type: Gin)
   // [SQL] CHECK: homograph_no >= 1, lemma nem üres, frequency_rank > 0.
@@ -533,4 +581,39 @@ model ReviewLog {
   //       ease_factor_* BETWEEN 1.30 AND 5.00; interval_days_* >= 0.
   // [SQL] trigger: UPDATE tiltása (append-only).
   @@map("review_logs")
+}
+
+// -----------------------------------------------------------------------------
+// Hibabejelentések
+// -----------------------------------------------------------------------------
+
+/// Egy felhasználó hibabejelentése egy szóról (szabad szöveggel). Az `id`-t a
+/// kliens generálja, így az offline rögzített bejelentés feltöltése idempotens.
+model WordReport {
+  id           String         @id @db.Uuid
+  userId       String         @map("user_id") @db.Uuid
+  wordId       String         @map("word_id") @db.Uuid
+  /// Melyik kártyán vette észre (opcionális kontextus).
+  cardType     CardType?      @map("card_type")
+  category     ReportCategory @default(OTHER)
+  message      String         @db.VarChar(1000)
+  status       ReportStatus   @default(OPEN)
+  /// Az admin megjegyzése (mit javított, miért utasította el).
+  adminNote    String?        @map("admin_note") @db.VarChar(1000)
+  /// A bejelentés ideje a kliens (korrigált) órája szerint.
+  createdAt    DateTime       @map("created_at") @db.Timestamptz(3)
+  receivedAt   DateTime       @default(now()) @map("received_at") @db.Timestamptz(3)
+  resolvedAt   DateTime?      @map("resolved_at") @db.Timestamptz(3)
+  resolvedById String?        @map("resolved_by_id") @db.Uuid
+
+  user       User  @relation("ReportAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  word       Word  @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  resolvedBy User? @relation("ReportResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  /// Admin lista: nyitott bejelentések érkezési sorrendben.
+  @@index([status, receivedAt])
+  @@index([wordId])
+  @@index([userId])
+  // [SQL] CHECK: az üzenet nem üres; status = 'OPEN' <=> resolved_at IS NULL.
+  @@map("word_reports")
 }

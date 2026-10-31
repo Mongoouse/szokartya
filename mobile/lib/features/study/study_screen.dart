@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/study_card.dart';
 import '../../domain/answer_check.dart';
 import '../../providers.dart';
+import '../reports/report_dialog.dart';
 import 'flashcard_view.dart';
 import 'study_session_controller.dart';
 
@@ -39,6 +40,15 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(session.phase == StudyPhase.finished ? 'Kész' : 'Hátra: ${session.remaining}'),
+        actions: [
+          if (card != null && (session.phase == StudyPhase.question || session.phase == StudyPhase.answer))
+            IconButton(
+              key: const Key('reportWord'),
+              tooltip: 'Hibát találtam',
+              icon: const Icon(Icons.flag_outlined),
+              onPressed: () => showReportDialog(context, ref, word: card.word, cardType: card.cardType),
+            ),
+        ],
       ),
       body: SafeArea(
         child: Padding(

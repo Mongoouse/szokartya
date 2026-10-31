@@ -6,7 +6,7 @@
  * Egy szó összes rekordja egyetlen tranzakcióban íródik.
  */
 import { createHash } from 'node:crypto';
-import { CefrLevel, GrammaticalCase, PartOfSpeech, Prisma, PrismaClient } from '@prisma/client';
+import { CefrLevel, GrammaticalCase, PartOfSpeech, Prisma, PrismaClient, WordReviewStatus } from '@prisma/client';
 
 /** Rögzített névtér a seed-azonosítókhoz (RFC 4122 UUID v5). */
 const SEED_NAMESPACE = 'b7c2a4f0-6a51-4f3e-9d0e-2c1f5e8a9b10';
@@ -124,9 +124,20 @@ async function seedExamples(
   }
 }
 
-export async function seedWord(prisma: PrismaClient, w: SeedWord, categoryIds: Map<string, string>): Promise<void> {
+/**
+ * Egy szó idempotens beírása. @returns false, ha a szót egy admin már ellenőrizte
+ * (VERIFIED / REJECTED): az ilyen szót a seed nem írja felül, különben egy
+ * újrafuttatás visszaállítaná az admin javítását.
+ */
+export async function seedWord(prisma: PrismaClient, w: SeedWord, categoryIds: Map<string, string>): Promise<boolean> {
   const key = wordKey(w);
   const wordId = seedId(key);
+
+  const reviewed = await prisma.word.findFirst({
+    where: { id: wordId, reviewStatus: { not: WordReviewStatus.UNREVIEWED } },
+    select: { id: true },
+  });
+  if (reviewed) return false;
 
   await prisma.$transaction(async (tx) => {
     const wordData = {
@@ -180,4 +191,5 @@ export async function seedWord(prisma: PrismaClient, w: SeedWord, categoryIds: M
       });
     }
   });
+  return true;
 }

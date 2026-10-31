@@ -31,7 +31,8 @@
     "eval:schedulers": "tsx scripts/evaluate-schedulers.ts",
     "experiment:schedulers": "tsx scripts/experiment/run-experiment.ts",
     "experiment:schedulers:docs": "tsx scripts/experiment/run-experiment.ts --out ../docs/kiserlet/szimulacio",
-    "db:import": "tsx prisma/import-vocabulary.ts"
+    "db:import": "tsx prisma/import-vocabulary.ts",
+    "user:role": "tsx prisma/set-role.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.2.7",

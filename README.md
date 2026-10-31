@@ -19,6 +19,7 @@ Keresztplatformos, offline-first szókincsfejlesztő alkalmazás német nyelvtan
 | 4 | Egység-, integrációs és szinkron tesztek, CI | ✅ kész – [docs/04-teszteles.md](docs/04-teszteles.md) |
 | 5 | Bővebb szókincs, nyelvtani kártyák, saját szavak, beállítások, statisztika, GDPR, Docker | ✅ kész – [docs/05-tovabbfejlesztes.md](docs/05-tovabbfejlesztes.md) |
 | 6 | SM-2 ↔ személyre illesztett FSRS: kísérleti összevetés, statisztikai próbák | ✅ kész – [docs/06-utemezok-kiserlet.md](docs/06-utemezok-kiserlet.md) |
+| 7 | Hibabejelentés (offline is), admin felület: szóellenőrzés, bejelentések kezelése | ✅ kész – [docs/07-adminisztracio-es-hibabejelentes.md](docs/07-adminisztracio-es-hibabejelentes.md) |
 
 ## Könyvtárszerkezet
 
@@ -31,6 +32,8 @@ backend/
     repetition/            # napi sor, értékelés, statisztika
       scheduler/           # módosított SM-2 (tiszta függvények)
     sync/                  # offline szinkronizáció (pull / push)
+    reports/               # felhasználói hibabejelentések
+    admin/                 # szóellenőrzés, bejelentések kezelése (csak ADMIN)
     common/ config/ prisma/
   prisma/
     schema.prisma          # adatmodell (forrás)
@@ -38,6 +41,7 @@ backend/
     seed.ts                # idempotens seed (kategóriák + data/wortschatz.txt)
     data/wortschatz.txt    # ~450 szavas szólista tömör formátumban
     import-vocabulary.ts   # saját szólista importálása (npm run db:import)
+    set-role.ts            # admin kinevezése (npm run user:role -- <email> ADMIN)
     vocab/b2/              # ~1550 szavas B2 szókincs (névelővel, vonzattal; formátum: vocab/dsl.ts)
     verify/schema-checks.sql
   scripts/                 # SM-2 vs FSRS összehasonlítás (npm run eval:schedulers)
@@ -51,6 +55,8 @@ docs/
   03-szinkronizacio-es-kliens.md  # offline-first szinkron, konfliktuskezelés, Flutter kliens
   04-teszteles.md          # tesztstratégia, lefedettség, talált hibák
   05-tovabbfejlesztes.md   # új funkciók: kártyatípusok, saját szavak, beállítások, GDPR
+  06-utemezok-kiserlet.md  # SM-2 ↔ FSRS kísérlet
+  07-adminisztracio-es-hibabejelentes.md  # hibabejelentés, admin, szóellenőrzés
 shared/fixtures/           # közös SM-2 golden referencia (TS + Dart tesztek)
 .github/workflows/ci.yml   # CI: backend, mobil, többeszközös szinkron e2e
 docker-compose.yml         # PostgreSQL; --profile api: migráció + seed + API konténerben
@@ -81,6 +87,8 @@ cd ../mobile
 flutter pub get
 flutter run
 ```
+
+Admin felhasználó (szóellenőrzés és a bejelentések kezelése az appban): regisztrálj az appban, majd `npm run user:role -- <email> ADMIN`, és jelentkezz be újra.
 
 A teljes backend konténerben is indítható (Node.js nélkül): `docker compose --profile api up -d`, ekkor az API a `http://localhost:3000/api/v1` címen fut.
 

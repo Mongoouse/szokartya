@@ -8,7 +8,9 @@ import 'core/time/clock.dart';
 import 'core/tts/speaker.dart';
 import 'data/local/app_database.dart';
 import 'data/local/local_store.dart';
+import 'data/repositories/admin_repository.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/report_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/study_repository.dart';
 import 'sync/sync_engine.dart';
@@ -58,6 +60,16 @@ final syncEngineProvider = Provider<SyncEngine>(
 final settingsRepositoryProvider = Provider<SettingsRepository>(
   (ref) => SettingsRepository(api: ref.watch(apiClientProvider), store: ref.watch(localStoreProvider)),
 );
+
+final reportRepositoryProvider = Provider<ReportRepository>(
+  (ref) => ReportRepository(
+    store: ref.watch(localStoreProvider),
+    api: ref.watch(apiClientProvider),
+    clock: ref.watch(clockProvider),
+  ),
+);
+
+final adminRepositoryProvider = Provider<AdminRepository>((ref) => AdminRepository(api: ref.watch(apiClientProvider)));
 
 /// Német kiejtés (tesztben némítható).
 final speakerProvider = Provider<Speaker>((ref) => DeviceSpeaker());

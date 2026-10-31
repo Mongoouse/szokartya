@@ -16,9 +16,10 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { CreateReportDto, ReportSubmitResultDto } from '../../reports/dto/report.dto';
 import { CreateCustomWordDto, CustomWordStatus } from '../../words/dto/custom-word.dto';
 import { WordDto } from '../../words/dto/word.dto';
-import type { WordWithDetails } from '../../words/word-detail';
+import { isRejectedCentralWord, type WordWithDetails } from '../../words/word-detail';
 
 /** Egy push kötegben elemtípusonként legfeljebb ennyi tétel. */
 export const MAX_PUSH_ITEMS = 500;
@@ -99,7 +100,10 @@ export class WordSyncDto extends WordDto {
   deletedAt!: Date | null;
 
   static fromWord(w: WordWithDetails): WordSyncDto {
-    return { ...WordDto.fromEntity(w), version: w.version, updatedAt: w.updatedAt, deletedAt: w.deletedAt };
+    // Az admin által elutasított központi szó a kliensen törlődik (a kártyái is
+    // kikerülnek a tanulásból); ha később mégis jóváhagyják, a következő verzió visszahozza.
+    const deletedAt = w.deletedAt ?? (isRejectedCentralWord(w) ? (w.reviewedAt ?? w.updatedAt) : null);
+    return { ...WordDto.fromEntity(w), version: w.version, updatedAt: w.updatedAt, deletedAt };
   }
 }
 
@@ -263,6 +267,18 @@ export class PushRequestDto {
   @ValidateNested({ each: true })
   @Type(() => ReviewChangeDto)
   reviews: ReviewChangeDto[] = [];
+
+  @ApiPropertyOptional({
+    type: [CreateReportDto],
+    maxItems: MAX_PUSH_ITEMS,
+    description: 'Offline rögzített hibabejelentések (az id kötelező)',
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(MAX_PUSH_ITEMS)
+  @ValidateNested({ each: true })
+  @Type(() => CreateReportDto)
+  reports: CreateReportDto[] = [];
 }
 
 export enum EnrollmentStatus {
@@ -319,4 +335,5 @@ export class PushResponseDto {
   @ApiProperty({ type: [EnrollmentResultDto] }) enrollments!: EnrollmentResultDto[];
   @ApiProperty({ type: [CardChangeResultDto] }) cardChanges!: CardChangeResultDto[];
   @ApiProperty({ type: [ReviewResultItemDto] }) reviews!: ReviewResultItemDto[];
+  @ApiProperty({ type: [ReportSubmitResultDto] }) reports!: ReportSubmitResultDto[];
 }

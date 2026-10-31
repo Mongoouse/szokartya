@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CardState, CardType, Prisma, ReviewLog, UserProgress } from '@prisma/client';
+import { CardState, CardType, Prisma, ReviewLog, UserProgress, WordReviewStatus } from '@prisma/client';
 import { DbClient, PrismaService } from '../prisma/prisma.service';
 import { WORD_DETAIL_INCLUDE } from '../words/word-detail';
 
 export const CARD_INCLUDE = { word: { include: WORD_DETAIL_INCLUDE } } satisfies Prisma.UserProgressInclude;
 export type ProgressWithWord = Prisma.UserProgressGetPayload<{ include: typeof CARD_INCLUDE }>;
 
-/** Aktív (nem törölt, nem felfüggesztett) kártyák – a részleges indexek feltételével egyezően. */
-const ACTIVE = { deletedAt: null, isSuspended: false } as const;
+/**
+ * Aktív (nem törölt, nem felfüggesztett) kártyák – a részleges indexek feltételével egyezően –,
+ * az admin által elutasított szavak kártyái nélkül.
+ */
+const ACTIVE = {
+  deletedAt: null,
+  isSuspended: false,
+  word: { reviewStatus: { not: WordReviewStatus.REJECTED } },
+} satisfies Prisma.UserProgressWhereInput;
 
 /**
  * A `user_progress` és `review_logs` táblák adatelérési rétege.

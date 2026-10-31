@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CefrLevel, User } from '@prisma/client';
+import { CefrLevel, User, UserRole } from '@prisma/client';
 import {
   ArrayUnique,
   IsArray,
@@ -57,6 +57,9 @@ export class UserDto {
   @ApiProperty({ enum: CefrLevel, enumName: 'CefrLevel', isArray: true, description: 'Szinkronizált katalógusszintek; üres = mind' })
   catalogLevels!: CefrLevel[];
 
+  @ApiProperty({ enum: UserRole, enumName: 'UserRole', description: 'ADMIN: szókincs-ellenőrzés és bejelentések kezelése' })
+  role!: UserRole;
+
   @ApiProperty()
   createdAt!: Date;
 
@@ -71,6 +74,7 @@ export class UserDto {
       dailyReviewLimit: user.dailyReviewLimit,
       targetRetention: user.targetRetention.toNumber(),
       catalogLevels: user.catalogLevels,
+      role: user.role,
       createdAt: user.createdAt,
     };
   }
