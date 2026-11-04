@@ -201,12 +201,3 @@ const fastBaseMs = 4000;
 const fastPerCharMs = 500;
 const slowBaseMs = 10000;
 const slowPerCharMs = 1000;
-
-/// Az automatikus értékelés felirata.
-String gradeLabel(int grade) => switch (grade) {
-  1 => 'Nem tudtad',
-  3 => 'Nehéz',
-  4 => 'Jó',
-  5 => 'Könnyű',
-  _ => '$grade',
-};

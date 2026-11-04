@@ -4,9 +4,8 @@ import '../../data/models/study_card.dart';
 import '../../domain/answer_check.dart';
 import '../../domain/card_answer.dart';
 import '../../domain/sm2_scheduler.dart';
-import '../../domain/topic_groups.dart';
+import '../../domain/word_scope.dart';
 import '../../providers.dart';
-import '../home/home_summary_provider.dart';
 import '../sync/sync_controller.dart';
 
 /// Egy lecke ennyi válaszból áll (a találati aránytól függetlenül).
@@ -19,7 +18,7 @@ enum StudyPhase {
   /// A kártya előlapja látszik – a felhasználó válaszol.
   question,
 
-  /// A válasz kiértékelve, a hátlap és az automatikus értékelés látszik.
+  /// A válasz kiértékelve, a hátlap látszik.
   answer,
 
   /// A lecke véget ért (20 válasz, vagy nincs több kártya).
@@ -30,21 +29,20 @@ enum StudyPhase {
 
 /// Milyen leckét indít a felhasználó.
 class StudySessionArgs {
-  const StudySessionArgs({this.topicId, this.endless = false});
+  const StudySessionArgs({this.scope, this.endless = false});
 
-  /// Témakör-csoport ([topicGroups]); null = a napi sor (esedékes + új kártyák).
-  final String? topicId;
+  /// Szókészlet (témakör vagy szint); null = a napi sor (esedékes és új
+  /// kártyák a napi kereten belül).
+  final WordScope? scope;
 
   /// Végtelen mód: a lecke nem ér véget a 20. kártya után.
   final bool endless;
 
-  TopicGroup? get topic => topicId == null ? null : topicGroupById(topicId!);
+  @override
+  bool operator ==(Object other) => other is StudySessionArgs && other.scope == scope && other.endless == endless;
 
   @override
-  bool operator ==(Object other) => other is StudySessionArgs && other.topicId == topicId && other.endless == endless;
-
-  @override
-  int get hashCode => Object.hash(topicId, endless);
+  int get hashCode => Object.hash(scope, endless);
 }
 
 /// A tanulási munkamenet megváltoztathatatlan állapota.
@@ -60,7 +58,6 @@ class StudySessionState {
     this.check,
     this.typed,
     this.grade,
-    this.nextInterval,
     this.outOfCards = false,
   });
 
@@ -84,9 +81,9 @@ class StudySessionState {
   final AnswerCheck? check;
   final String? typed;
 
-  /// Az automatikus értékelés (1 / 3 / 4 / 5) és a következő ismétlésig hátralévő idő.
+  /// Az automatikus értékelés (1 / 3 / 4 / 5): naplózódik és ütemez, a
+  /// felületen nem jelenik meg.
   final int? grade;
-  final Duration? nextInterval;
 
   /// A lecke azért ért véget, mert elfogytak a kártyák (nem a 20 válasz miatt).
   final bool outOfCards;
@@ -106,24 +103,23 @@ class StudySessionState {
     AnswerCheck? check,
     String? typed,
     int? grade,
-    Duration? nextInterval,
     bool? outOfCards,
     bool clearAnswer = false,
     bool clearError = false,
-  }) => StudySessionState(
-    phase: phase ?? this.phase,
-    queue: queue ?? this.queue,
-    answered: answered ?? this.answered,
-    correct: correct ?? this.correct,
-    goal: goal,
-    saving: saving ?? this.saving,
-    error: clearError ? null : (error ?? this.error),
-    check: clearAnswer ? null : (check ?? this.check),
-    typed: clearAnswer ? null : (typed ?? this.typed),
-    grade: clearAnswer ? null : (grade ?? this.grade),
-    nextInterval: clearAnswer ? null : (nextInterval ?? this.nextInterval),
-    outOfCards: outOfCards ?? this.outOfCards,
-  );
+  }) =>
+      StudySessionState(
+        phase: phase ?? this.phase,
+        queue: queue ?? this.queue,
+        answered: answered ?? this.answered,
+        correct: correct ?? this.correct,
+        goal: goal,
+        saving: saving ?? this.saving,
+        error: clearError ? null : (error ?? this.error),
+        check: clearAnswer ? null : (check ?? this.check),
+        typed: clearAnswer ? null : (typed ?? this.typed),
+        grade: clearAnswer ? null : (grade ?? this.grade),
+        outOfCards: outOfCards ?? this.outOfCards,
+      );
 }
 
 /// A szókártya-lecke állapotgépe:
@@ -135,8 +131,8 @@ class StudySessionState {
 /// - Minden kártyán a felhasználó válaszol (gépelve vagy a névelő gombbal);
 ///   a hátlap csak a válasz után látszik.
 /// - Az értékelést az alkalmazás adja ([autoGrade]): a válasz helyessége, a
-///   megoldásra fordított idő (az előlap megjelenésétől a beküldésig) és a
-///   kártya eddigi találati aránya alapján. Az értékelés a válaszkor mentődik.
+///   megoldásra fordított idő és a kártya eddigi találati aránya alapján. Az
+///   értékelés a válaszkor mentődik.
 /// - A lecke [lessonSize] válaszig tart, bármilyen találati aránynál; a hibás
 ///   vagy ma még esedékes kártya a sor végére kerül, és újra számít.
 ///   Végtelen módban a lecke nem ér véget, a sor folyamatosan feltöltődik.
@@ -156,10 +152,10 @@ class StudySessionController extends Notifier<StudySessionState> {
   Future<void> _load() async {
     try {
       final repo = ref.read(studyRepositoryProvider);
-      final topic = args.topic;
+      final scope = args.scope;
       final List<StudyCard> cards;
-      if (topic != null) {
-        cards = await repo.loadTopicQueue(topic, size: lessonSize);
+      if (scope != null) {
+        cards = await repo.loadScopedQueue(scope, size: lessonSize);
       } else {
         final queue = await repo.loadQueue();
         _dayEndsAt = queue.dayEndsAt;
@@ -185,14 +181,13 @@ class StudySessionController extends Notifier<StudySessionState> {
     try {
       final updated = await ref.read(studyRepositoryProvider).review(card, grade: grade, responseTimeMs: responseTimeMs);
       if (!ref.mounted) return;
-      final next = updated.scheduling.nextReviewAt;
 
-      // A hibás vagy ma még esedékes kártya a sor végére kerül (a munkamenetben újra előjön).
+      // A hibás vagy ma még esedékes kártya a sor végére kerül (a leckében újra előjön).
       final rest = state.queue.sublist(1);
       if (check.verdict == AnswerVerdict.wrong || _dueAgainToday(updated)) rest.add(updated);
 
+      // A kezdőképernyő összesítője a lecke bezárásakor frissül, nem válaszonként.
       ref.read(syncControllerProvider.notifier).scheduleSync();
-      ref.invalidate(homeSummaryProvider);
       state = state.copyWith(
         phase: StudyPhase.answer,
         queue: [card, ...rest],
@@ -202,7 +197,6 @@ class StudySessionController extends Notifier<StudySessionState> {
         check: check,
         typed: typed.trim(),
         grade: grade,
-        nextInterval: next?.difference(ref.read(clockProvider).now()),
       );
     } on Exception catch (e) {
       _stopwatch.start();
@@ -237,16 +231,16 @@ class StudySessionController extends Notifier<StudySessionState> {
     state = next.copyWith(phase: StudyPhase.question, queue: queue, clearAnswer: true);
   }
 
-  /// Utánpótlás: témakör-leckében és végtelen módban újabb kártyák töltődnek be,
-  /// a napi leckében (napi keret) nem.
+  /// Utánpótlás: szókészlet-leckében és végtelen módban újabb kártyák töltődnek
+  /// be, a napi leckében (napi keret) nem.
   Future<List<StudyCard>> _refill(List<StudyCard> queue) async {
-    final topic = args.topic;
-    if (topic == null && !args.endless) return const [];
+    final scope = args.scope;
+    if (scope == null && !args.endless) return const [];
     final repo = ref.read(studyRepositoryProvider);
     final exclude = {for (final c in queue) c.id};
     try {
-      return topic != null
-          ? await repo.loadTopicQueue(topic, size: lessonSize, exclude: exclude)
+      return scope != null
+          ? await repo.loadScopedQueue(scope, size: lessonSize, exclude: exclude)
           : await repo.loadMore(size: lessonSize, exclude: exclude);
     } on Exception {
       return const [];
@@ -257,12 +251,11 @@ class StudySessionController extends Notifier<StudySessionState> {
     final s = card.scheduling;
     if (s.state != CardState.learning && s.state != CardState.relearning) return false;
     final next = s.nextReviewAt;
-    final dayEnd = _dayEndsAt;
     if (next == null) return false;
+    final dayEnd = _dayEndsAt;
     return dayEnd == null || next.isBefore(dayEnd);
   }
 }
 
-final studySessionProvider = NotifierProvider.autoDispose.family<StudySessionController, StudySessionState, StudySessionArgs>(
-  StudySessionController.new,
-);
+final studySessionProvider =
+    NotifierProvider.autoDispose.family<StudySessionController, StudySessionState, StudySessionArgs>(StudySessionController.new);

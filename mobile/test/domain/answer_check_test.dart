@@ -31,9 +31,13 @@ void main() {
     expect(checkAnswer('', 'der Tisch').verdict, AnswerVerdict.wrong);
   });
 
-  test('javasolt értékelés', () {
-    expect(AnswerVerdict.correct.suggestedGrade, 4);
-    expect(AnswerVerdict.almost.suggestedGrade, 3);
-    expect(AnswerVerdict.wrong.suggestedGrade, 1);
+  test('ékezet nélküli írásmód minden szónál elfogadott: ö→oe, ä→ae, ü→ue, ß→ss (kis- és nagybetűvel is)', () {
+    expect(checkAnswer('die Tuer', 'die Tür').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('das Oel', 'das Öl').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('der AErger', 'der Ärger').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('die Uebung', 'die Übung').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('die Strasse', 'die Straße').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('schoen', 'schön').verdict, AnswerVerdict.correct);
+    expect(checkAnswer('die Äpfel', 'die Aepfel').verdict, AnswerVerdict.correct);
   });
 }

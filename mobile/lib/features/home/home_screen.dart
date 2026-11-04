@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/user_settings.dart';
-import '../../domain/sm2_scheduler.dart';
-import '../../providers.dart';
+import '../../data/repositories/study_repository.dart';
+import '../../domain/word_scope.dart';
 import '../admin/admin_screen.dart';
 import '../auth/auth_controller.dart';
 import '../reports/my_reports_screen.dart';
@@ -84,55 +84,32 @@ class HomeScreen extends ConsumerWidget {
                 label: const Text('Végtelen gyakorlás'),
                 onPressed: s.enrolledWords == 0 ? null : () => _study(context, ref, const StudySessionArgs(endless: true)),
               ),
-              const SizedBox(height: 24),
-              Text('Kártyáid', style: Theme.of(context).textTheme.titleMedium),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  '${s.enrolledWords} szót tanulsz. Szavanként több kártya készül '
-                  '(jelentés, németül, névelő, többes szám), ezért a kártyák száma nagyobb a szavakénál.',
-                  style: Theme.of(context).textTheme.bodySmall,
+              if (s.levels.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Text('Lecke szint szerint (20 kártya)', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final l in s.levels)
+                      Tooltip(
+                        message: '${l.level}: ${l.words} szó',
+                        child: FilledButton.tonal(
+                          key: Key('level-${l.level}'),
+                          onPressed: () => _study(context, ref, StudySessionArgs(scope: LevelScope(l.level))),
+                          child: Text(l.level, style: const TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-              Wrap(
-                spacing: 8,
-                children: [
-                  for (final state in CardState.values)
-                    Chip(label: Text('${_stateLabel(state)}: ${s.cardsByState[state] ?? 0}')),
-                ],
-              ),
+              ],
               if (s.topics.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 Text('Témakörök', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 4),
-                for (final t in s.topics)
-                  Card(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      title: Text(t.group.nameHu),
-                      subtitle: Text('${t.total} szó · ${t.enrolled} tanulás alatt'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => _open(context, ref, TopicScreen(group: t.group)),
-                    ),
-                  ),
+                for (final t in s.topics) _TopicTile(summary: t, onTap: () => _open(context, ref, TopicScreen(scope: t.scope))),
               ],
-              const SizedBox(height: 24),
-              Text('Új szavak felvétele szint szerint', style: Theme.of(context).textTheme.titleMedium),
-              if (s.unenrolledByLevel.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Text('Minden elérhető szót felvettél (vagy még nem futott szinkronizáció).'),
-                ),
-              Wrap(
-                spacing: 8,
-                children: [
-                  for (final entry in (s.unenrolledByLevel.entries.toList()..sort((a, b) => a.key.compareTo(b.key))))
-                    ActionChip(
-                      label: Text('${entry.key} (${entry.value} szó)'),
-                      onPressed: () => _enroll(context, ref, entry.key),
-                    ),
-                ],
-              ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 icon: const Icon(Icons.search),
@@ -148,15 +125,6 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _enroll(BuildContext context, WidgetRef ref, String level) async {
-    final created = await ref.read(studyRepositoryProvider).enrollLevel(level);
-    ref.invalidate(homeSummaryProvider);
-    ref.read(syncControllerProvider.notifier).scheduleSync();
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$created új kártya ($level)')));
-    }
   }
 
   Future<void> _study(BuildContext context, WidgetRef ref, StudySessionArgs args) async {
@@ -189,13 +157,38 @@ class HomeScreen extends ConsumerWidget {
     );
     if (force == true) await auth.signOut(force: true);
   }
+}
 
-  static String _stateLabel(CardState s) => switch (s) {
-        CardState.newCard => 'Új',
-        CardState.learning => 'Tanulás',
-        CardState.review => 'Ismétlés',
-        CardState.relearning => 'Újratanulás',
-      };
+/// Témakör a kezdőképernyőn: szószám és ismeret (%), koppintásra a szólista.
+class _TopicTile extends StatelessWidget {
+  const _TopicTile({required this.summary, required this.onTap});
+
+  final ScopeSummary<TopicScope> summary;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = (summary.knowledge * 100).round();
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        title: Text(summary.scope.title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${summary.totalWords} szó · ismeret: $percent%'),
+            const SizedBox(height: 4),
+            Semantics(
+              label: 'Ismeret: $percent%',
+              child: LinearProgressIndicator(value: summary.knowledge),
+            ),
+          ],
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
+      ),
+    );
+  }
 }
 
 class _Stat extends StatelessWidget {

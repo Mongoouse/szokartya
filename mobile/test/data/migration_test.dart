@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:szokartya/data/local/local_store.dart';
+import 'package:szokartya/domain/topic_groups.dart';
+import 'package:szokartya/domain/word_scope.dart';
 
 import '../helpers/test_support.dart';
 
@@ -33,7 +35,8 @@ void main() {
     final row = (await v2.db.query('words')).single;
     expect(row['search_text'], 'apfel der apfel alma');
     expect(row['is_custom'], 0);
-    expect(await store.categories(), [(slug: 'essen', nameHu: 'Étel', total: 1, unenrolled: 1)]);
+    const food = TopicScope(TopicGroup(id: 'etel', nameHu: 'Étel', slugs: ['essen']));
+    expect((await store.scopeStats(food)).total, 1, reason: 'a kategóriák visszatöltődtek');
     expect((await store.searchWords(query: 'alma')).single.word.id, 'w1');
 
     final outbox = await v2.db.query('outbox');
