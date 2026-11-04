@@ -172,7 +172,10 @@ bool _same(List<String> a, List<String> b) {
 ///  - hibás → 1 („nem tudta”)
 ///  - majdnem (elütés, ékezet, hiányzó névelő) → 3 („nehéz”)
 ///  - helyes: a válasz hosszához mért idő szerint gyors → 5, átlagos → 4,
-///    lassú → 3. A határok: gyors ≤ 4 s + 0,15 s/karakter, lassú > 10 s + 0,3 s/karakter.
+///    lassú → 3. Az idő a kártya megjelenésétől a beküldésig tart, a gépelést
+///    is beleértve, ezért karakterenként ráhagyás jár (telefonos gépelési
+///    sebességre méretezve): gyors ≤ 4 s + 0,5 s/karakter,
+///    lassú > 10 s + 1 s/karakter.
 ///  - ha a kártya eddigi találati aránya (legalább 3 válasz után) 60% alatti,
 ///    a „könnyű” értékelés „jó”-ra csökken: a sokszor elrontott szó egy
 ///    szerencsés gyors válasz után se kerüljön túl messzire.
@@ -184,14 +187,20 @@ int autoGrade({required AnswerVerdict verdict, required int responseTimeMs, requ
       return 3;
     case AnswerVerdict.correct:
       final length = expectedAnswer(card).length;
-      final fastMs = 4000 + 150 * length;
-      final slowMs = 10000 + 300 * length;
+      final fastMs = fastBaseMs + fastPerCharMs * length;
+      final slowMs = slowBaseMs + slowPerCharMs * length;
       var grade = responseTimeMs <= fastMs ? 5 : (responseTimeMs <= slowMs ? 4 : 3);
       final s = card.scheduling;
       if (grade == 5 && s.totalReviews >= 3 && s.correctReviews / s.totalReviews < 0.6) grade = 4;
       return grade;
   }
 }
+
+/// Az automatikus értékelés időhatárai (ezredmásodperc): alapidő + karakterenkénti ráhagyás.
+const fastBaseMs = 4000;
+const fastPerCharMs = 500;
+const slowBaseMs = 10000;
+const slowPerCharMs = 1000;
 
 /// Az automatikus értékelés felirata.
 String gradeLabel(int grade) => switch (grade) {

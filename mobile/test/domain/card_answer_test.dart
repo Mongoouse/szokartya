@@ -79,9 +79,11 @@ void main() {
     final card = _card(tisch, CardType.production);
     expect(autoGrade(verdict: AnswerVerdict.wrong, responseTimeMs: 1000, card: card), 1);
     expect(autoGrade(verdict: AnswerVerdict.almost, responseTimeMs: 1000, card: card), 3);
-    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 3000, card: card), 5);
-    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 9000, card: card), 4);
-    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 30000, card: card), 3);
+    // „der Tisch” = 9 karakter → gyors ≤ 4 + 4,5 = 8,5 s; átlagos ≤ 10 + 9 = 19 s.
+    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 8500, card: card), 5);
+    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 8501, card: card), 4);
+    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 19000, card: card), 4);
+    expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 19001, card: card), 3);
     // Gyakran elrontott kártya: a gyors helyes válasz is csak „jó”.
     final hard = _card(tisch, CardType.production, total: 5, correct: 2);
     expect(autoGrade(verdict: AnswerVerdict.correct, responseTimeMs: 3000, card: hard), 4);
