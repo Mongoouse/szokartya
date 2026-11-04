@@ -71,23 +71,71 @@ class LocalStore {
       FROM cards c JOIN words w ON w.id = c.word_id
      WHERE c.deleted = 0 AND c.is_suspended = 0 AND w.deleted = 0''';
 
+  /// Szűrés kategóriákra (témakör-csoport): a szónak legalább egy ilyen kategóriája van.
+  static String _inCategories(String wordIdColumn, List<String> slugs) =>
+      ' AND EXISTS (SELECT 1 FROM word_categories wc WHERE wc.word_id = $wordIdColumn '
+      'AND wc.slug IN (${List.filled(slugs.length, '?').join(', ')}))';
+
   /// Esedékes (nem új) kártyák a megadott időpontig, esedékesség szerint.
-  Future<List<StudyCard>> dueCards({required DateTime before, required List<CardState> states, required int limit}) async {
-    if (limit <= 0) return const [];
+  /// [categorySlugs]: csak ezekbe a kategóriákba tartozó szavak kártyái.
+  Future<List<StudyCard>> dueCards({
+    required DateTime before,
+    required List<CardState> states,
+    required int limit,
+    List<String>? categorySlugs,
+  }) async {
+    if (limit <= 0 || (categorySlugs != null && categorySlugs.isEmpty)) return const [];
     final placeholders = List.filled(states.length, '?').join(', ');
     final rows = await _db.rawQuery(
-      "$_cardSelect AND c.state <> 'NEW' AND c.state IN ($placeholders) AND c.next_review_at <= ? "
+      "$_cardSelect AND c.state <> 'NEW' AND c.state IN ($placeholders) AND c.next_review_at <= ?"
+      '${categorySlugs == null ? '' : _inCategories('c.word_id', categorySlugs)} '
       'ORDER BY c.next_review_at, c.id LIMIT ?',
-      [...states.map((s) => s.wire), before.millisecondsSinceEpoch, limit],
+      [...states.map((s) => s.wire), before.millisecondsSinceEpoch, ...?categorySlugs, limit],
     );
     return rows.map(_cardFromRow).toList();
   }
 
   /// Új kártyák felvételi sorrendben.
-  Future<List<StudyCard>> newCards({required int limit}) async {
-    if (limit <= 0) return const [];
-    final rows = await _db.rawQuery("$_cardSelect AND c.state = 'NEW' ORDER BY c.created_at, c.id LIMIT ?", [limit]);
+  Future<List<StudyCard>> newCards({required int limit, List<String>? categorySlugs}) async {
+    if (limit <= 0 || (categorySlugs != null && categorySlugs.isEmpty)) return const [];
+    final rows = await _db.rawQuery(
+      "$_cardSelect AND c.state = 'NEW'"
+      '${categorySlugs == null ? '' : _inCategories('c.word_id', categorySlugs)} '
+      'ORDER BY c.created_at, c.id LIMIT ?',
+      [...?categorySlugs, limit],
+    );
     return rows.map(_cardFromRow).toList();
+  }
+
+  /// Felvett szavak száma (egy szóhoz kártyatípusonként egy-egy kártya tartozik).
+  Future<int> countEnrolledWords() async =>
+      Sqflite.firstIntValue(await _db.rawQuery(
+        'SELECT COUNT(DISTINCT c.word_id) FROM cards c JOIN words w ON w.id = c.word_id '
+        'WHERE c.deleted = 0 AND c.is_suspended = 0 AND w.deleted = 0',
+      )) ??
+      0;
+
+  /// Egy témakör-csoport szavainak száma és ebből a már felvettek.
+  Future<({int total, int enrolled})> countWordsInCategories(List<String> slugs) async {
+    if (slugs.isEmpty) return (total: 0, enrolled: 0);
+    final rows = await _db.rawQuery(
+      'SELECT COUNT(*) AS total, '
+      'SUM(CASE WHEN EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) THEN 1 ELSE 0 END) AS enrolled '
+      'FROM words w WHERE w.deleted = 0${_inCategories('w.id', slugs)}',
+      slugs,
+    );
+    return (total: (rows.first['total'] as int?) ?? 0, enrolled: (rows.first['enrolled'] as int?) ?? 0);
+  }
+
+  /// Egy témakör-csoport még fel nem vett szavai (a felvétel sorrendjében).
+  Future<List<Word>> unenrolledWordsInCategories(List<String> slugs, {required int limit}) async {
+    if (slugs.isEmpty || limit <= 0) return const [];
+    final rows = await _db.rawQuery(
+      'SELECT w.payload FROM words w WHERE w.deleted = 0${_inCategories('w.id', slugs)} '
+      'AND NOT EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) ORDER BY w.rowid LIMIT ?',
+      [...slugs, limit],
+    );
+    return rows.map((r) => Word.fromJson(jsonDecode(r['payload']! as String) as Json)).toList();
   }
 
   Future<StudyCard?> card(String id) async {
@@ -170,6 +218,7 @@ class LocalStore {
     String query = '',
     String? cefrLevel,
     String? categorySlug,
+    List<String>? categorySlugs,
     bool customOnly = false,
     int limit = 100,
   }) async {
@@ -188,6 +237,11 @@ class LocalStore {
     if (categorySlug != null) {
       where.add('EXISTS (SELECT 1 FROM word_categories wc WHERE wc.word_id = w.id AND wc.slug = ?)');
       args.add(categorySlug);
+    }
+    if (categorySlugs != null) {
+      if (categorySlugs.isEmpty) return const [];
+      where.add(_inCategories('w.id', categorySlugs).replaceFirst(' AND ', ''));
+      args.addAll(categorySlugs);
     }
     if (customOnly) where.add('w.is_custom = 1');
     final rows = await _db.rawQuery(

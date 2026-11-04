@@ -38,7 +38,7 @@ void main() {
   final cases = <(Word, CardType, String, String, String)>[
     (tisch, CardType.recognition, 'Mit jelent?', 'der Tisch', 'asztal'),
     (tisch, CardType.production, 'Hogy mondod németül?', 'asztal', 'der Tisch'),
-    (tisch, CardType.gender, 'Melyik névelő?', '___ Tisch', 'der Tisch'),
+    (tisch, CardType.gender, 'Melyik névelő?', '___ Tisch\n(asztal)', 'der'),
     (tisch, CardType.plural, 'Mi a többes száma?', 'der Tisch', 'die Tische'),
     (fahren, CardType.verbForms, 'Mik az alapalakjai?', 'fahren', 'fährt – fuhr – ist gefahren'),
     (fahren, CardType.valency, 'Milyen vonzata van?', 'fahren ___', 'fahren mit + Dat.'),
@@ -55,7 +55,7 @@ void main() {
     });
   }
 
-  testWidgets('kiejtés gomb: felidézés kártyán csak a hátlapon (különben elárulná a választ)', (tester) async {
+  testWidgets('kiejtés gomb: csak a hátlapon (az előlapon gépelve kell válaszolni)', (tester) async {
     var spoken = 0;
     await show(tester, cardOf(tisch, CardType.production), onSpeak: () => spoken++);
     expect(find.byTooltip('Kiejtés'), findsNothing);
@@ -64,6 +64,6 @@ void main() {
     expect(spoken, 1);
 
     await show(tester, cardOf(tisch, CardType.recognition), onSpeak: () => spoken++);
-    expect(find.byTooltip('Kiejtés'), findsOneWidget);
+    expect(find.byTooltip('Kiejtés'), findsNothing);
   });
 }

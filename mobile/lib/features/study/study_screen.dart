@@ -3,13 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/study_card.dart';
 import '../../domain/answer_check.dart';
+import '../../domain/card_answer.dart';
 import '../../providers.dart';
 import '../reports/report_dialog.dart';
+import 'accent_bar.dart';
 import 'flashcard_view.dart';
 import 'study_session_controller.dart';
 
 class StudyScreen extends ConsumerStatefulWidget {
-  const StudyScreen({super.key});
+  const StudyScreen({super.key, this.args = const StudySessionArgs()});
+
+  final StudySessionArgs args;
 
   @override
   ConsumerState<StudyScreen> createState() => _StudyScreenState();
@@ -17,29 +21,46 @@ class StudyScreen extends ConsumerStatefulWidget {
 
 class _StudyScreenState extends ConsumerState<StudyScreen> {
   final _answer = TextEditingController();
+  final _answerFocus = FocusNode();
+  final _nextFocus = FocusNode();
+
+  StudySessionController get _controller => ref.read(studySessionProvider(widget.args).notifier);
 
   @override
   void dispose() {
     _answer.dispose();
+    _answerFocus.dispose();
+    _nextFocus.dispose();
     super.dispose();
   }
 
-  void _reveal() {
-    final typed = _answer.text;
+  void _submit([String? value]) {
+    final typed = value ?? _answer.text;
     _answer.clear();
-    ref.read(studySessionProvider.notifier).reveal(typed: typed);
+    _controller.answer(typed);
+  }
+
+  String _title(StudySessionState s) {
+    if (s.phase == StudyPhase.finished) return 'Kész';
+    final topic = widget.args.topic?.nameHu;
+    final progress = s.goal == null ? '${s.answered}. kártya' : 'Hátra: ${s.remaining} / ${s.goal}';
+    return topic == null ? progress : '$progress · $topic';
   }
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(studySessionProvider);
-    final controller = ref.read(studySessionProvider.notifier);
+    final session = ref.watch(studySessionProvider(widget.args));
     final card = session.current;
-    final typing = session.phase == StudyPhase.question && card?.cardType == CardType.production;
+
+    // Válasz után a „Tovább” gomb kapja a fókuszt (Enterrel is tovább lehet lépni).
+    ref.listen(studySessionProvider(widget.args).select((s) => s.phase), (_, phase) {
+      if (phase == StudyPhase.answer) _nextFocus.requestFocus();
+      if (phase == StudyPhase.question) _answerFocus.requestFocus();
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(session.phase == StudyPhase.finished ? 'Kész' : 'Hátra: ${session.remaining}'),
+        title: Text(_title(session)),
         actions: [
           if (card != null && (session.phase == StudyPhase.question || session.phase == StudyPhase.answer))
             IconButton(
@@ -56,66 +77,126 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
           child: switch (session.phase) {
             StudyPhase.loading => const Center(child: CircularProgressIndicator()),
             StudyPhase.error => Center(child: Text(session.error ?? 'Ismeretlen hiba')),
-            StudyPhase.finished => _Finished(reviewed: session.reviewed, correct: session.correct),
+            StudyPhase.finished => _Finished(
+              answered: session.answered,
+              correct: session.correct,
+              outOfCards: session.outOfCards,
+              endless: session.goal == null,
+            ),
             StudyPhase.question || StudyPhase.answer => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: typing ? null : _reveal,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        child: FlashcardView(
-                          key: ValueKey('${card!.id}-${session.phase}'),
-                          card: card,
-                          showAnswer: session.phase == StudyPhase.answer,
-                          onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
-                        ),
-                      ),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (session.goal != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: LinearProgressIndicator(value: session.answered / session.goal!),
+                  ),
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: FlashcardView(
+                      key: ValueKey('${card!.id}-${session.answered}-${session.phase}'),
+                      card: card,
+                      showAnswer: session.phase == StudyPhase.answer,
+                      onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  if (session.error != null)
-                    Text(session.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                  if (session.check != null) _CheckBanner(check: session.check!, typed: session.typed ?? ''),
-                  if (typing) ...[
-                    TextField(
-                      key: const Key('typedAnswer'),
-                      controller: _answer,
-                      autofocus: true,
-                      autocorrect: false,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _reveal(),
-                      decoration: const InputDecoration(
-                        labelText: 'Válaszod (névelővel)',
-                        helperText: 'Üresen hagyva csak megfordítja a kártyát',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                  if (session.phase == StudyPhase.question)
-                    FilledButton(onPressed: _reveal, child: Text(typing ? 'Ellenőrzés' : 'Mutasd a választ'))
-                  else
-                    _GradeButtons(
-                      preview: session.preview,
-                      enabled: !session.saving,
-                      suggested: session.check?.verdict.suggestedGrade,
-                      onGrade: controller.grade,
-                    ),
+                ),
+                const SizedBox(height: 12),
+                if (session.error != null) Text(session.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                if (session.phase == StudyPhase.question)
+                  ..._questionControls(card, session.saving)
+                else ...[
+                  _ResultBanner(
+                    check: session.check!,
+                    typed: session.typed ?? '',
+                    grade: session.grade!,
+                    nextInterval: session.nextInterval,
+                  ),
+                  FilledButton(
+                    key: const Key('nextCard'),
+                    focusNode: _nextFocus,
+                    autofocus: true,
+                    onPressed: _controller.next,
+                    child: Text(session.goal != null && session.remaining == 0 ? 'Lecke vége' : 'Tovább'),
+                  ),
                 ],
-              ),
+              ],
+            ),
           },
         ),
       ),
     );
   }
+
+  List<Widget> _questionControls(StudyCard card, bool saving) {
+    if (card.cardType == CardType.gender) {
+      return [
+        Row(
+          children: [
+            for (final article in const ['der', 'die', 'das'])
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: FilledButton.tonal(
+                    key: Key('article-$article'),
+                    onPressed: saving ? null : () => _submit(article),
+                    child: Text(article, style: const TextStyle(fontSize: 18)),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        TextButton(onPressed: saving ? null : () => _submit(''), child: const Text('Nem tudom')),
+      ];
+    }
+    final german = card.cardType != CardType.recognition;
+    return [
+      TextField(
+        key: const Key('typedAnswer'),
+        controller: _answer,
+        focusNode: _answerFocus,
+        autofocus: true,
+        autocorrect: false,
+        enableSuggestions: false,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        onSubmitted: saving ? null : (_) => _submit(),
+        decoration: InputDecoration(labelText: _inputLabel(card.cardType), border: const OutlineInputBorder()),
+      ),
+      AccentBar(controller: _answer, focusNode: _answerFocus, letters: german ? germanLetters : hungarianLetters),
+      Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(key: const Key('dontKnow'), onPressed: saving ? null : () => _submit(''), child: const Text('Nem tudom')),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: FilledButton(key: const Key('checkAnswer'), onPressed: saving ? null : _submit, child: const Text('Ellenőrzés')),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  static String _inputLabel(CardType type) => switch (type) {
+    CardType.recognition => 'Mit jelent magyarul?',
+    CardType.production => 'Németül, névelővel (pl. der Tisch)',
+    CardType.gender => 'Névelő',
+    CardType.plural => 'Többes szám (pl. die Tische)',
+    CardType.verbForms => 'Alapalakok (pl. fährt, fuhr, ist gefahren)',
+    CardType.valency => 'Elöljáró + eset (pl. auf + Akk.)',
+  };
 }
 
-class _CheckBanner extends StatelessWidget {
-  const _CheckBanner({required this.check, required this.typed});
+class _ResultBanner extends StatelessWidget {
+  const _ResultBanner({required this.check, required this.typed, required this.grade, this.nextInterval});
 
   final AnswerCheck check;
   final String typed;
+  final int grade;
+  final Duration? nextInterval;
 
   @override
   Widget build(BuildContext context) {
@@ -123,72 +204,31 @@ class _CheckBanner extends StatelessWidget {
     final (icon, color, label) = switch (check.verdict) {
       AnswerVerdict.correct => (Icons.check_circle, Colors.green, 'Helyes'),
       AnswerVerdict.almost => (Icons.adjust, Colors.orange, 'Majdnem'),
-      AnswerVerdict.wrong => (Icons.cancel, scheme.error, 'Hibás'),
+      AnswerVerdict.wrong => (Icons.cancel, scheme.error, typed.isEmpty ? 'Nem tudtad' : 'Hibás'),
     };
+    final answerText = typed.isEmpty ? '' : ': „$typed”';
+    final next = nextInterval == null ? '' : ', újra ${formatInterval(nextInterval!)} múlva';
     return Semantics(
       liveRegion: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color),
-            const SizedBox(width: 8),
-            Expanded(child: Text('$label: „$typed”${check.hint != null ? ' – ${check.hint}' : ''}')),
+            Row(
+              children: [
+                Icon(icon, color: color),
+                const SizedBox(width: 8),
+                Expanded(child: Text('$label$answerText${check.hint != null ? ' – ${check.hint}' : ''}')),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text('Értékelés: ${gradeLabel(grade)}$next', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),
     );
   }
-}
-
-class _GradeButtons extends StatelessWidget {
-  const _GradeButtons({required this.preview, required this.enabled, required this.onGrade, this.suggested});
-
-  final Map<int, Duration> preview;
-  final bool enabled;
-  final ValueChanged<int> onGrade;
-
-  /// A gépelt válasz alapján javasolt értékelés (kiemelve jelenik meg).
-  final int? suggested;
-
-  static const _options = [(1, 'Nem tudtam'), (3, 'Nehéz'), (4, 'Jó'), (5, 'Könnyű')];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (final (grade, label) in _options)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Semantics(
-                button: true,
-                label: preview[grade] == null
-                    ? 'Értékelés: $label'
-                    : 'Értékelés: $label, következő ismétlés ${formatInterval(preview[grade]!)} múlva',
-                excludeSemantics: true,
-                child: _button(
-                  context,
-                  highlighted: grade == suggested,
-                  onPressed: enabled ? () => onGrade(grade) : null,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(label, textAlign: TextAlign.center),
-                      if (preview[grade] != null)
-                        Text(formatInterval(preview[grade]!), style: Theme.of(context).textTheme.labelSmall),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  static Widget _button(BuildContext context, {required bool highlighted, required VoidCallback? onPressed, required Widget child}) =>
-      highlighted ? FilledButton.tonal(onPressed: onPressed, child: child) : OutlinedButton(onPressed: onPressed, child: child);
 }
 
 /// „1 perc”, „10 perc”, „4 nap”, „2 hónap”.
@@ -201,23 +241,26 @@ String formatInterval(Duration d) {
 }
 
 class _Finished extends StatelessWidget {
-  const _Finished({required this.reviewed, required this.correct});
+  const _Finished({required this.answered, required this.correct, required this.outOfCards, required this.endless});
 
-  final int reviewed;
+  final int answered;
   final int correct;
+  final bool outOfCards;
+  final bool endless;
 
   @override
   Widget build(BuildContext context) {
-    final accuracy = reviewed == 0 ? 0 : (correct * 100 / reviewed).round();
+    final accuracy = answered == 0 ? 0 : (correct * 100 / answered).round();
+    final title = answered == 0 ? 'Nincs esedékes kártya' : (outOfCards && !endless ? 'Mára elfogytak a kártyák' : 'Lecke vége!');
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.check_circle_outline, size: 64),
           const SizedBox(height: 16),
-          Text('Mára végeztél!', style: Theme.of(context).textTheme.headlineSmall),
+          Text(title, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
           const SizedBox(height: 8),
-          Text(reviewed == 0 ? 'Nincs esedékes kártya.' : '$reviewed értékelés, $accuracy% helyes'),
+          if (answered > 0) Text('$answered válasz, $accuracy% helyes'),
           const SizedBox(height: 24),
           FilledButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Vissza')),
         ],
