@@ -4,19 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/word.dart';
+import '../../domain/cefr_levels.dart';
 import '../../domain/topic_groups.dart';
+import '../../domain/word_scope.dart';
 import '../../providers.dart';
 import '../home/home_summary_provider.dart';
-import '../settings/settings_screen.dart' show cefrLevels;
 import '../sync/sync_controller.dart';
 import 'custom_word_screen.dart';
 
 /// Szókereső: keresés németül vagy magyarul, szint- és kategóriaszűrés,
 /// egyes szavak felvétele, kiejtés.
 class WordBrowserScreen extends ConsumerStatefulWidget {
-  const WordBrowserScreen({super.key, this.initialCategory});
+  const WordBrowserScreen({super.key, this.initialTopicId});
 
-  final String? initialCategory;
+  /// Előre kiválasztott témakör ([topicGroups] azonosító).
+  final String? initialTopicId;
 
   @override
   ConsumerState<WordBrowserScreen> createState() => _WordBrowserScreenState();
@@ -26,7 +28,7 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
   final _query = TextEditingController();
   Timer? _debounce;
   String? _level;
-  late String? _category = widget.initialCategory;
+  late String? _topicId = widget.initialTopicId;
   bool _customOnly = false;
   List<({Word word, bool enrolled})>? _results;
 
@@ -43,11 +45,16 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
     super.dispose();
   }
 
+  WordScope? get _topicScope {
+    final group = _topicId == null ? null : topicGroupById(_topicId!);
+    return group == null ? null : TopicScope(group);
+  }
+
   Future<void> _search() async {
     final results = await ref.read(studyRepositoryProvider).searchWords(
           query: _query.text,
           cefrLevel: _level,
-          categorySlugs: _category == null ? null : topicGroupById(_category!)?.slugs,
+          scope: _topicScope,
           customOnly: _customOnly,
         );
     if (mounted) setState(() => _results = results);
@@ -111,14 +118,14 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: DropdownButton<String?>(
-                    value: _category,
+                    value: _topicId,
                     hint: const Text('Témakör'),
                     items: [
                       const DropdownMenuItem<String?>(child: Text('Minden témakör')),
                       for (final g in topicGroups) DropdownMenuItem(value: g.id, child: Text(g.nameHu)),
                     ],
                     onChanged: (v) {
-                      setState(() => _category = v);
+                      setState(() => _topicId = v);
                       unawaited(_search());
                     },
                   ),

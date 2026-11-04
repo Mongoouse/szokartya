@@ -7,12 +7,12 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/api/api_exception.dart';
 import '../../data/models/study_card.dart';
 import '../../data/models/user_settings.dart';
+import '../../domain/cefr_levels.dart';
 import '../../providers.dart';
 import '../auth/auth_controller.dart';
 import '../home/home_summary_provider.dart';
 import '../sync/sync_controller.dart';
-
-const cefrLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+import 'cards_overview_screen.dart';
 
 /// Gyakori időzónák; a jelenlegi (ha más) is választható marad.
 const _timeZones = [
@@ -143,6 +143,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     : (on) => setState(() => on == true ? _types!.add(type) : _types!.remove(type)),
               ),
           const Divider(height: 40),
+          ListTile(
+            key: const Key('cardsOverview'),
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.style),
+            title: const Text('Kártyáim'),
+            subtitle: const Text('Kártyák állapot szerint (új, tanulás, ismétlés, újratanulás), teljes szint felvétele'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const CardsOverviewScreen())),
+          ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.download),

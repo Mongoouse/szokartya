@@ -100,19 +100,20 @@ void main() {
     expect(find.textContaining('Majdnem'), findsOneWidget);
     expect(find.textContaining('Hiányzik a névelő.'), findsOneWidget);
     expect(find.text('der Tisch'), findsOneWidget);
-    expect(find.textContaining('Értékelés: Nehéz'), findsOneWidget);
+    // Az automatikus értékelés naplózódik, de nem jelenik meg.
     expect(study.grades, [3]);
+    expect(find.textContaining('Értékelés'), findsNothing);
     expect(find.text('Hátra: 19 / 20'), findsOneWidget);
     // Nincsenek önértékelő gombok.
     expect(find.text('Könnyű'), findsNothing);
   });
 
-  testWidgets('„Nem tudom”: hibás, értékelés 1; a kártya a sor végére kerül', (tester) async {
+  testWidgets('„Nem tudom”: Helytelen, értékelés 1; a kártya a sor végére kerül', (tester) async {
     final (study, _) = await pump(tester, [cardOf(tisch, CardType.recognition)]);
     expect(find.byTooltip('Kiejtés'), findsNothing);
     await tester.tap(find.byKey(const Key('dontKnow')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Nem tudtad'), findsWidgets);
+    expect(find.textContaining('Helytelen'), findsOneWidget);
     expect(find.text('asztal'), findsOneWidget);
     expect(study.grades, [1]);
     await tester.tap(find.byKey(const Key('nextCard')));
@@ -120,16 +121,14 @@ void main() {
     expect(find.text('Mit jelent?'), findsOneWidget, reason: 'a hibás kártya újra előjön');
   });
 
-  testWidgets('kiejtés a válasz után; ékezetes betű gombbal', (tester) async {
-    final (study, speaker) = await pump(tester, [cardOf(tisch, CardType.recognition)]);
-    await tester.enterText(find.byKey(const Key('typedAnswer')), 'aszt');
-    await tester.tap(find.byKey(const Key('accent-á')));
-    await tester.pump();
-    final field = tester.widget<TextField>(find.byKey(const Key('typedAnswer')));
-    expect(field.controller!.text, 'asztá');
+  testWidgets('kiejtés a válasz után; nincs ékezetsor (a telefon billentyűzete adja)', (tester) async {
+    final (study, speaker) = await pump(tester, [cardOf(tisch, CardType.production)]);
+    expect(find.byKey(const Key('accent-ä')), findsNothing);
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'der Tisch');
     await tester.tap(find.text('Ellenőrzés'));
     await tester.pumpAndSettle();
-    expect(study.grades, [3], reason: 'egy elütés → majdnem');
+    expect(find.textContaining('Helyes'), findsOneWidget);
+    expect(study.grades.single, greaterThanOrEqualTo(4));
     await tester.tap(find.byTooltip('Kiejtés'));
     expect(speaker.spoken, ['der Tisch']);
   });

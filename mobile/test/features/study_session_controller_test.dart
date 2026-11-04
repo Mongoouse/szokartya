@@ -6,6 +6,8 @@ import 'package:szokartya/data/local/local_store.dart';
 import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/domain/answer_check.dart';
 import 'package:szokartya/domain/sm2_scheduler.dart';
+import 'package:szokartya/domain/topic_groups.dart';
+import 'package:szokartya/domain/word_scope.dart';
 import 'package:szokartya/features/study/study_session_controller.dart';
 import 'package:szokartya/features/sync/sync_controller.dart';
 import 'package:szokartya/providers.dart';
@@ -101,7 +103,7 @@ void main() {
     expect(s.phase, StudyPhase.answer);
     expect(s.check!.verdict, AnswerVerdict.correct);
     expect(s.grade, 5);
-    expect(s.nextInterval, const Duration(days: 4));
+    expect((await store.card('c0'))!.scheduling.intervalDays, 4);
     expect(s.answered, 1);
     expect(s.remaining, 19);
     expect(sync.scheduled, 1);
@@ -173,7 +175,7 @@ void main() {
   });
 
   test('témakör-lecke: csak a témakör szavai; a még fel nem vett szavakból annyit vesz fel, amennyi kell', () async {
-    const topic = StudySessionArgs(topicId: 'termeszet');
+    const topic = StudySessionArgs(scope: TopicScope(TopicGroup(id: 'termeszet', nameHu: 'Természet', slugs: ['natur'])));
     await start(newCards: 0, args: topic);
     final nature = [for (var i = 0; i < 30; i++) wordJson(id: 'n$i', lemma: 'Baum$i', translation: 'fa$i', categories: [(slug: 'natur', nameHu: 'Természet')])];
     final other = [for (var i = 0; i < 5; i++) wordJson(id: 'o$i', lemma: 'Geld$i', translation: 'pénz$i', categories: [(slug: 'wirtschaft', nameHu: 'Gazdaság')])];

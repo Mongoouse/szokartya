@@ -1,8 +1,10 @@
 import 'package:uuid/uuid.dart';
 
 import '../../core/time/clock.dart';
+import '../../domain/cefr_levels.dart';
 import '../../domain/sm2_scheduler.dart';
 import '../../domain/topic_groups.dart';
+import '../../domain/word_scope.dart';
 import '../local/local_store.dart';
 import '../models/custom_word_input.dart';
 import '../models/study_card.dart';
@@ -27,30 +29,51 @@ class StudyQueue {
   bool get isEmpty => learning.isEmpty && reviews.isEmpty && newCards.isEmpty;
 }
 
+/// Egy szókészlet (témakör vagy szint) összesítője a kezdőképernyőhöz.
+class ScopeSummary<S extends WordScope> {
+  const ScopeSummary({required this.scope, required this.totalWords, required this.enrolledWords, required this.knowledge});
+
+  final S scope;
+  final int totalWords;
+  final int enrolledWords;
+
+  /// Ismeret 0–1 között: a szókészlet szavainak átlagos találati aránya (a
+  /// válaszidőtől függetlenül; a még nem gyakorolt szó 0-val számít).
+  /// 0 = egyik szavára sem adott jó választ, 1 = minden szavára mindig jót.
+  final double knowledge;
+}
+
 class HomeSummary {
   const HomeSummary({
     required this.dueToday,
     required this.newAvailableToday,
     required this.reviewedToday,
-    required this.cardsByState,
     required this.pendingSync,
-    required this.unenrolledByLevel,
-    required this.categories,
-    this.enrolledWords = 0,
-    this.topics = const [],
+    required this.enrolledWords,
+    required this.levels,
+    required this.topics,
   });
 
   final int dueToday;
   final int newAvailableToday;
   final int reviewedToday;
-  final Map<CardState, int> cardsByState;
   final int pendingSync;
-  final Map<String, int> unenrolledByLevel;
-  final List<({String slug, String nameHu, int total, int unenrolled})> categories;
 
   /// Felvett szavak száma (a kártyák száma ennek többszöröse: szavanként több típus).
   final int enrolledWords;
-  final List<({TopicGroup group, int total, int enrolled})> topics;
+
+  /// A szókincs szintjei (A1, A2 …) a szavak számával, szintsorrendben.
+  final List<({String level, int words})> levels;
+  final List<ScopeSummary<TopicScope>> topics;
+}
+
+/// A kártyák áttekintése (Beállítások → Kártyáim).
+class CardsOverview {
+  const CardsOverview({required this.enrolledWords, required this.cardsByState, required this.unenrolledByLevel});
+
+  final int enrolledWords;
+  final Map<CardState, int> cardsByState;
+  final Map<String, int> unenrolledByLevel;
 }
 
 /// Tanulási statisztika a helyi naplóból (offline is).
@@ -96,66 +119,64 @@ class StudyRepository {
 
   /// A szerver `GET /study/queue` logikájának helyi megfelelője (azonos keretekkel).
   Future<StudyQueue> loadQueue({int limit = 200}) async {
-    final now = _clock.now();
-    final profile = await _profile();
-    final day = localDayBounds(now, timeZone: profile.timezone);
+    final budget = await _dailyBudget(limit: limit);
+    return StudyQueue(
+      learning: await _store.dueCards(before: budget.dayEnd, states: _learningStates, limit: limit),
+      reviews: await _store.dueCards(before: budget.dayEnd, states: [CardState.review], limit: budget.reviews),
+      newCards: spreadByWord(await _store.newCards(limit: budget.newCards)),
+      dayEndsAt: budget.dayEnd,
+    );
+  }
 
+  static const _learningStates = [CardState.learning, CardState.relearning];
+  static const _dueStates = [CardState.learning, CardState.relearning, CardState.review];
+
+  /// A mai nap határai és a napi keretekből még hátralévő ismétlések / új kártyák.
+  Future<({DateTime dayStart, DateTime dayEnd, int reviews, int newCards})> _dailyBudget({required int limit}) async {
+    final profile = await _profile();
+    final day = localDayBounds(_clock.now(), timeZone: profile.timezone);
     final reviewsDone = await _store.countReviewsSince(day.start, statesBefore: [CardState.review]);
     final newDone = await _store.countReviewsSince(day.start, statesBefore: [CardState.newCard]);
-    final reviewsRemaining = (profile.dailyReviewLimit - reviewsDone).clamp(0, limit);
-    final newRemaining = (profile.dailyNewCardsLimit - newDone).clamp(0, limit);
-
-    return StudyQueue(
-      learning: await _store.dueCards(before: day.end, states: [CardState.learning, CardState.relearning], limit: limit),
-      reviews: await _store.dueCards(before: day.end, states: [CardState.review], limit: reviewsRemaining),
-      newCards: spreadByWord(await _store.newCards(limit: newRemaining)),
-      dayEndsAt: day.end,
+    return (
+      dayStart: day.start,
+      dayEnd: day.end,
+      reviews: (profile.dailyReviewLimit - reviewsDone).clamp(0, limit),
+      newCards: (profile.dailyNewCardsLimit - newDone).clamp(0, limit),
     );
   }
 
   /// Utánpótlás a végtelen gyakorláshoz: a ma esedékes kártyák, utánuk új
   /// kártyák a napi keret figyelmen kívül hagyásával. [exclude]: a munkamenet
   /// sorában már bent lévő kártyák.
-  Future<List<StudyCard>> loadMore({int size = 20, Set<String> exclude = const {}}) async {
-    final profile = await _profile();
-    final day = localDayBounds(_clock.now(), timeZone: profile.timezone);
-    final due = await _store.dueCards(
-      before: day.end,
-      states: [CardState.learning, CardState.relearning, CardState.review],
-      limit: size + exclude.length,
-    );
-    final fresh = await _store.newCards(limit: size + exclude.length);
-    return [...due, ...spreadByWord(fresh)].where((c) => !exclude.contains(c.id)).take(size).toList();
+  Future<List<StudyCard>> loadMore({int size = 20, Set<String> exclude = const {}}) =>
+      _collect(size: size, exclude: exclude);
+
+  /// Szókészlet-lecke (témakör vagy szint) sora: a szókészlet ma esedékes
+  /// kártyái, a már felvett új kártyái, és ha ez kevés, a még fel nem vett
+  /// szavai közül annyi kerül felvételre, amennyi a lecke kitöltéséhez kell
+  /// (nem az egész szókészlet – így nem keletkezik több ezer feltöltendő
+  /// módosítás). A sorrend és az ütemezés ugyanaz, mint a napi leckében.
+  Future<List<StudyCard>> loadScopedQueue(WordScope scope, {int size = 20, Set<String> exclude = const {}}) async {
+    final cards = await _collect(size: size, exclude: exclude, scope: scope);
+    if (cards.length >= size) return cards;
+    final types = await preferredCardTypes();
+    final words = await _store.unenrolledWordsIn(scope, limit: ((size - cards.length) / types.length).ceil() + 1);
+    if (words.isEmpty) return cards;
+    await enrollWords(words, types: types);
+    return _collect(size: size, exclude: exclude, scope: scope);
   }
 
-  /// Témakör-lecke sora: a csoport ma esedékes kártyái, a már felvett új
-  /// kártyái, és ha ez kevés, a csoport még fel nem vett szavai közül annyi
-  /// kerül felvételre, amennyi a lecke kitöltéséhez kell (nem az egész témakör –
-  /// így nem keletkezik több ezer feltöltendő módosítás).
-  Future<List<StudyCard>> loadTopicQueue(TopicGroup group, {int size = 20, Set<String> exclude = const {}}) async {
+  /// Ma esedékes kártyák, utánuk új kártyák (a napi keret nélkül), a sorban már
+  /// bent lévők ([exclude]) kihagyásával.
+  Future<List<StudyCard>> _collect({required int size, required Set<String> exclude, WordScope? scope}) async {
     final profile = await _profile();
-    final day = localDayBounds(_clock.now(), timeZone: profile.timezone);
+    final dayEnd = localDayBounds(_clock.now(), timeZone: profile.timezone).end;
     final want = size + exclude.length;
-    List<StudyCard> collect(List<StudyCard> due, List<StudyCard> fresh) =>
-        [...due, ...spreadByWord(fresh)].where((c) => !exclude.contains(c.id)).toList();
-
-    final due = await _store.dueCards(
-      before: day.end,
-      states: [CardState.learning, CardState.relearning, CardState.review],
-      limit: want,
-      categorySlugs: group.slugs,
-    );
-    var cards = collect(due, await _store.newCards(limit: want, categorySlugs: group.slugs));
-    if (cards.length < size) {
-      final types = await preferredCardTypes();
-      final perWord = types.isEmpty ? 1 : types.length;
-      final words = await _store.unenrolledWordsInCategories(group.slugs, limit: ((size - cards.length) / perWord).ceil() + 1);
-      if (words.isNotEmpty) {
-        await enrollWords(words, types: types);
-        cards = collect(due, await _store.newCards(limit: want, categorySlugs: group.slugs));
-      }
-    }
-    return cards.take(size).toList();
+    final due = await _store.dueCards(before: dayEnd, states: _dueStates, limit: want, scope: scope);
+    // Szavanként több új kártya van egymás után: többet kérünk, hogy a
+    // szétszórás után is több szó kerüljön a sorba.
+    final fresh = due.length >= want ? const <StudyCard>[] : await _store.newCards(limit: want * CardType.values.length, scope: scope);
+    return [...due, ...spreadByWord(fresh)].where((c) => !exclude.contains(c.id)).take(size).toList();
   }
 
   /// Az új kártyák sorrendje úgy, hogy ugyanannak a szónak a kártyái ne
@@ -179,14 +200,15 @@ class StudyRepository {
     return result;
   }
 
-  /// A témakör-csoportok szószámai (összes / felvett); az üres csoportok nélkül.
-  Future<List<({TopicGroup group, int total, int enrolled})>> topicGroupSummaries() async {
-    final result = <({TopicGroup group, int total, int enrolled})>[];
-    for (final g in topicGroups) {
-      final counts = await _store.countWordsInCategories(g.slugs);
-      if (counts.total > 0) result.add((group: g, total: counts.total, enrolled: counts.enrolled));
-    }
-    return result;
+  /// Egy szókészlet összesítője (szavak, felvett szavak, ismeret).
+  Future<ScopeSummary<S>> scopeSummary<S extends WordScope>(S scope) async {
+    final stats = await _store.scopeStats(scope);
+    return ScopeSummary(
+      scope: scope,
+      totalWords: stats.total,
+      enrolledWords: stats.enrolled,
+      knowledge: stats.total == 0 ? 0 : stats.knowledgeSum / stats.total,
+    );
   }
 
   /// Egy értékelés rögzítése: helyi ütemezés + napló + kimenő sor, atomian.
@@ -211,19 +233,6 @@ class StudyRepository {
     return card.copyWith(scheduling: result.card);
   }
 
-  /// Előnézet a gombokhoz: melyik válasz után mikor jön újra a kártya.
-  Future<Map<int, Duration>> previewIntervals(StudyCard card, {required int responseTimeMs}) async {
-    final now = _clock.now();
-    final config = await _schedulerConfig();
-    return {
-      for (final grade in const [1, 3, 4, 5])
-        grade: scheduleReview(card.scheduling, grade: grade, responseTimeMs: responseTimeMs, reviewedAt: now, config: config)
-            .card
-            .nextReviewAt!
-            .difference(now),
-    };
-  }
-
   // ---------------------------------------------------------------------------
   // Kártyafelvétel
   // ---------------------------------------------------------------------------
@@ -241,9 +250,6 @@ class StudyRepository {
 
   /// Egy CEFR szint még fel nem vett szavainak felvétele a választott típusokkal.
   Future<int> enrollLevel(String cefrLevel) async => enrollWords(await _store.unenrolledWords(cefrLevel: cefrLevel));
-
-  /// Egy tematikus kategória még fel nem vett szavainak felvétele.
-  Future<int> enrollCategory(String slug) async => enrollWords(await _store.unenrolledWordsInCategory(slug));
 
   /// Szavak felvétele: a választott típusok közül az alkalmazhatókkal (a már
   /// meglévő kártyákat a tároló kihagyja). @returns az új kártyák száma.
@@ -279,41 +285,47 @@ class StudyRepository {
   Future<List<({Word word, bool enrolled})>> searchWords({
     String query = '',
     String? cefrLevel,
-    String? categorySlug,
-    List<String>? categorySlugs,
+    WordScope? scope,
     bool customOnly = false,
     int limit = 100,
   }) =>
-      _store.searchWords(
-        query: query,
-        cefrLevel: cefrLevel,
-        categorySlug: categorySlug,
-        categorySlugs: categorySlugs,
-        customOnly: customOnly,
-        limit: limit,
-      );
+      _store.searchWords(query: query, cefrLevel: cefrLevel, scope: scope, customOnly: customOnly, limit: limit);
 
   Future<Set<CardType>> enrolledTypes(String wordId) => _store.enrolledTypes(wordId);
 
   Future<void> setSuspended(StudyCard card, bool suspended) => _store.setSuspended(card.id, suspended, _clock.now());
 
+  /// A kezdőképernyő összesítője – csak számlálás, kártyák betöltése nélkül
+  /// (minden szinkron és lecke után újraszámolódik, ezért legyen olcsó).
   Future<HomeSummary> summary() async {
-    final now = _clock.now();
-    final profile = await _profile();
-    final day = localDayBounds(now, timeZone: profile.timezone);
-    final queue = await loadQueue();
+    const limit = 200;
+    final budget = await _dailyBudget(limit: limit);
+    final learning = await _store.countDueCards(before: budget.dayEnd, states: _learningStates);
+    final reviews = await _store.countDueCards(before: budget.dayEnd, states: [CardState.review]);
+    final levels = await _store.wordCountByLevel();
     return HomeSummary(
-      dueToday: queue.learning.length + queue.reviews.length,
-      newAvailableToday: queue.newCards.length,
-      reviewedToday: await _store.countReviewsSince(day.start),
-      cardsByState: await _store.countCardsByState(),
+      dueToday: learning.clamp(0, limit) + reviews.clamp(0, budget.reviews),
+      newAvailableToday: (await _store.countNewCards()).clamp(0, budget.newCards),
+      reviewedToday: await _store.countReviewsSince(budget.dayStart),
       pendingSync: await _store.outboxCount(),
-      unenrolledByLevel: await _store.unenrolledCountByLevel(),
-      categories: await _store.categories(),
       enrolledWords: await _store.countEnrolledWords(),
-      topics: await topicGroupSummaries(),
+      levels: [
+        for (final level in cefrLevels)
+          if (levels[level] case final words?) (level: level, words: words),
+      ],
+      topics: [
+        for (final group in topicGroups)
+          if (await scopeSummary(TopicScope(group)) case final topic when topic.totalWords > 0) topic,
+      ],
     );
   }
+
+  /// Kártyák állapot szerint, felvett szavak, szintenként a még fel nem vett szavak.
+  Future<CardsOverview> cardsOverview() async => CardsOverview(
+        enrolledWords: await _store.countEnrolledWords(),
+        cardsByState: await _store.countCardsByState(),
+        unenrolledByLevel: await _store.unenrolledCountByLevel(),
+      );
 
   /// Statisztika a helyi naplóból: napi aktivitás, pontosság, sorozat, előrejelzés.
   Future<StudyStats> stats() async {

@@ -1,4 +1,4 @@
-/// A gépelt válasz ellenőrzése (felidézés kártyán).
+/// A gépelt német válasz ellenőrzése.
 ///
 /// Elvárt válasz pl. „der Tisch” vagy „sich freuen”. Elfogadott eltérések:
 ///  - kis- és nagybetű, felesleges szóközök, írásjelek;
@@ -8,10 +8,7 @@
 enum AnswerVerdict {
   correct,
   almost,
-  wrong;
-
-  /// A javasolt önértékelés (a felhasználó felülírhatja).
-  int get suggestedGrade => switch (this) { correct => 4, almost => 3, wrong => 1 };
+  wrong,
 }
 
 class AnswerCheck {

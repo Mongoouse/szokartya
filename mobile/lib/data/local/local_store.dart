@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../core/api/api_client.dart';
 import '../../domain/sm2_scheduler.dart';
+import '../../domain/word_scope.dart';
 import '../models/study_card.dart';
 import '../models/word.dart';
 import 'app_database.dart';
@@ -71,41 +72,69 @@ class LocalStore {
       FROM cards c JOIN words w ON w.id = c.word_id
      WHERE c.deleted = 0 AND c.is_suspended = 0 AND w.deleted = 0''';
 
-  /// Szűrés kategóriákra (témakör-csoport): a szónak legalább egy ilyen kategóriája van.
-  static String _inCategories(String wordIdColumn, List<String> slugs) =>
-      ' AND EXISTS (SELECT 1 FROM word_categories wc WHERE wc.word_id = $wordIdColumn '
-      'AND wc.slug IN (${List.filled(slugs.length, '?').join(', ')}))';
+  /// A szókészlet ([WordScope]) SQL-feltétele egy szóazonosító-oszlopra
+  /// (` AND …` alakban, a hozzá tartozó paraméterekkel).
+  static ({String sql, List<Object> args}) _scopeFilter(WordScope? scope, String wordIdColumn) => switch (scope) {
+        null => (sql: '', args: const []),
+        TopicScope(:final group) => (
+            sql: ' AND EXISTS (SELECT 1 FROM word_categories wc WHERE wc.word_id = $wordIdColumn '
+                'AND wc.slug IN (${List.filled(group.slugs.length, '?').join(', ')}))',
+            args: group.slugs,
+          ),
+        LevelScope(:final level) => (
+            sql: ' AND EXISTS (SELECT 1 FROM words ws WHERE ws.id = $wordIdColumn AND ws.cefr_level = ?)',
+            args: [level],
+          ),
+      };
 
   /// Esedékes (nem új) kártyák a megadott időpontig, esedékesség szerint.
-  /// [categorySlugs]: csak ezekbe a kategóriákba tartozó szavak kártyái.
+  /// [scope]: csak ennek a szókészletnek a kártyái.
   Future<List<StudyCard>> dueCards({
     required DateTime before,
     required List<CardState> states,
     required int limit,
-    List<String>? categorySlugs,
+    WordScope? scope,
   }) async {
-    if (limit <= 0 || (categorySlugs != null && categorySlugs.isEmpty)) return const [];
+    if (limit <= 0) return const [];
     final placeholders = List.filled(states.length, '?').join(', ');
+    final filter = _scopeFilter(scope, 'c.word_id');
     final rows = await _db.rawQuery(
-      "$_cardSelect AND c.state <> 'NEW' AND c.state IN ($placeholders) AND c.next_review_at <= ?"
-      '${categorySlugs == null ? '' : _inCategories('c.word_id', categorySlugs)} '
+      "$_cardSelect AND c.state <> 'NEW' AND c.state IN ($placeholders) AND c.next_review_at <= ?${filter.sql} "
       'ORDER BY c.next_review_at, c.id LIMIT ?',
-      [...states.map((s) => s.wire), before.millisecondsSinceEpoch, ...?categorySlugs, limit],
+      [...states.map((s) => s.wire), before.millisecondsSinceEpoch, ...filter.args, limit],
     );
     return rows.map(_cardFromRow).toList();
   }
 
   /// Új kártyák felvételi sorrendben.
-  Future<List<StudyCard>> newCards({required int limit, List<String>? categorySlugs}) async {
-    if (limit <= 0 || (categorySlugs != null && categorySlugs.isEmpty)) return const [];
+  Future<List<StudyCard>> newCards({required int limit, WordScope? scope}) async {
+    if (limit <= 0) return const [];
+    final filter = _scopeFilter(scope, 'c.word_id');
     final rows = await _db.rawQuery(
-      "$_cardSelect AND c.state = 'NEW'"
-      '${categorySlugs == null ? '' : _inCategories('c.word_id', categorySlugs)} '
-      'ORDER BY c.created_at, c.id LIMIT ?',
-      [...?categorySlugs, limit],
+      "$_cardSelect AND c.state = 'NEW'${filter.sql} ORDER BY c.created_at, c.id LIMIT ?",
+      [...filter.args, limit],
     );
     return rows.map(_cardFromRow).toList();
   }
+
+  /// Esedékes kártyák száma állapotonként a megadott időpontig (a kezdőképernyő
+  /// összesítőjéhez – a kártyák betöltése és dekódolása nélkül).
+  Future<int> countDueCards({required DateTime before, required List<CardState> states}) async =>
+      Sqflite.firstIntValue(await _db.rawQuery(
+        'SELECT COUNT(*) FROM cards c JOIN words w ON w.id = c.word_id '
+        'WHERE c.deleted = 0 AND c.is_suspended = 0 AND w.deleted = 0 AND c.next_review_at <= ? '
+        'AND c.state IN (${List.filled(states.length, '?').join(', ')})',
+        [before.millisecondsSinceEpoch, ...states.map((s) => s.wire)],
+      )) ??
+      0;
+
+  /// Új (még nem tanult) kártyák száma.
+  Future<int> countNewCards() async =>
+      Sqflite.firstIntValue(await _db.rawQuery(
+        'SELECT COUNT(*) FROM cards c JOIN words w ON w.id = c.word_id '
+        "WHERE c.deleted = 0 AND c.is_suspended = 0 AND w.deleted = 0 AND c.state = 'NEW'",
+      )) ??
+      0;
 
   /// Felvett szavak száma (egy szóhoz kártyatípusonként egy-egy kártya tartozik).
   Future<int> countEnrolledWords() async =>
@@ -115,27 +144,48 @@ class LocalStore {
       )) ??
       0;
 
-  /// Egy témakör-csoport szavainak száma és ebből a már felvettek.
-  Future<({int total, int enrolled})> countWordsInCategories(List<String> slugs) async {
-    if (slugs.isEmpty) return (total: 0, enrolled: 0);
+  /// Egy szókészlet összesítője: szavak száma, ebből a felvettek, és az ismeret
+  /// (a szavankénti találati arányok összege – a még nem gyakorolt szó 0-val
+  /// számít). A találati arány az időtől független: helyes / összes válasz a szó
+  /// minden kártyáján.
+  Future<({int total, int enrolled, double knowledgeSum})> scopeStats(WordScope scope) async {
+    final filter = _scopeFilter(scope, 'w.id');
     final rows = await _db.rawQuery(
-      'SELECT COUNT(*) AS total, '
-      'SUM(CASE WHEN EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) THEN 1 ELSE 0 END) AS enrolled '
-      'FROM words w WHERE w.deleted = 0${_inCategories('w.id', slugs)}',
-      slugs,
+      'SELECT COUNT(*) AS total, COALESCE(SUM(s.cards > 0), 0) AS enrolled, '
+      'COALESCE(SUM(CASE WHEN s.answers > 0 THEN CAST(s.correct AS REAL) / s.answers ELSE 0 END), 0) AS knowledge '
+      'FROM words w LEFT JOIN ('
+      '  SELECT word_id, COUNT(*) AS cards, SUM(total_reviews) AS answers, SUM(correct_reviews) AS correct '
+      '  FROM cards WHERE deleted = 0 GROUP BY word_id'
+      ') s ON s.word_id = w.id '
+      'WHERE w.deleted = 0${filter.sql}',
+      filter.args,
     );
-    return (total: (rows.first['total'] as int?) ?? 0, enrolled: (rows.first['enrolled'] as int?) ?? 0);
+    final r = rows.first;
+    return (
+      total: (r['total'] as int?) ?? 0,
+      enrolled: (r['enrolled'] as int?) ?? 0,
+      knowledgeSum: ((r['knowledge'] as num?) ?? 0).toDouble(),
+    );
   }
 
-  /// Egy témakör-csoport még fel nem vett szavai (a felvétel sorrendjében).
-  Future<List<Word>> unenrolledWordsInCategories(List<String> slugs, {required int limit}) async {
-    if (slugs.isEmpty || limit <= 0) return const [];
+  /// Egy szókészlet még fel nem vett szavai (a felvétel sorrendjében).
+  Future<List<Word>> unenrolledWordsIn(WordScope scope, {required int limit}) async {
+    if (limit <= 0) return const [];
+    final filter = _scopeFilter(scope, 'w.id');
     final rows = await _db.rawQuery(
-      'SELECT w.payload FROM words w WHERE w.deleted = 0${_inCategories('w.id', slugs)} '
+      'SELECT w.payload FROM words w WHERE w.deleted = 0${filter.sql} '
       'AND NOT EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) ORDER BY w.rowid LIMIT ?',
-      [...slugs, limit],
+      [...filter.args, limit],
     );
     return rows.map((r) => Word.fromJson(jsonDecode(r['payload']! as String) as Json)).toList();
+  }
+
+  /// A szókincs szintjei a szavak számával (pl. {A1: 650, B2: 1558}).
+  Future<Map<String, int>> wordCountByLevel() async {
+    final rows = await _db.rawQuery(
+      'SELECT cefr_level, COUNT(*) AS n FROM words WHERE deleted = 0 AND cefr_level IS NOT NULL GROUP BY cefr_level',
+    );
+    return {for (final r in rows) r['cefr_level']! as String: r['n']! as int};
   }
 
   Future<StudyCard?> card(String id) async {
@@ -161,13 +211,6 @@ class LocalStore {
     return {for (final r in rows) CardStateWire.parse(r['state']! as String): r['n']! as int};
   }
 
-  Future<int> countDue(DateTime before) async =>
-      Sqflite.firstIntValue(await _db.rawQuery(
-        "SELECT COUNT(*) FROM cards WHERE deleted = 0 AND is_suspended = 0 AND state <> 'NEW' AND next_review_at <= ?",
-        [before.millisecondsSinceEpoch],
-      )) ??
-      0;
-
   // ---------------------------------------------------------------------------
   // Szavak
   // ---------------------------------------------------------------------------
@@ -182,43 +225,12 @@ class LocalStore {
     return rows.map((r) => Word.fromJson(jsonDecode(r['payload']! as String) as Json)).toList();
   }
 
-  /// Egy kategória még fel nem vett szavai.
-  Future<List<Word>> unenrolledWordsInCategory(String slug) async {
-    final rows = await _db.rawQuery(
-      'SELECT w.payload FROM words w JOIN word_categories wc ON wc.word_id = w.id '
-      'WHERE w.deleted = 0 AND wc.slug = ? '
-      'AND NOT EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) ORDER BY w.rowid',
-      [slug],
-    );
-    return rows.map((r) => Word.fromJson(jsonDecode(r['payload']! as String) as Json)).toList();
-  }
-
-  /// Kategóriák a szavak és a még fel nem vett szavak számával, név szerint.
-  Future<List<({String slug, String nameHu, int total, int unenrolled})>> categories() async {
-    final rows = await _db.rawQuery(
-      'SELECT wc.slug, MIN(wc.name_hu) AS name_hu, COUNT(*) AS total, '
-      'SUM(CASE WHEN EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.deleted = 0) THEN 0 ELSE 1 END) AS unenrolled '
-      'FROM word_categories wc JOIN words w ON w.id = wc.word_id WHERE w.deleted = 0 '
-      'GROUP BY wc.slug ORDER BY name_hu',
-    );
-    return [
-      for (final r in rows)
-        (
-          slug: r['slug']! as String,
-          nameHu: r['name_hu']! as String,
-          total: r['total']! as int,
-          unenrolled: (r['unenrolled'] as int?) ?? 0,
-        ),
-    ];
-  }
-
   /// Szókereső: részleges egyezés a német alakra vagy a magyar fordításra,
   /// szint- és kategóriaszűréssel. A felvett szavakat is visszaadja (jelölve).
   Future<List<({Word word, bool enrolled})>> searchWords({
     String query = '',
     String? cefrLevel,
-    String? categorySlug,
-    List<String>? categorySlugs,
+    WordScope? scope,
     bool customOnly = false,
     int limit = 100,
   }) async {
@@ -234,14 +246,10 @@ class LocalStore {
       where.add('w.cefr_level = ?');
       args.add(cefrLevel);
     }
-    if (categorySlug != null) {
-      where.add('EXISTS (SELECT 1 FROM word_categories wc WHERE wc.word_id = w.id AND wc.slug = ?)');
-      args.add(categorySlug);
-    }
-    if (categorySlugs != null) {
-      if (categorySlugs.isEmpty) return const [];
-      where.add(_inCategories('w.id', categorySlugs).replaceFirst(' AND ', ''));
-      args.addAll(categorySlugs);
+    final filter = _scopeFilter(scope, 'w.id');
+    if (filter.sql.isNotEmpty) {
+      where.add(filter.sql.replaceFirst(' AND ', ''));
+      args.addAll(filter.args);
     }
     if (customOnly) where.add('w.is_custom = 1');
     final rows = await _db.rawQuery(

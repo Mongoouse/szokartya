@@ -7,6 +7,8 @@ import 'package:szokartya/data/models/study_card.dart';
 import 'package:szokartya/data/repositories/auth_repository.dart';
 import 'package:szokartya/data/models/user_settings.dart';
 import 'package:szokartya/data/repositories/study_repository.dart';
+import 'package:szokartya/domain/topic_groups.dart';
+import 'package:szokartya/domain/word_scope.dart';
 
 import '../helpers/test_support.dart';
 
@@ -17,6 +19,7 @@ void main() {
   final clock = FakeClock(DateTime.utc(2026, 3, 10, 9));
 
   const food = (slug: 'essen', nameHu: 'Étel');
+  const foodTopic = TopicScope(TopicGroup(id: 'etel', nameHu: 'Étel', slugs: ['essen']));
   final verb = {
     'present3sg': 'fährt',
     'preterite3sg': 'fuhr',
@@ -68,12 +71,38 @@ void main() {
       expect(await typesOf('warten'), {CardType.recognition, CardType.valency});
     });
 
-    test('kategória szerinti felvétel és kategórialista', () async {
-      expect(await store.categories(), [(slug: 'essen', nameHu: 'Étel', total: 2, unenrolled: 2)]);
-      final created = await study.enrollCategory('essen');
-      expect(created, 7);
-      expect(await store.categories(), [(slug: 'essen', nameHu: 'Étel', total: 2, unenrolled: 0)]);
-      expect(await typesOf('fahren'), isEmpty);
+    test('szókészlet-lecke: csak a lecke kitöltéséhez szükséges szavakat veszi fel', () async {
+      final queue = await study.loadScopedQueue(foodTopic, size: 3);
+      expect(queue, hasLength(3));
+      expect(queue.map((c) => c.wordId).toSet(), {'apfel', 'milch'});
+      expect(await typesOf('fahren'), isEmpty, reason: 'más témakör szava nem kerül felvételre');
+
+      final a2 = await study.loadScopedQueue(const LevelScope('A2'), size: 20);
+      expect(a2.map((c) => c.wordId).toSet(), {'warten'});
+    });
+
+    test('szókészlet összesítő: szavak, felvettek, ismeret (a nem gyakorolt szó 0%)', () async {
+      var summary = await study.scopeSummary(foodTopic);
+      expect((summary.totalWords, summary.enrolledWords, summary.knowledge), (2, 0, 0.0));
+
+      await study.enrollWords([(await store.unenrolledWords(cefrLevel: 'A1')).firstWhere((w) => w.id == 'apfel')]);
+      final apfel = (await store.newCards(limit: 10)).firstWhere((c) => c.cardType == CardType.recognition);
+      await study.review(apfel, grade: 4, responseTimeMs: 2000); // 1/1 helyes
+      final apfelProd = (await store.newCards(limit: 10)).firstWhere((c) => c.cardType == CardType.production);
+      await study.review(apfelProd, grade: 1, responseTimeMs: 2000); // 1/2 helyes a szón
+
+      summary = await study.scopeSummary(foodTopic);
+      expect(summary.enrolledWords, 1);
+      expect(summary.knowledge, closeTo(0.25, 1e-9), reason: 'alma: 50%, tej: 0% → átlag 25%');
+    });
+
+    test('kezdőképernyő: szintek és témakörök számlálással (kártyák betöltése nélkül)', () async {
+      await study.enrollLevel('A1');
+      final s = await study.summary();
+      expect(s.levels, [(level: 'A1', words: 3), (level: 'A2', words: 1)]);
+      expect(s.newAvailableToday, 9); // alma 4 + tej 3 + utazik 2 kártya
+      expect(s.dueToday, 0);
+      expect(s.enrolledWords, 3);
     });
   });
 
@@ -90,7 +119,7 @@ void main() {
       final a2 = await study.searchWords(cefrLevel: 'A2');
       expect(a2.single.word.id, 'warten');
       expect(a2.single.enrolled, isTrue);
-      expect((await study.searchWords(categorySlug: 'essen')).map((r) => r.word.id).toSet(), {'apfel', 'milch'});
+      expect((await study.searchWords(scope: foodTopic)).map((r) => r.word.id).toSet(), {'apfel', 'milch'});
       expect(await study.searchWords(query: '%'), isEmpty);
       expect(await study.searchWords(query: '_'), isEmpty);
     });
@@ -146,14 +175,14 @@ void main() {
           ).encode(),
         );
 
-    test('a profil célmegtartása rövidíti az előnézett intervallumot', () async {
+    test('a profil célmegtartása rövidíti az intervallumot', () async {
       await store.applyServerCards([
         progressJson(id: 'c1', wordId: 'apfel', state: 'REVIEW', intervalDays: 10, totalReviews: 3, nextReviewAt: clock.now()),
       ]);
       final card = (await store.card('c1'))!;
-      final base = (await study.previewIntervals(card, responseTimeMs: 2000))[4]!;
+      final base = (await study.review(card, grade: 4, responseTimeMs: 2000)).scheduling.intervalDays;
       await setProfile(retention: 0.95);
-      final strict = (await study.previewIntervals(card, responseTimeMs: 2000))[4]!;
+      final strict = (await study.review(card, grade: 4, responseTimeMs: 2000)).scheduling.intervalDays;
       expect(strict, lessThan(base));
     });
 

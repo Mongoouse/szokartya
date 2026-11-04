@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/custom_word_input.dart';
+import '../../domain/cefr_levels.dart';
 import '../../providers.dart';
 import '../home/home_summary_provider.dart';
-import '../settings/settings_screen.dart' show cefrLevels;
 import '../sync/sync_controller.dart';
 
 const _partsOfSpeech = {
