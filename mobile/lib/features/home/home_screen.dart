@@ -10,8 +10,10 @@ import '../reports/my_reports_screen.dart';
 import '../settings/settings_screen.dart';
 import '../stats/stats_screen.dart';
 import '../study/study_screen.dart';
+import '../study/study_session_controller.dart';
 import '../sync/sync_controller.dart';
 import '../words/custom_word_screen.dart';
+import '../words/topic_screen.dart';
 import '../words/word_browser_screen.dart';
 import 'home_summary_provider.dart';
 
@@ -70,17 +72,28 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
               FilledButton.icon(
+                key: const Key('startLesson'),
                 icon: const Icon(Icons.play_arrow),
-                label: const Text('Tanulás indítása'),
-                onPressed: s.dueToday + s.newAvailableToday == 0
-                    ? null
-                    : () async {
-                        await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const StudyScreen()));
-                        ref.invalidate(homeSummaryProvider);
-                      },
+                label: const Text('Lecke indítása (20 kártya)'),
+                onPressed: s.dueToday + s.newAvailableToday == 0 ? null : () => _study(context, ref, const StudySessionArgs()),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                key: const Key('startEndless'),
+                icon: const Icon(Icons.all_inclusive),
+                label: const Text('Végtelen gyakorlás'),
+                onPressed: s.enrolledWords == 0 ? null : () => _study(context, ref, const StudySessionArgs(endless: true)),
               ),
               const SizedBox(height: 24),
               Text('Kártyáid', style: Theme.of(context).textTheme.titleMedium),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(
+                  '${s.enrolledWords} szót tanulsz. Szavanként több kártya készül '
+                  '(jelentés, németül, névelő, többes szám), ezért a kártyák száma nagyobb a szavakénál.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
               Wrap(
                 spacing: 8,
                 children: [
@@ -88,8 +101,23 @@ class HomeScreen extends ConsumerWidget {
                     Chip(label: Text('${_stateLabel(state)}: ${s.cardsByState[state] ?? 0}')),
                 ],
               ),
+              if (s.topics.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Text('Témakörök', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 4),
+                for (final t in s.topics)
+                  Card(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    child: ListTile(
+                      title: Text(t.group.nameHu),
+                      subtitle: Text('${t.total} szó · ${t.enrolled} tanulás alatt'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => _open(context, ref, TopicScreen(group: t.group)),
+                    ),
+                  ),
+              ],
               const SizedBox(height: 24),
-              Text('Új szavak felvétele', style: Theme.of(context).textTheme.titleMedium),
+              Text('Új szavak felvétele szint szerint', style: Theme.of(context).textTheme.titleMedium),
               if (s.unenrolledByLevel.isEmpty)
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
@@ -100,27 +128,11 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   for (final entry in (s.unenrolledByLevel.entries.toList()..sort((a, b) => a.key.compareTo(b.key))))
                     ActionChip(
-                      label: Text('${entry.key} (${entry.value})'),
+                      label: Text('${entry.key} (${entry.value} szó)'),
                       onPressed: () => _enroll(context, ref, entry.key),
                     ),
                 ],
               ),
-              if (s.categories.any((c) => c.unenrolled > 0)) ...[
-                const SizedBox(height: 24),
-                Text('Témakörök', style: Theme.of(context).textTheme.titleMedium),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    for (final c in s.categories)
-                      if (c.unenrolled > 0)
-                        ActionChip(
-                          label: Text('${c.nameHu} (${c.unenrolled})'),
-                          tooltip: '${c.nameHu}: ${c.unenrolled} új szó felvétele',
-                          onPressed: () => _enrollCategory(context, ref, c.slug, c.nameHu),
-                        ),
-                  ],
-                ),
-              ],
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 icon: const Icon(Icons.search),
@@ -147,13 +159,9 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _enrollCategory(BuildContext context, WidgetRef ref, String slug, String name) async {
-    final created = await ref.read(studyRepositoryProvider).enrollCategory(slug);
+  Future<void> _study(BuildContext context, WidgetRef ref, StudySessionArgs args) async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => StudyScreen(args: args)));
     ref.invalidate(homeSummaryProvider);
-    ref.read(syncControllerProvider.notifier).scheduleSync();
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$created új kártya ($name)')));
-    }
   }
 
   Future<void> _open(BuildContext context, WidgetRef ref, Widget screen) async {

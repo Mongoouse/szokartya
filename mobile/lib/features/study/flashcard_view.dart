@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/study_card.dart';
 import '../../data/models/word.dart';
+import '../../domain/card_answer.dart';
 
 /// Egy kártya elő- vagy hátlapja a kártyatípus szerint.
 ///
@@ -20,8 +21,9 @@ class FlashcardView extends StatelessWidget {
   /// A német alak felolvasása; null = nincs kiejtés gomb.
   final VoidCallback? onSpeak;
 
-  /// A német alak látható-e (a felidézés kártyán csak a hátlapon).
-  bool get _germanVisible => showAnswer || card.cardType != CardType.production;
+  /// A kiejtés gomb csak a válasz után látszik: az előlapon a felhasználó
+  /// gépelve válaszol, a hangszóró ne tűnjön válaszadási lehetőségnek.
+  bool get _speakVisible => showAnswer;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class FlashcardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(_typeLabel, style: theme.textTheme.labelMedium, textAlign: TextAlign.center),
-              if (onSpeak != null && _germanVisible)
+              if (onSpeak != null && _speakVisible)
                 Align(
                   child: IconButton(
                     icon: const Icon(Icons.volume_up),
@@ -54,7 +56,7 @@ class FlashcardView extends StatelessWidget {
               if (showAnswer) ...[
                 const Divider(height: 32),
                 Text(
-                  _answer(word),
+                  expectedAnswer(card),
                   style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary),
                   textAlign: TextAlign.center,
                 ),
@@ -80,22 +82,16 @@ class FlashcardView extends StatelessWidget {
   String _prompt(Word w) => switch (card.cardType) {
         CardType.recognition || CardType.plural || CardType.verbForms => w.display,
         CardType.production => w.primaryTranslation,
-        CardType.gender => '___ ${w.lemma}',
+        CardType.gender => '___ ${w.lemma}\n(${w.primaryTranslation})',
         CardType.valency => '${w.display} ___',
       };
 
-  String _answer(Word w) => switch (card.cardType) {
-        CardType.recognition => w.translations.join(', '),
-        CardType.production || CardType.gender => w.display,
-        CardType.plural => w.pluralDisplay ?? '—',
-        CardType.verbForms => w.verbForms ?? '—',
-        CardType.valency => w.valencies.map((v) => v.pattern).join('\n'),
-      };
 
   List<Widget> _grammar(Word w, ThemeData theme) {
     final type = card.cardType;
     final lines = <String>[
-      if (type != CardType.recognition && type != CardType.production) w.primaryTranslation,
+      if (type == CardType.gender) w.display,
+      if (type != CardType.recognition && type != CardType.production && type != CardType.gender) w.primaryTranslation,
       if (type != CardType.plural && w.pluralForm != null && w.article != null) 'Többes szám: die ${w.pluralForm}',
       if (type != CardType.verbForms && w.verbForms != null) w.verbForms!,
       if (w.comparison != null) w.comparison!,

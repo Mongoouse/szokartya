@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/word.dart';
+import '../../domain/topic_groups.dart';
 import '../../providers.dart';
 import '../home/home_summary_provider.dart';
 import '../settings/settings_screen.dart' show cefrLevels;
@@ -28,12 +29,10 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
   late String? _category = widget.initialCategory;
   bool _customOnly = false;
   List<({Word word, bool enrolled})>? _results;
-  List<({String slug, String nameHu, int total, int unenrolled})> _categories = const [];
 
   @override
   void initState() {
     super.initState();
-    unawaited(_loadCategories());
     unawaited(_search());
   }
 
@@ -44,16 +43,11 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
     super.dispose();
   }
 
-  Future<void> _loadCategories() async {
-    final cats = await ref.read(localStoreProvider).categories();
-    if (mounted) setState(() => _categories = cats);
-  }
-
   Future<void> _search() async {
     final results = await ref.read(studyRepositoryProvider).searchWords(
           query: _query.text,
           cefrLevel: _level,
-          categorySlug: _category,
+          categorySlugs: _category == null ? null : topicGroupById(_category!)?.slugs,
           customOnly: _customOnly,
         );
     if (mounted) setState(() => _results = results);
@@ -114,15 +108,14 @@ class _WordBrowserScreenState extends ConsumerState<WordBrowserScreen> {
                   },
                 ),
               ),
-              if (_categories.isNotEmpty)
-                Padding(
+              Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: DropdownButton<String?>(
                     value: _category,
-                    hint: const Text('Kategória'),
+                    hint: const Text('Témakör'),
                     items: [
-                      const DropdownMenuItem<String?>(child: Text('Minden kategória')),
-                      for (final c in _categories) DropdownMenuItem(value: c.slug, child: Text(c.nameHu)),
+                      const DropdownMenuItem<String?>(child: Text('Minden témakör')),
+                      for (final g in topicGroups) DropdownMenuItem(value: g.id, child: Text(g.nameHu)),
                     ],
                     onChanged: (v) {
                       setState(() => _category = v);

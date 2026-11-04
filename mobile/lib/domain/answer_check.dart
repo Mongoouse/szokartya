@@ -67,11 +67,11 @@ String normalizeAnswer(String s) => s
 bool _close(String a, String b, {required bool exactOnly}) {
   if (a == b) return true;
   if (exactOnly) return false;
-  return b.length > 5 && _levenshtein(a, b, max: 1) <= 1;
+  return b.length > 5 && levenshtein(a, b, max: 1) <= 1;
 }
 
 /// Szerkesztési távolság korlátos számítással (a [max]-nál nagyobbat max+1-ként adja).
-int _levenshtein(String a, String b, {required int max}) {
+int levenshtein(String a, String b, {required int max}) {
   if ((a.length - b.length).abs() > max) return max + 1;
   var prev = List<int>.generate(b.length + 1, (i) => i);
   for (var i = 1; i <= a.length; i++) {

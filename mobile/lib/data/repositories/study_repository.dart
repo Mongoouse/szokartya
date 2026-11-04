@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../core/time/clock.dart';
 import '../../domain/sm2_scheduler.dart';
+import '../../domain/topic_groups.dart';
 import '../local/local_store.dart';
 import '../models/custom_word_input.dart';
 import '../models/study_card.dart';
@@ -35,6 +36,8 @@ class HomeSummary {
     required this.pendingSync,
     required this.unenrolledByLevel,
     required this.categories,
+    this.enrolledWords = 0,
+    this.topics = const [],
   });
 
   final int dueToday;
@@ -44,6 +47,10 @@ class HomeSummary {
   final int pendingSync;
   final Map<String, int> unenrolledByLevel;
   final List<({String slug, String nameHu, int total, int unenrolled})> categories;
+
+  /// Felvett szavak száma (a kártyák száma ennek többszöröse: szavanként több típus).
+  final int enrolledWords;
+  final List<({TopicGroup group, int total, int enrolled})> topics;
 }
 
 /// Tanulási statisztika a helyi naplóból (offline is).
@@ -101,9 +108,85 @@ class StudyRepository {
     return StudyQueue(
       learning: await _store.dueCards(before: day.end, states: [CardState.learning, CardState.relearning], limit: limit),
       reviews: await _store.dueCards(before: day.end, states: [CardState.review], limit: reviewsRemaining),
-      newCards: await _store.newCards(limit: newRemaining),
+      newCards: spreadByWord(await _store.newCards(limit: newRemaining)),
       dayEndsAt: day.end,
     );
+  }
+
+  /// Utánpótlás a végtelen gyakorláshoz: a ma esedékes kártyák, utánuk új
+  /// kártyák a napi keret figyelmen kívül hagyásával. [exclude]: a munkamenet
+  /// sorában már bent lévő kártyák.
+  Future<List<StudyCard>> loadMore({int size = 20, Set<String> exclude = const {}}) async {
+    final profile = await _profile();
+    final day = localDayBounds(_clock.now(), timeZone: profile.timezone);
+    final due = await _store.dueCards(
+      before: day.end,
+      states: [CardState.learning, CardState.relearning, CardState.review],
+      limit: size + exclude.length,
+    );
+    final fresh = await _store.newCards(limit: size + exclude.length);
+    return [...due, ...spreadByWord(fresh)].where((c) => !exclude.contains(c.id)).take(size).toList();
+  }
+
+  /// Témakör-lecke sora: a csoport ma esedékes kártyái, a már felvett új
+  /// kártyái, és ha ez kevés, a csoport még fel nem vett szavai közül annyi
+  /// kerül felvételre, amennyi a lecke kitöltéséhez kell (nem az egész témakör –
+  /// így nem keletkezik több ezer feltöltendő módosítás).
+  Future<List<StudyCard>> loadTopicQueue(TopicGroup group, {int size = 20, Set<String> exclude = const {}}) async {
+    final profile = await _profile();
+    final day = localDayBounds(_clock.now(), timeZone: profile.timezone);
+    final want = size + exclude.length;
+    List<StudyCard> collect(List<StudyCard> due, List<StudyCard> fresh) =>
+        [...due, ...spreadByWord(fresh)].where((c) => !exclude.contains(c.id)).toList();
+
+    final due = await _store.dueCards(
+      before: day.end,
+      states: [CardState.learning, CardState.relearning, CardState.review],
+      limit: want,
+      categorySlugs: group.slugs,
+    );
+    var cards = collect(due, await _store.newCards(limit: want, categorySlugs: group.slugs));
+    if (cards.length < size) {
+      final types = await preferredCardTypes();
+      final perWord = types.isEmpty ? 1 : types.length;
+      final words = await _store.unenrolledWordsInCategories(group.slugs, limit: ((size - cards.length) / perWord).ceil() + 1);
+      if (words.isNotEmpty) {
+        await enrollWords(words, types: types);
+        cards = collect(due, await _store.newCards(limit: want, categorySlugs: group.slugs));
+      }
+    }
+    return cards.take(size).toList();
+  }
+
+  /// Az új kártyák sorrendje úgy, hogy ugyanannak a szónak a kártyái ne
+  /// kövessék egymást (különben a „Mit jelent?” hátlapja elárulná a következő
+  /// „Hogy mondod németül?” kártya válaszát): előbb minden szó első kártyája,
+  /// aztán a másodikak stb.
+  static List<StudyCard> spreadByWord(List<StudyCard> cards) {
+    final byWord = <String, List<StudyCard>>{};
+    for (final c in cards) {
+      byWord.putIfAbsent(c.wordId, () => []).add(c);
+    }
+    for (final list in byWord.values) {
+      list.sort((a, b) => a.cardType.index.compareTo(b.cardType.index));
+    }
+    final result = <StudyCard>[];
+    for (var round = 0; result.length < cards.length; round++) {
+      for (final list in byWord.values) {
+        if (round < list.length) result.add(list[round]);
+      }
+    }
+    return result;
+  }
+
+  /// A témakör-csoportok szószámai (összes / felvett); az üres csoportok nélkül.
+  Future<List<({TopicGroup group, int total, int enrolled})>> topicGroupSummaries() async {
+    final result = <({TopicGroup group, int total, int enrolled})>[];
+    for (final g in topicGroups) {
+      final counts = await _store.countWordsInCategories(g.slugs);
+      if (counts.total > 0) result.add((group: g, total: counts.total, enrolled: counts.enrolled));
+    }
+    return result;
   }
 
   /// Egy értékelés rögzítése: helyi ütemezés + napló + kimenő sor, atomian.
@@ -193,8 +276,22 @@ class StudyRepository {
     return word;
   }
 
-  Future<List<({Word word, bool enrolled})>> searchWords({String query = '', String? cefrLevel, String? categorySlug, bool customOnly = false}) =>
-      _store.searchWords(query: query, cefrLevel: cefrLevel, categorySlug: categorySlug, customOnly: customOnly);
+  Future<List<({Word word, bool enrolled})>> searchWords({
+    String query = '',
+    String? cefrLevel,
+    String? categorySlug,
+    List<String>? categorySlugs,
+    bool customOnly = false,
+    int limit = 100,
+  }) =>
+      _store.searchWords(
+        query: query,
+        cefrLevel: cefrLevel,
+        categorySlug: categorySlug,
+        categorySlugs: categorySlugs,
+        customOnly: customOnly,
+        limit: limit,
+      );
 
   Future<Set<CardType>> enrolledTypes(String wordId) => _store.enrolledTypes(wordId);
 
@@ -213,6 +310,8 @@ class StudyRepository {
       pendingSync: await _store.outboxCount(),
       unenrolledByLevel: await _store.unenrolledCountByLevel(),
       categories: await _store.categories(),
+      enrolledWords: await _store.countEnrolledWords(),
+      topics: await topicGroupSummaries(),
     );
   }
 

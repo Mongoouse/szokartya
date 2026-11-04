@@ -25,10 +25,6 @@ class FakeStudyRepository implements StudyRepository {
       StudyQueue(learning: const [], reviews: const [], newCards: cards, dayEndsAt: DateTime.utc(2026, 3, 10, 23));
 
   @override
-  Future<Map<int, Duration>> previewIntervals(StudyCard card, {required int responseTimeMs}) async =>
-      {1: const Duration(minutes: 1), 3: const Duration(minutes: 6), 4: const Duration(minutes: 10), 5: const Duration(days: 4)};
-
-  @override
   Future<StudyCard> review(StudyCard card, {required int grade, required int responseTimeMs}) async {
     grades.add(grade);
     return card;
@@ -88,9 +84,14 @@ void main() {
     return (study, speaker);
   }
 
-  testWidgets('felidézés kártya: gépelt válasz ellenőrzése, javasolt értékelés kiemelve', (tester) async {
+  testWidgets('felidézés kártya: a beviteli mezőre koppintás nem fedi fel a választ; gépelt válasz, automatikus értékelés', (tester) async {
     final (study, _) = await pump(tester, [cardOf(tisch, CardType.production)]);
     expect(find.text('asztal'), findsOneWidget);
+    expect(find.text('Hátra: 20 / 20'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('typedAnswer')));
+    await tester.pumpAndSettle();
+    expect(find.text('der Tisch'), findsNothing, reason: 'koppintásra nem fordul meg a kártya');
 
     await tester.enterText(find.byKey(const Key('typedAnswer')), 'Tisch');
     await tester.tap(find.text('Ellenőrzés'));
@@ -99,33 +100,47 @@ void main() {
     expect(find.textContaining('Majdnem'), findsOneWidget);
     expect(find.textContaining('Hiányzik a névelő.'), findsOneWidget);
     expect(find.text('der Tisch'), findsOneWidget);
-    // A „Nehéz” (3) gomb a javasolt – kiemelt (tonal) stílussal.
-    expect(find.widgetWithText(FilledButton, 'Nehéz'), findsOneWidget);
-    expect(find.widgetWithText(OutlinedButton, 'Jó'), findsOneWidget);
-
-    await tester.tap(find.text('Nehéz'));
-    await tester.pumpAndSettle();
+    expect(find.textContaining('Értékelés: Nehéz'), findsOneWidget);
     expect(study.grades, [3]);
-    expect(find.text('Mára végeztél!'), findsOneWidget);
+    expect(find.text('Hátra: 19 / 20'), findsOneWidget);
+    // Nincsenek önértékelő gombok.
+    expect(find.text('Könnyű'), findsNothing);
   });
 
-  testWidgets('üres válasszal a kártya egyszerűen megfordul, ellenőrzés nélkül', (tester) async {
-    await pump(tester, [cardOf(tisch, CardType.production)]);
+  testWidgets('„Nem tudom”: hibás, értékelés 1; a kártya a sor végére kerül', (tester) async {
+    final (study, _) = await pump(tester, [cardOf(tisch, CardType.recognition)]);
+    expect(find.byTooltip('Kiejtés'), findsNothing);
+    await tester.tap(find.byKey(const Key('dontKnow')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Nem tudtad'), findsWidgets);
+    expect(find.text('asztal'), findsOneWidget);
+    expect(study.grades, [1]);
+    await tester.tap(find.byKey(const Key('nextCard')));
+    await tester.pumpAndSettle();
+    expect(find.text('Mit jelent?'), findsOneWidget, reason: 'a hibás kártya újra előjön');
+  });
+
+  testWidgets('kiejtés a válasz után; ékezetes betű gombbal', (tester) async {
+    final (study, speaker) = await pump(tester, [cardOf(tisch, CardType.recognition)]);
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'aszt');
+    await tester.tap(find.byKey(const Key('accent-á')));
+    await tester.pump();
+    final field = tester.widget<TextField>(find.byKey(const Key('typedAnswer')));
+    expect(field.controller!.text, 'asztá');
     await tester.tap(find.text('Ellenőrzés'));
     await tester.pumpAndSettle();
-    expect(find.text('der Tisch'), findsOneWidget);
-    expect(find.textContaining('Majdnem'), findsNothing);
-    expect(find.byType(FilledButton), findsNothing);
-  });
-
-  testWidgets('értékelő gombok: akadálymentes címke az intervallummal; kiejtés', (tester) async {
-    final (_, speaker) = await pump(tester, [cardOf(tisch, CardType.recognition)]);
+    expect(study.grades, [3], reason: 'egy elütés → majdnem');
     await tester.tap(find.byTooltip('Kiejtés'));
     expect(speaker.spoken, ['der Tisch']);
+  });
 
-    await tester.tap(find.text('Mutasd a választ'));
+  testWidgets('névelő kártya: der / die / das gombok, nincs gépelés', (tester) async {
+    final (study, _) = await pump(tester, [cardOf(tisch, CardType.gender)]);
+    expect(find.byKey(const Key('typedAnswer')), findsNothing);
+    await tester.tap(find.byKey(const Key('article-die')));
     await tester.pumpAndSettle();
-    expect(find.bySemanticsLabel('Értékelés: Könnyű, következő ismétlés 4 nap múlva'), findsOneWidget);
+    expect(find.textContaining('Rossz névelő'), findsOneWidget);
+    expect(study.grades, [1]);
   });
 
   testWidgets('hibabejelentés: a zászló gomb párbeszédablakot nyit, üres szöveget nem küld, a kártya adataival rögzít', (tester) async {
@@ -150,6 +165,6 @@ void main() {
     ));
     expect(find.textContaining('Köszönjük'), findsOneWidget);
     // A tanulás ugyanott folytatódik.
-    expect(find.text('Mutasd a választ'), findsOneWidget);
+    expect(find.text('Ellenőrzés'), findsOneWidget);
   });
 }
