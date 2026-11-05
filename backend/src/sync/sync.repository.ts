@@ -80,7 +80,7 @@ export class SyncRepository {
   }
 
   restoreCard(id: string): Promise<UserProgress> {
-    return this.prisma.userProgress.update({ where: { id }, data: { deletedAt: null } });
+    return this.prisma.userProgress.update({ where: { id }, data: { isActive: true } });
   }
 
   /**
@@ -90,7 +90,7 @@ export class SyncRepository {
   async updateCardIfVersion(
     id: string,
     expectedVersion: number,
-    data: { isSuspended?: boolean; deletedAt?: Date | null; flagsChangedAt: Date },
+    data: { isSuspended?: boolean; isActive?: boolean; flagsChangedAt: Date },
   ): Promise<boolean> {
     const { count } = await this.prisma.userProgress.updateMany({ where: { id, version: expectedVersion }, data });
     return count === 1;

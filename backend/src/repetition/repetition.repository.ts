@@ -11,7 +11,7 @@ export type ProgressWithWord = Prisma.UserProgressGetPayload<{ include: typeof C
  * az admin által elutasított szavak kártyái nélkül.
  */
 const ACTIVE = {
-  deletedAt: null,
+  isActive: true,
   isSuspended: false,
   word: { reviewStatus: { not: WordReviewStatus.REJECTED } },
 } satisfies Prisma.UserProgressWhereInput;
@@ -62,7 +62,7 @@ export class RepetitionRepository {
   async lockOwnedCard(userId: string, progressId: string, db: DbClient): Promise<UserProgress | null> {
     const rows = await db.$queryRaw<{ id: string }[]>`
       SELECT id FROM user_progress
-       WHERE id = ${progressId}::uuid AND user_id = ${userId}::uuid AND deleted_at IS NULL
+       WHERE id = ${progressId}::uuid AND user_id = ${userId}::uuid AND is_active
        FOR UPDATE`;
     if (rows.length === 0) {
       return null;
@@ -94,22 +94,22 @@ export class RepetitionRepository {
   /** Korábban törölt (soft delete) kártyák visszaállítása, megtartva a tanulási előzményt. */
   async restoreCards(userId: string, wordIds: string[], cardTypes: CardType[], db: DbClient = this.prisma): Promise<number> {
     const { count } = await db.userProgress.updateMany({
-      where: { userId, wordId: { in: wordIds }, cardType: { in: cardTypes }, deletedAt: { not: null } },
-      data: { deletedAt: null },
+      where: { userId, wordId: { in: wordIds }, cardType: { in: cardTypes }, isActive: false },
+      data: { isActive: true },
     });
     return count;
   }
 
   setSuspended(userId: string, progressId: string, isSuspended: boolean): Promise<Prisma.BatchPayload> {
     return this.prisma.userProgress.updateMany({
-      where: { id: progressId, userId, deletedAt: null },
+      where: { id: progressId, userId, isActive: true },
       data: { isSuspended, flagsChangedAt: new Date() },
     });
   }
 
   findOwnedCard(userId: string, progressId: string): Promise<ProgressWithWord | null> {
     return this.prisma.userProgress.findFirst({
-      where: { id: progressId, userId, deletedAt: null },
+      where: { id: progressId, userId, isActive: true },
       include: CARD_INCLUDE,
     });
   }

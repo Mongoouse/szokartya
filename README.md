@@ -38,11 +38,11 @@ backend/
   prisma/
     schema.prisma          # adatmodell (forrás)
     migrations/            # 1: generált séma, 2: kézi CHECK / index / trigger
-    seed.ts                # idempotens seed (kategóriák + data/wortschatz.txt)
-    data/wortschatz.txt    # ~450 szavas szólista tömör formátumban
+    seed.ts                # idempotens seed a data/vocabulary/ JSON fájljaiból
+    data/vocabulary/       # a szókincs: categories.json + de/a1.json … de/b2.json (~2000 szó)
+    vocabulary-json.ts     # a JSON formátum leírása, beolvasása és ellenőrzése
     import-vocabulary.ts   # saját szólista importálása (npm run db:import)
     set-role.ts            # admin kinevezése (npm run user:role -- <email> ADMIN)
-    vocab/b2/              # ~1550 szavas B2 szókincs (névelővel, vonzattal; formátum: vocab/dsl.ts)
     verify/schema-checks.sql
   scripts/                 # SM-2 vs FSRS összehasonlítás (npm run eval:schedulers)
   Dockerfile

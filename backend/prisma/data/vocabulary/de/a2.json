@@ -1,0 +1,1779 @@
+{
+  "language": "de",
+  "level": "A2",
+  "words": [
+    {
+      "lemma": "See",
+      "pos": "noun",
+      "translations": ["tó"],
+      "categories": ["natur"],
+      "noun": { "gender": "masculine", "plural": "Seen", "genitive": "Sees" },
+      "examples": [{ "sentence": "Im Sommer schwimmen wir im See.", "translation": "Nyáron a tóban úszunk." }],
+      "ipa": "zeː",
+      "is_active": true
+    },
+    {
+      "lemma": "Angst",
+      "pos": "noun",
+      "translations": ["félelem"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "feminine", "plural": "Ängste", "genitive": "Angst" },
+      "valencies": [
+        {
+          "preposition": "vor",
+          "case": "dative",
+          "pattern": "Angst vor + Dat.",
+          "meaning": "félelem valamitől",
+          "examples": [{ "sentence": "Sie hat Angst vor Hunden.", "translation": "Fél a kutyáktól." }]
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "freuen",
+      "pos": "verb",
+      "translations": ["örül"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "freut sich",
+        "preterite_3sg": "freute sich",
+        "past_participle": "gefreut",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "auf",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich freuen auf + Akk.",
+          "meaning": "örül valaminek (jövőbeli)",
+          "examples": [{ "sentence": "Ich freue mich auf den Urlaub.", "translation": "Várom a szabadságot." }]
+        },
+        {
+          "preposition": "über",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich freuen über + Akk.",
+          "meaning": "örül valaminek (megtörtént)",
+          "examples": [{ "sentence": "Sie freut sich über das Geschenk.", "translation": "Örül az ajándéknak." }]
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "Kollege",
+      "pos": "noun",
+      "translations": ["kolléga"],
+      "categories": ["arbeit", "menschen"],
+      "noun": { "gender": "masculine", "plural": "Kollegen", "n_declension": true },
+      "is_active": true
+    },
+    {
+      "lemma": "Nachbar",
+      "pos": "noun",
+      "translations": ["szomszéd"],
+      "categories": ["menschen"],
+      "noun": { "gender": "masculine", "plural": "Nachbarn", "n_declension": true },
+      "is_active": true
+    },
+    {
+      "lemma": "Großmutter",
+      "pos": "noun",
+      "translations": ["nagymama"],
+      "categories": ["familie"],
+      "noun": { "gender": "feminine", "plural": "Großmütter" },
+      "is_active": true
+    },
+    {
+      "lemma": "Großvater",
+      "pos": "noun",
+      "translations": ["nagyapa"],
+      "categories": ["familie"],
+      "noun": { "gender": "masculine", "plural": "Großväter" },
+      "is_active": true
+    },
+    {
+      "lemma": "Onkel",
+      "pos": "noun",
+      "translations": ["nagybácsi"],
+      "categories": ["familie"],
+      "noun": { "gender": "masculine", "plural": "Onkel" },
+      "is_active": true
+    },
+    {
+      "lemma": "Tante",
+      "pos": "noun",
+      "translations": ["nagynéni"],
+      "categories": ["familie"],
+      "noun": { "gender": "feminine", "plural": "Tanten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Bein",
+      "pos": "noun",
+      "translations": ["láb"],
+      "categories": ["koerper"],
+      "noun": { "gender": "neuter", "plural": "Beine" },
+      "is_active": true
+    },
+    {
+      "lemma": "Arm",
+      "pos": "noun",
+      "translations": ["kar"],
+      "categories": ["koerper"],
+      "noun": { "gender": "masculine", "plural": "Arme" },
+      "is_active": true
+    },
+    {
+      "lemma": "Bauch",
+      "pos": "noun",
+      "translations": ["has"],
+      "categories": ["koerper"],
+      "noun": { "gender": "masculine", "plural": "Bäuche" },
+      "is_active": true
+    },
+    {
+      "lemma": "Rücken",
+      "pos": "noun",
+      "translations": ["hát"],
+      "categories": ["koerper"],
+      "noun": { "gender": "masculine", "plural": "Rücken" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ohr",
+      "pos": "noun",
+      "translations": ["fül"],
+      "categories": ["koerper"],
+      "noun": { "gender": "neuter", "plural": "Ohren" },
+      "is_active": true
+    },
+    {
+      "lemma": "Nase",
+      "pos": "noun",
+      "translations": ["orr"],
+      "categories": ["koerper"],
+      "noun": { "gender": "feminine", "plural": "Nasen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Mund",
+      "pos": "noun",
+      "translations": ["száj"],
+      "categories": ["koerper"],
+      "noun": { "gender": "masculine", "plural": "Münder" },
+      "is_active": true
+    },
+    {
+      "lemma": "Zahn",
+      "pos": "noun",
+      "translations": ["fog"],
+      "categories": ["koerper"],
+      "noun": { "gender": "masculine", "plural": "Zähne" },
+      "is_active": true
+    },
+    {
+      "lemma": "Herz",
+      "pos": "noun",
+      "translations": ["szív"],
+      "categories": ["koerper"],
+      "noun": { "gender": "neuter", "plural": "Herzen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ärztin",
+      "pos": "noun",
+      "translations": ["orvosnő"],
+      "categories": ["gesundheit", "arbeit"],
+      "noun": { "gender": "feminine", "plural": "Ärztinnen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Krankenhaus",
+      "pos": "noun",
+      "translations": ["kórház"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "neuter", "plural": "Krankenhäuser" },
+      "is_active": true
+    },
+    {
+      "lemma": "Apotheke",
+      "pos": "noun",
+      "translations": ["gyógyszertár"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "feminine", "plural": "Apotheken" },
+      "is_active": true
+    },
+    {
+      "lemma": "Medikament",
+      "pos": "noun",
+      "translations": ["gyógyszer"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "neuter", "plural": "Medikamente" },
+      "is_active": true
+    },
+    {
+      "lemma": "Fieber",
+      "pos": "noun",
+      "translations": ["láz"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "neuter", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Gesundheit",
+      "pos": "noun",
+      "translations": ["egészség"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "feminine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "gesund",
+      "pos": "adjective",
+      "translations": ["egészséges"],
+      "categories": ["gesundheit"],
+      "adjective": { "comparative": "gesünder", "superlative": "am gesündesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Tomate",
+      "pos": "noun",
+      "translations": ["paradicsom"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "feminine", "plural": "Tomaten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Suppe",
+      "pos": "noun",
+      "translations": ["leves"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "feminine", "plural": "Suppen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kuchen",
+      "pos": "noun",
+      "translations": ["sütemény, torta"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "masculine", "plural": "Kuchen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Frühstück",
+      "pos": "noun",
+      "translations": ["reggeli"],
+      "categories": ["lebensmittel", "zeit"],
+      "noun": { "gender": "neuter", "plural": "Frühstücke" },
+      "is_active": true
+    },
+    {
+      "lemma": "Mittagessen",
+      "pos": "noun",
+      "translations": ["ebéd"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "neuter", "plural": "Mittagessen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Abendessen",
+      "pos": "noun",
+      "translations": ["vacsora"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "neuter", "plural": "Abendessen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Restaurant",
+      "pos": "noun",
+      "translations": ["étterem"],
+      "categories": ["lebensmittel", "stadt"],
+      "noun": { "gender": "neuter", "plural": "Restaurants" },
+      "is_active": true
+    },
+    {
+      "lemma": "Rechnung",
+      "pos": "noun",
+      "translations": ["számla"],
+      "categories": ["lebensmittel"],
+      "noun": { "gender": "feminine", "plural": "Rechnungen" },
+      "examples": [{ "sentence": "Die Rechnung, bitte!", "translation": "A számlát, kérem!" }],
+      "is_active": true
+    },
+    {
+      "lemma": "schmecken",
+      "pos": "verb",
+      "translations": ["ízlik"],
+      "categories": ["lebensmittel"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "schmeckt",
+        "preterite_3sg": "schmeckte",
+        "past_participle": "geschmeckt"
+      },
+      "valencies": [{ "preposition": null, "case": "dative", "pattern": "schmecken + Dat.", "meaning": "ízlik valakinek" }],
+      "examples": [{ "sentence": "Die Suppe schmeckt mir.", "translation": "Ízlik a leves." }],
+      "is_active": true
+    },
+    {
+      "lemma": "süß",
+      "pos": "adjective",
+      "translations": ["édes"],
+      "categories": ["lebensmittel"],
+      "adjective": { "comparative": "süßer", "superlative": "am süßesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "scharf",
+      "pos": "adjective",
+      "translations": ["csípős", "éles"],
+      "categories": ["lebensmittel"],
+      "adjective": { "comparative": "schärfer", "superlative": "am schärfsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Schrank",
+      "pos": "noun",
+      "translations": ["szekrény"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "masculine", "plural": "Schränke" },
+      "is_active": true
+    },
+    {
+      "lemma": "Sofa",
+      "pos": "noun",
+      "translations": ["kanapé"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "neuter", "plural": "Sofas" },
+      "is_active": true
+    },
+    {
+      "lemma": "Lampe",
+      "pos": "noun",
+      "translations": ["lámpa"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "feminine", "plural": "Lampen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Schlüssel",
+      "pos": "noun",
+      "translations": ["kulcs"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "masculine", "plural": "Schlüssel" },
+      "is_active": true
+    },
+    {
+      "lemma": "Garten",
+      "pos": "noun",
+      "translations": ["kert"],
+      "categories": ["haushalt", "natur"],
+      "noun": { "gender": "masculine", "plural": "Gärten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kühlschrank",
+      "pos": "noun",
+      "translations": ["hűtőszekrény"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "masculine", "plural": "Kühlschränke" },
+      "is_active": true
+    },
+    {
+      "lemma": "Miete",
+      "pos": "noun",
+      "translations": ["lakbér"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "feminine", "plural": "Mieten" },
+      "is_active": true
+    },
+    {
+      "lemma": "putzen",
+      "pos": "verb",
+      "translations": ["takarít"],
+      "categories": ["haushalt"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "putzt",
+        "preterite_3sg": "putzte",
+        "past_participle": "geputzt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "waschen",
+      "pos": "verb",
+      "translations": ["mos"],
+      "categories": ["haushalt"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "wäscht",
+        "preterite_3sg": "wusch",
+        "past_participle": "gewaschen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "waschen",
+      "pos": "verb",
+      "homograph": 2,
+      "translations": ["mosakszik"],
+      "categories": ["haushalt"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "wäscht sich",
+        "preterite_3sg": "wusch sich",
+        "past_participle": "gewaschen",
+        "reflexive": "accusative"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "aufräumen",
+      "pos": "verb",
+      "translations": ["rendet rak"],
+      "categories": ["haushalt"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "räumt auf",
+        "preterite_3sg": "räumte auf",
+        "past_participle": "aufgeräumt",
+        "separable_prefix": "auf"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "hell",
+      "pos": "adjective",
+      "translations": ["világos"],
+      "categories": ["haushalt"],
+      "adjective": { "comparative": "heller", "superlative": "am hellsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "dunkel",
+      "pos": "adjective",
+      "translations": ["sötét"],
+      "categories": ["haushalt"],
+      "adjective": { "comparative": "dunkler", "superlative": "am dunkelsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "sauber",
+      "pos": "adjective",
+      "translations": ["tiszta"],
+      "categories": ["haushalt"],
+      "adjective": { "comparative": "sauberer", "superlative": "am saubersten" },
+      "is_active": true
+    },
+    {
+      "lemma": "schmutzig",
+      "pos": "adjective",
+      "translations": ["piszkos"],
+      "categories": ["haushalt"],
+      "adjective": { "comparative": "schmutziger", "superlative": "am schmutzigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "bequem",
+      "pos": "adjective",
+      "translations": ["kényelmes"],
+      "categories": ["haushalt"],
+      "adjective": { "comparative": "bequemer", "superlative": "am bequemsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "U-Bahn",
+      "pos": "noun",
+      "translations": ["metró"],
+      "categories": ["verkehr"],
+      "noun": { "gender": "feminine", "plural": "U-Bahnen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ampel",
+      "pos": "noun",
+      "translations": ["közlekedési lámpa"],
+      "categories": ["verkehr"],
+      "noun": { "gender": "feminine", "plural": "Ampeln" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kreuzung",
+      "pos": "noun",
+      "translations": ["kereszteződés"],
+      "categories": ["verkehr"],
+      "noun": { "gender": "feminine", "plural": "Kreuzungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Verkehr",
+      "pos": "noun",
+      "translations": ["közlekedés, forgalom"],
+      "categories": ["verkehr"],
+      "noun": { "gender": "masculine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Verspätung",
+      "pos": "noun",
+      "translations": ["késés"],
+      "categories": ["verkehr"],
+      "noun": { "gender": "feminine", "plural": "Verspätungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kirche",
+      "pos": "noun",
+      "translations": ["templom"],
+      "categories": ["stadt"],
+      "noun": { "gender": "feminine", "plural": "Kirchen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Museum",
+      "pos": "noun",
+      "translations": ["múzeum"],
+      "categories": ["stadt", "freizeit"],
+      "noun": { "gender": "neuter", "plural": "Museen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Platz",
+      "pos": "noun",
+      "translations": ["tér", "hely"],
+      "categories": ["stadt"],
+      "noun": { "gender": "masculine", "plural": "Plätze" },
+      "is_active": true
+    },
+    {
+      "lemma": "Brücke",
+      "pos": "noun",
+      "translations": ["híd"],
+      "categories": ["stadt"],
+      "noun": { "gender": "feminine", "plural": "Brücken" },
+      "is_active": true
+    },
+    {
+      "lemma": "umsteigen",
+      "pos": "verb",
+      "translations": ["átszáll"],
+      "categories": ["verkehr"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "sein",
+        "present_3sg": "steigt um",
+        "preterite_3sg": "stieg um",
+        "past_participle": "umgestiegen",
+        "separable_prefix": "um"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "fliegen",
+      "pos": "verb",
+      "translations": ["repül"],
+      "categories": ["verkehr", "reisen"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "sein",
+        "present_3sg": "fliegt",
+        "preterite_3sg": "flog",
+        "past_participle": "geflogen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "laufen",
+      "pos": "verb",
+      "translations": ["fut", "gyalogol"],
+      "categories": ["verkehr", "freizeit"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "sein",
+        "present_3sg": "läuft",
+        "preterite_3sg": "lief",
+        "past_participle": "gelaufen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "pünktlich",
+      "pos": "adjective",
+      "translations": ["pontos"],
+      "categories": ["verkehr", "zeit"],
+      "adjective": { "comparative": "pünktlicher", "superlative": "am pünktlichsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Reise",
+      "pos": "noun",
+      "translations": ["utazás"],
+      "categories": ["reisen"],
+      "noun": { "gender": "feminine", "plural": "Reisen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Pass",
+      "pos": "noun",
+      "translations": ["útlevél"],
+      "categories": ["reisen"],
+      "noun": { "gender": "masculine", "plural": "Pässe" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ausland",
+      "pos": "noun",
+      "translations": ["külföld"],
+      "categories": ["reisen"],
+      "noun": { "gender": "neuter", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Meer",
+      "pos": "noun",
+      "translations": ["tenger"],
+      "categories": ["reisen", "natur"],
+      "noun": { "gender": "neuter", "plural": "Meere" },
+      "is_active": true
+    },
+    {
+      "lemma": "Strand",
+      "pos": "noun",
+      "translations": ["strand"],
+      "categories": ["reisen", "natur"],
+      "noun": { "gender": "masculine", "plural": "Strände" },
+      "is_active": true
+    },
+    {
+      "lemma": "reisen",
+      "pos": "verb",
+      "translations": ["utazik"],
+      "categories": ["reisen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "sein",
+        "present_3sg": "reist",
+        "preterite_3sg": "reiste",
+        "past_participle": "gereist"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "buchen",
+      "pos": "verb",
+      "translations": ["lefoglal"],
+      "categories": ["reisen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "bucht",
+        "preterite_3sg": "buchte",
+        "past_participle": "gebucht"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "übernachten",
+      "pos": "verb",
+      "translations": ["megszáll, éjszakázik"],
+      "categories": ["reisen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "übernachtet",
+        "preterite_3sg": "übernachtete",
+        "past_participle": "übernachtet"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "Termin",
+      "pos": "noun",
+      "translations": ["időpont, megbeszélt időpont"],
+      "categories": ["zeit", "arbeit"],
+      "noun": { "gender": "masculine", "plural": "Termine" },
+      "is_active": true
+    },
+    {
+      "lemma": "Geburtstag",
+      "pos": "noun",
+      "translations": ["születésnap"],
+      "categories": ["zeit", "familie"],
+      "noun": { "gender": "masculine", "plural": "Geburtstage" },
+      "is_active": true
+    },
+    {
+      "lemma": "Frühling",
+      "pos": "noun",
+      "translations": ["tavasz"],
+      "categories": ["zeit", "wetter"],
+      "noun": { "gender": "masculine", "plural": "Frühlinge" },
+      "is_active": true
+    },
+    {
+      "lemma": "Sommer",
+      "pos": "noun",
+      "translations": ["nyár"],
+      "categories": ["zeit", "wetter"],
+      "noun": { "gender": "masculine", "plural": "Sommer" },
+      "is_active": true
+    },
+    {
+      "lemma": "Herbst",
+      "pos": "noun",
+      "translations": ["ősz"],
+      "categories": ["zeit", "wetter"],
+      "noun": { "gender": "masculine", "plural": "Herbste" },
+      "is_active": true
+    },
+    {
+      "lemma": "Winter",
+      "pos": "noun",
+      "translations": ["tél"],
+      "categories": ["zeit", "wetter"],
+      "noun": { "gender": "masculine", "plural": "Winter" },
+      "is_active": true
+    },
+    {
+      "lemma": "früher",
+      "pos": "adverb",
+      "translations": ["régebben, korábban"],
+      "categories": ["zeit"],
+      "is_active": true
+    },
+    {
+      "lemma": "danach",
+      "pos": "adverb",
+      "translations": ["azután"],
+      "categories": ["zeit"],
+      "is_active": true
+    },
+    {
+      "lemma": "Universität",
+      "pos": "noun",
+      "translations": ["egyetem"],
+      "categories": ["bildung"],
+      "noun": { "gender": "feminine", "plural": "Universitäten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Prüfung",
+      "pos": "noun",
+      "translations": ["vizsga"],
+      "categories": ["bildung"],
+      "noun": { "gender": "feminine", "plural": "Prüfungen" },
+      "examples": [{ "sentence": "Morgen habe ich eine Prüfung.", "translation": "Holnap vizsgám van." }],
+      "is_active": true
+    },
+    {
+      "lemma": "Kurs",
+      "pos": "noun",
+      "translations": ["tanfolyam"],
+      "categories": ["bildung"],
+      "noun": { "gender": "masculine", "plural": "Kurse" },
+      "is_active": true
+    },
+    {
+      "lemma": "Firma",
+      "pos": "noun",
+      "translations": ["cég"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "feminine", "plural": "Firmen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Chef",
+      "pos": "noun",
+      "translations": ["főnök"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "masculine", "plural": "Chefs" },
+      "is_active": true
+    },
+    {
+      "lemma": "Gehalt",
+      "pos": "noun",
+      "translations": ["fizetés"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "neuter", "plural": "Gehälter" },
+      "is_active": true
+    },
+    {
+      "lemma": "Besprechung",
+      "pos": "noun",
+      "translations": ["megbeszélés"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "feminine", "plural": "Besprechungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "studieren",
+      "pos": "verb",
+      "translations": ["egyetemen tanul"],
+      "categories": ["bildung"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "studiert",
+        "preterite_3sg": "studierte",
+        "past_participle": "studiert"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "wissen",
+      "pos": "verb",
+      "translations": ["tud (tudomása van)"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "mixed",
+        "auxiliary": "haben",
+        "present_3sg": "weiß",
+        "preterite_3sg": "wusste",
+        "past_participle": "gewusst"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "kennen",
+      "pos": "verb",
+      "translations": ["ismer"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "mixed",
+        "auxiliary": "haben",
+        "present_3sg": "kennt",
+        "preterite_3sg": "kannte",
+        "past_participle": "gekannt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "denken",
+      "pos": "verb",
+      "translations": ["gondol"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "mixed",
+        "auxiliary": "haben",
+        "present_3sg": "denkt",
+        "preterite_3sg": "dachte",
+        "past_participle": "gedacht"
+      },
+      "valencies": [
+        {
+          "preposition": "an",
+          "case": "accusative",
+          "pattern": "denken an + Akk.",
+          "meaning": "gondol valakire/valamire"
+        }
+      ],
+      "examples": [{ "sentence": "Ich denke oft an dich.", "translation": "Gyakran gondolok rád." }],
+      "is_active": true
+    },
+    {
+      "lemma": "bringen",
+      "pos": "verb",
+      "translations": ["hoz"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "mixed",
+        "auxiliary": "haben",
+        "present_3sg": "bringt",
+        "preterite_3sg": "brachte",
+        "past_participle": "gebracht"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "vergessen",
+      "pos": "verb",
+      "translations": ["elfelejt"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "vergisst",
+        "preterite_3sg": "vergaß",
+        "past_participle": "vergessen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "fleißig",
+      "pos": "adjective",
+      "translations": ["szorgalmas"],
+      "categories": ["bildung", "arbeit"],
+      "adjective": { "comparative": "fleißiger", "superlative": "am fleißigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "schwierig",
+      "pos": "adjective",
+      "translations": ["nehéz, bonyolult"],
+      "categories": ["bildung"],
+      "adjective": { "comparative": "schwieriger", "superlative": "am schwierigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kino",
+      "pos": "noun",
+      "translations": ["mozi"],
+      "categories": ["freizeit", "stadt"],
+      "noun": { "gender": "neuter", "plural": "Kinos" },
+      "is_active": true
+    },
+    {
+      "lemma": "Theater",
+      "pos": "noun",
+      "translations": ["színház"],
+      "categories": ["freizeit", "stadt"],
+      "noun": { "gender": "neuter", "plural": "Theater" },
+      "is_active": true
+    },
+    {
+      "lemma": "Konzert",
+      "pos": "noun",
+      "translations": ["koncert"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "neuter", "plural": "Konzerte" },
+      "is_active": true
+    },
+    {
+      "lemma": "Spiel",
+      "pos": "noun",
+      "translations": ["játék", "mérkőzés"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "neuter", "plural": "Spiele" },
+      "is_active": true
+    },
+    {
+      "lemma": "Party",
+      "pos": "noun",
+      "translations": ["buli"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "feminine", "plural": "Partys" },
+      "is_active": true
+    },
+    {
+      "lemma": "Lied",
+      "pos": "noun",
+      "translations": ["dal"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "neuter", "plural": "Lieder" },
+      "is_active": true
+    },
+    {
+      "lemma": "interessieren",
+      "pos": "verb",
+      "translations": ["érdeklődik"],
+      "categories": ["freizeit"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "interessiert sich",
+        "preterite_3sg": "interessierte sich",
+        "past_participle": "interessiert",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "für",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich interessieren für + Akk.",
+          "meaning": "érdeklődik valami iránt"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "wandern",
+      "pos": "verb",
+      "translations": ["túrázik"],
+      "categories": ["freizeit", "natur"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "sein",
+        "present_3sg": "wandert",
+        "preterite_3sg": "wanderte",
+        "past_participle": "gewandert"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "treffen",
+      "pos": "verb",
+      "translations": ["találkozik"],
+      "categories": ["freizeit", "menschen"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "trifft sich",
+        "preterite_3sg": "traf sich",
+        "past_participle": "getroffen",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "mit",
+          "case": "dative",
+          "reflexive": true,
+          "pattern": "sich treffen mit + Dat.",
+          "meaning": "találkozik valakivel"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "einladen",
+      "pos": "verb",
+      "translations": ["meghív"],
+      "categories": ["freizeit"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "lädt ein",
+        "preterite_3sg": "lud ein",
+        "past_participle": "eingeladen",
+        "separable_prefix": "ein"
+      },
+      "valencies": [{ "preposition": "zu", "case": "dative", "pattern": "einladen zu + Dat.", "meaning": "meghív valamire" }],
+      "is_active": true
+    },
+    {
+      "lemma": "lustig",
+      "pos": "adjective",
+      "translations": ["vicces"],
+      "categories": ["freizeit", "gefuehle"],
+      "adjective": { "comparative": "lustiger", "superlative": "am lustigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Mantel",
+      "pos": "noun",
+      "translations": ["kabát"],
+      "categories": ["kleidung"],
+      "noun": { "gender": "masculine", "plural": "Mäntel" },
+      "is_active": true
+    },
+    {
+      "lemma": "Pullover",
+      "pos": "noun",
+      "translations": ["pulóver"],
+      "categories": ["kleidung"],
+      "noun": { "gender": "masculine", "plural": "Pullover" },
+      "is_active": true
+    },
+    {
+      "lemma": "Größe",
+      "pos": "noun",
+      "translations": ["méret"],
+      "categories": ["kleidung"],
+      "noun": { "gender": "feminine", "plural": "Größen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Geschäft",
+      "pos": "noun",
+      "translations": ["üzlet"],
+      "categories": ["stadt"],
+      "noun": { "gender": "neuter", "plural": "Geschäfte" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kasse",
+      "pos": "noun",
+      "translations": ["pénztár"],
+      "categories": ["stadt"],
+      "noun": { "gender": "feminine", "plural": "Kassen" },
+      "is_active": true
+    },
+    {
+      "lemma": "anziehen",
+      "pos": "verb",
+      "translations": ["felvesz (ruhát)"],
+      "categories": ["kleidung"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "zieht an",
+        "preterite_3sg": "zog an",
+        "past_participle": "angezogen",
+        "separable_prefix": "an"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "tragen",
+      "pos": "verb",
+      "translations": ["visel", "hord"],
+      "categories": ["kleidung"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "trägt",
+        "preterite_3sg": "trug",
+        "past_participle": "getragen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "passen",
+      "pos": "verb",
+      "translations": ["illik, jó (méret)"],
+      "categories": ["kleidung"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "passt",
+        "preterite_3sg": "passte",
+        "past_participle": "gepasst"
+      },
+      "valencies": [{ "preposition": null, "case": "dative", "pattern": "passen + Dat.", "meaning": "jó valakire" }],
+      "is_active": true
+    },
+    {
+      "lemma": "gefallen",
+      "pos": "verb",
+      "translations": ["tetszik"],
+      "categories": ["kleidung", "gefuehle"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "gefällt",
+        "preterite_3sg": "gefiel",
+        "past_participle": "gefallen"
+      },
+      "valencies": [{ "preposition": null, "case": "dative", "pattern": "gefallen + Dat.", "meaning": "tetszik valakinek" }],
+      "examples": [{ "sentence": "Das Kleid gefällt mir.", "translation": "Tetszik nekem a ruha." }],
+      "is_active": true
+    },
+    {
+      "lemma": "modern",
+      "pos": "adjective",
+      "translations": ["modern"],
+      "categories": ["kleidung"],
+      "adjective": { "comparative": "moderner", "superlative": "am modernsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Schnee",
+      "pos": "noun",
+      "translations": ["hó"],
+      "categories": ["wetter"],
+      "noun": { "gender": "masculine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Wind",
+      "pos": "noun",
+      "translations": ["szél"],
+      "categories": ["wetter"],
+      "noun": { "gender": "masculine", "plural": "Winde" },
+      "is_active": true
+    },
+    {
+      "lemma": "Wolke",
+      "pos": "noun",
+      "translations": ["felhő"],
+      "categories": ["wetter"],
+      "noun": { "gender": "feminine", "plural": "Wolken" },
+      "is_active": true
+    },
+    {
+      "lemma": "Gewitter",
+      "pos": "noun",
+      "translations": ["zivatar"],
+      "categories": ["wetter"],
+      "noun": { "gender": "neuter", "plural": "Gewitter" },
+      "is_active": true
+    },
+    {
+      "lemma": "Temperatur",
+      "pos": "noun",
+      "translations": ["hőmérséklet"],
+      "categories": ["wetter"],
+      "noun": { "gender": "feminine", "plural": "Temperaturen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Vogel",
+      "pos": "noun",
+      "translations": ["madár"],
+      "categories": ["tiere"],
+      "noun": { "gender": "masculine", "plural": "Vögel" },
+      "is_active": true
+    },
+    {
+      "lemma": "Pferd",
+      "pos": "noun",
+      "translations": ["ló"],
+      "categories": ["tiere"],
+      "noun": { "gender": "neuter", "plural": "Pferde" },
+      "is_active": true
+    },
+    {
+      "lemma": "Kuh",
+      "pos": "noun",
+      "translations": ["tehén"],
+      "categories": ["tiere"],
+      "noun": { "gender": "feminine", "plural": "Kühe" },
+      "is_active": true
+    },
+    {
+      "lemma": "Baum",
+      "pos": "noun",
+      "translations": ["fa"],
+      "categories": ["natur"],
+      "noun": { "gender": "masculine", "plural": "Bäume" },
+      "is_active": true
+    },
+    {
+      "lemma": "Blume",
+      "pos": "noun",
+      "translations": ["virág"],
+      "categories": ["natur"],
+      "noun": { "gender": "feminine", "plural": "Blumen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Wald",
+      "pos": "noun",
+      "translations": ["erdő"],
+      "categories": ["natur"],
+      "noun": { "gender": "masculine", "plural": "Wälder" },
+      "is_active": true
+    },
+    {
+      "lemma": "Berg",
+      "pos": "noun",
+      "translations": ["hegy"],
+      "categories": ["natur"],
+      "noun": { "gender": "masculine", "plural": "Berge" },
+      "is_active": true
+    },
+    {
+      "lemma": "Fluss",
+      "pos": "noun",
+      "translations": ["folyó"],
+      "categories": ["natur"],
+      "noun": { "gender": "masculine", "plural": "Flüsse" },
+      "is_active": true
+    },
+    {
+      "lemma": "schneien",
+      "pos": "verb",
+      "translations": ["havazik"],
+      "categories": ["wetter"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "schneit",
+        "preterite_3sg": "schneite",
+        "past_participle": "geschneit"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "scheinen",
+      "pos": "verb",
+      "translations": ["süt (a nap)", "látszik"],
+      "categories": ["wetter"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "scheint",
+        "preterite_3sg": "schien",
+        "past_participle": "geschienen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "kühl",
+      "pos": "adjective",
+      "translations": ["hűvös"],
+      "categories": ["wetter"],
+      "adjective": { "comparative": "kühler", "superlative": "am kühlsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "sonnig",
+      "pos": "adjective",
+      "translations": ["napos"],
+      "categories": ["wetter"],
+      "adjective": { "comparative": "sonniger", "superlative": "am sonnigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "nass",
+      "pos": "adjective",
+      "translations": ["nedves"],
+      "categories": ["wetter"],
+      "adjective": { "comparative": "nässer", "superlative": "am nässesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Adresse",
+      "pos": "noun",
+      "translations": ["cím"],
+      "categories": ["kommunikation"],
+      "noun": { "gender": "feminine", "plural": "Adressen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Gespräch",
+      "pos": "noun",
+      "translations": ["beszélgetés"],
+      "categories": ["kommunikation"],
+      "noun": { "gender": "neuter", "plural": "Gespräche" },
+      "is_active": true
+    },
+    {
+      "lemma": "Meinung",
+      "pos": "noun",
+      "translations": ["vélemény"],
+      "categories": ["kommunikation"],
+      "noun": { "gender": "feminine", "plural": "Meinungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "erzählen",
+      "pos": "verb",
+      "translations": ["mesél"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "erzählt",
+        "preterite_3sg": "erzählte",
+        "past_participle": "erzählt"
+      },
+      "valencies": [{ "preposition": "von", "case": "dative", "pattern": "erzählen von + Dat.", "meaning": "mesél valamiről" }],
+      "is_active": true
+    },
+    {
+      "lemma": "erklären",
+      "pos": "verb",
+      "translations": ["elmagyaráz"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "erklärt",
+        "preterite_3sg": "erklärte",
+        "past_participle": "erklärt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "entschuldigen",
+      "pos": "verb",
+      "translations": ["bocsánatot kér"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "entschuldigt sich",
+        "preterite_3sg": "entschuldigte sich",
+        "past_participle": "entschuldigt",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "für",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich entschuldigen für + Akk.",
+          "meaning": "bocsánatot kér valamiért"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "Liebe",
+      "pos": "noun",
+      "translations": ["szerelem, szeretet"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "feminine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Glück",
+      "pos": "noun",
+      "translations": ["szerencse", "boldogság"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "neuter", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Freude",
+      "pos": "noun",
+      "translations": ["öröm"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "feminine", "plural": "Freuden" },
+      "is_active": true
+    },
+    {
+      "lemma": "lachen",
+      "pos": "verb",
+      "translations": ["nevet"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "lacht",
+        "preterite_3sg": "lachte",
+        "past_participle": "gelacht"
+      },
+      "valencies": [{ "preposition": "über", "case": "accusative", "pattern": "lachen über + Akk.", "meaning": "nevet valamin" }],
+      "is_active": true
+    },
+    {
+      "lemma": "weinen",
+      "pos": "verb",
+      "translations": ["sír"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "weint",
+        "preterite_3sg": "weinte",
+        "past_participle": "geweint"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "hoffen",
+      "pos": "verb",
+      "translations": ["remél"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "hofft",
+        "preterite_3sg": "hoffte",
+        "past_participle": "gehofft"
+      },
+      "valencies": [
+        {
+          "preposition": "auf",
+          "case": "accusative",
+          "pattern": "hoffen auf + Akk.",
+          "meaning": "reménykedik valamiben"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "müde",
+      "pos": "adjective",
+      "translations": ["fáradt"],
+      "categories": ["gefuehle", "gesundheit"],
+      "adjective": { "comparative": "müder", "superlative": "am müdesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "nervös",
+      "pos": "adjective",
+      "translations": ["ideges"],
+      "categories": ["gefuehle"],
+      "adjective": { "comparative": "nervöser", "superlative": "am nervösesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "zufrieden",
+      "pos": "adjective",
+      "translations": ["elégedett"],
+      "categories": ["gefuehle"],
+      "adjective": { "comparative": "zufriedener", "superlative": "am zufriedensten" },
+      "valencies": [{ "preposition": "mit", "case": "dative", "pattern": "zufrieden mit + Dat.", "meaning": "elégedett valamivel" }],
+      "is_active": true
+    },
+    {
+      "lemma": "vorbereiten",
+      "pos": "verb",
+      "translations": ["előkészít"],
+      "categories": ["bildung", "arbeit"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "bereitet vor",
+        "preterite_3sg": "bereitete vor",
+        "past_participle": "vorbereitet",
+        "separable_prefix": "vor"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "bekommen",
+      "pos": "verb",
+      "translations": ["kap"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "bekommt",
+        "preterite_3sg": "bekam",
+        "past_participle": "bekommen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "verlieren",
+      "pos": "verb",
+      "translations": ["elveszít"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "verliert",
+        "preterite_3sg": "verlor",
+        "past_participle": "verloren"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "gewinnen",
+      "pos": "verb",
+      "translations": ["nyer"],
+      "categories": ["freizeit"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "gewinnt",
+        "preterite_3sg": "gewann",
+        "past_participle": "gewonnen"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "danken",
+      "pos": "verb",
+      "translations": ["megköszön"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "dankt",
+        "preterite_3sg": "dankte",
+        "past_participle": "gedankt"
+      },
+      "valencies": [{ "preposition": null, "case": "dative", "pattern": "danken + Dat.", "meaning": "megköszön valakinek" }],
+      "is_active": true
+    },
+    {
+      "lemma": "gehören",
+      "pos": "verb",
+      "translations": ["tartozik valakihez"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "gehört",
+        "preterite_3sg": "gehörte",
+        "past_participle": "gehört"
+      },
+      "valencies": [{ "preposition": null, "case": "dative", "pattern": "gehören + Dat.", "meaning": "valakié" }],
+      "is_active": true
+    },
+    {
+      "lemma": "benutzen",
+      "pos": "verb",
+      "translations": ["használ"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "benutzt",
+        "preterite_3sg": "benutzte",
+        "past_participle": "benutzt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "entscheiden",
+      "pos": "verb",
+      "translations": ["dönt"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "entscheidet",
+        "preterite_3sg": "entschied",
+        "past_participle": "entschieden"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "versuchen",
+      "pos": "verb",
+      "translations": ["megpróbál"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "versucht",
+        "preterite_3sg": "versuchte",
+        "past_participle": "versucht"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "passieren",
+      "pos": "verb",
+      "translations": ["történik"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "sein",
+        "present_3sg": "passiert",
+        "preterite_3sg": "passierte",
+        "past_participle": "passiert"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "sterben",
+      "pos": "verb",
+      "translations": ["meghal"],
+      "categories": ["menschen"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "sein",
+        "present_3sg": "stirbt",
+        "preterite_3sg": "starb",
+        "past_participle": "gestorben"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "hoch",
+      "pos": "adjective",
+      "translations": ["magas"],
+      "categories": ["grundwortschatz"],
+      "adjective": { "comparative": "höher", "superlative": "am höchsten", "irregular_comparison": true },
+      "is_active": true
+    },
+    {
+      "lemma": "möglich",
+      "pos": "adjective",
+      "translations": ["lehetséges"],
+      "categories": ["grundwortschatz"],
+      "adjective": {  },
+      "is_active": true
+    },
+    {
+      "lemma": "ähnlich",
+      "pos": "adjective",
+      "translations": ["hasonló"],
+      "categories": ["grundwortschatz"],
+      "adjective": { "comparative": "ähnlicher", "superlative": "am ähnlichsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "freundlich",
+      "pos": "adjective",
+      "translations": ["barátságos"],
+      "categories": ["menschen"],
+      "adjective": { "comparative": "freundlicher", "superlative": "am freundlichsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "höflich",
+      "pos": "adjective",
+      "translations": ["udvarias"],
+      "categories": ["menschen"],
+      "adjective": { "comparative": "höflicher", "superlative": "am höflichsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "ruhig",
+      "pos": "adjective",
+      "translations": ["nyugodt, csendes"],
+      "categories": ["grundwortschatz"],
+      "adjective": { "comparative": "ruhiger", "superlative": "am ruhigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "laut",
+      "pos": "adjective",
+      "translations": ["hangos"],
+      "categories": ["grundwortschatz"],
+      "adjective": { "comparative": "lauter", "superlative": "am lautesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "ledig",
+      "pos": "adjective",
+      "translations": ["nőtlen, hajadon"],
+      "categories": ["familie"],
+      "adjective": {  },
+      "is_active": true
+    },
+    {
+      "lemma": "wegen",
+      "pos": "preposition",
+      "translations": ["miatt"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "während",
+      "pos": "preposition",
+      "translations": ["alatt, közben"],
+      "categories": ["grundwortschatz", "zeit"],
+      "is_active": true
+    },
+    {
+      "lemma": "dass",
+      "pos": "conjunction",
+      "translations": ["hogy"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "wenn",
+      "pos": "conjunction",
+      "translations": ["ha", "amikor"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "obwohl",
+      "pos": "conjunction",
+      "translations": ["habár, bár"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "leider",
+      "pos": "adverb",
+      "translations": ["sajnos"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "zusammen",
+      "pos": "adverb",
+      "translations": ["együtt"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "Viel Glück!",
+      "pos": "phrase",
+      "translations": ["sok szerencsét!"],
+      "categories": ["kommunikation"],
+      "is_active": true
+    }
+  ]
+}

@@ -17,7 +17,7 @@ interface PullBody {
     state: string;
     totalReviews: number;
     isSuspended: boolean;
-    deletedAt: string | null;
+    isActive: boolean;
     updatedAt: string;
   }[];
   words: { id: string; lemma: string; version: number; translations: { text: string }[] }[];
@@ -140,7 +140,7 @@ describe('Szinkronizáció (integráció)', () => {
       const { cursor } = await pullAll();
       await push({ cardChanges: [{ progressId, baseVersion: 1, changedAt: iso(Date.now()), deleted: true }] }).expect(200);
       const page = await pull(cursor);
-      expect(page.progress.find((p) => p.id === progressId)?.deletedAt).not.toBeNull();
+      expect(page.progress.find((p) => p.id === progressId)?.isActive).toBe(false);
     });
 
     it('érvénytelen kurzor → 400', async () => {
@@ -384,9 +384,9 @@ describe('Szinkronizáció (integráció)', () => {
     it('törlés és visszaállítás', async () => {
       await change(1, Date.now(), true);
       await push({ cardChanges: [{ progressId, baseVersion: 2, changedAt: iso(Date.now()), deleted: true }] }).expect(200);
-      expect((await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } })).deletedAt).not.toBeNull();
+      expect((await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } })).isActive).toBe(false);
       await push({ cardChanges: [{ progressId, baseVersion: 3, changedAt: iso(Date.now()), deleted: false }] }).expect(200);
-      expect((await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } })).deletedAt).toBeNull();
+      expect((await t.prisma.userProgress.findUniqueOrThrow({ where: { id: progressId } })).isActive).toBe(true);
     });
   });
 

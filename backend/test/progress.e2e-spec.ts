@@ -61,11 +61,11 @@ describe('Tanulási haladás (integráció)', () => {
       await enroll(['Tisch']);
       const id = await cardId('Tisch');
       await submit(id, { grade: 4 }).expect(200);
-      await t.prisma.userProgress.update({ where: { id }, data: { deletedAt: new Date() } });
+      await t.prisma.userProgress.update({ where: { id }, data: { isActive: false } });
 
       expect(await enroll(['Tisch'])).toMatchObject({ created: 0, restored: 1 });
       const restored = await t.prisma.userProgress.findUniqueOrThrow({ where: { id } });
-      expect(restored).toMatchObject({ deletedAt: null, totalReviews: 1 });
+      expect(restored).toMatchObject({ isActive: true, totalReviews: 1 });
     });
   });
 

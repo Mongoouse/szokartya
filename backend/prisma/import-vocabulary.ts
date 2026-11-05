@@ -1,32 +1,35 @@
 /**
- * Szólista importálása a központi szótárba (a `data/wortschatz.txt`
- * formátumában). Idempotens: a már meglévő szavakat frissíti.
+ * Saját szólista importálása a központi szótárba, a `data/vocabulary/<nyelv>/<szint>.json`
+ * fájlok formátumában (lásd `vocabulary-json.ts`). Idempotens: a már meglévő
+ * szavakat frissíti.
  *
- *   npx tsx prisma/import-vocabulary.ts <fájl> [--dry-run]
+ *   npx tsx prisma/import-vocabulary.ts <fájl.json> [további fájlok…] [--dry-run]
  *
- * A kategóriáknak már létezniük kell (seed); a sorok formátumhibáit
- * sorszámmal jelzi, és ilyenkor semmit nem ír.
+ * A kategóriáknak már létezniük kell (seed). Formátumhiba esetén az összes
+ * hibát kiírja, és semmit nem ír.
  */
-import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { seedWord } from './seed-writer';
-import { parseVocabulary } from './vocabulary';
+import { loadWordFiles } from './vocabulary-json';
 
 async function main(): Promise<void> {
-  const [file, ...flags] = process.argv.slice(2);
-  if (!file) {
-    console.error('Használat: npx tsx prisma/import-vocabulary.ts <fájl> [--dry-run]');
+  const args = process.argv.slice(2);
+  const files = args.filter((a) => !a.startsWith('--')).map((f) => resolve(f));
+  if (files.length === 0) {
+    console.error('Használat: npx tsx prisma/import-vocabulary.ts <fájl.json> [további fájlok…] [--dry-run]');
     process.exitCode = 2;
     return;
   }
-  const words = parseVocabulary(readFileSync(file, 'utf8'));
-  console.log(`${words.length} szó beolvasva (${file}).`);
-  if (flags.includes('--dry-run')) return;
 
   const prisma = new PrismaClient();
   try {
     const categories = await prisma.category.findMany({ select: { id: true, slug: true } });
     const ids = new Map(categories.map((c) => [c.slug, c.id]));
+    const words = loadWordFiles(files, ids.keys(), process.cwd());
+    console.log(`${words.length} szó beolvasva (${files.length} fájl).`);
+    if (args.includes('--dry-run')) return;
+
     let skipped = 0;
     for (const w of words) {
       if (!(await seedWord(prisma, w, ids))) skipped++;

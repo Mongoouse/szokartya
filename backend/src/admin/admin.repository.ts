@@ -28,7 +28,7 @@ export interface AdminWordFilter {
 }
 
 /** Csak a központi (kurált) szótár ellenőrizhető; a saját szavak a felhasználóé. */
-const CENTRAL = { ownerId: null, deletedAt: null } as const;
+const CENTRAL = { ownerId: null, isActive: true } as const;
 
 @Injectable()
 export class AdminRepository {
@@ -88,12 +88,12 @@ export class AdminRepository {
     // egyedi index különben a csere közben sérülne.
     await db.translation.updateMany({ where: { wordId, language: 'hu', isPrimary: true }, data: { isPrimary: false } });
     const keep = new Set(texts);
-    const toDelete = existing.filter((t) => !keep.has(t.text) && t.deletedAt === null).map((t) => t.id);
+    const toDelete = existing.filter((t) => !keep.has(t.text) && t.isActive).map((t) => t.id);
     if (toDelete.length > 0) {
-      await db.translation.updateMany({ where: { id: { in: toDelete } }, data: { deletedAt: now } });
+      await db.translation.updateMany({ where: { id: { in: toDelete } }, data: { isActive: false } });
     }
     for (const [i, text] of texts.entries()) {
-      const fields = { isPrimary: i === 0, sortOrder: i, deletedAt: null };
+      const fields = { isPrimary: i === 0, sortOrder: i, isActive: true };
       await db.translation.upsert({
         where: { wordId_language_text: { wordId, language: 'hu', text } },
         update: fields,
@@ -112,7 +112,7 @@ export class AdminRepository {
       and.push({
         OR: [
           { lemma: { contains: q, mode: 'insensitive' } },
-          { translations: { some: { deletedAt: null, text: { contains: q, mode: 'insensitive' } } } },
+          { translations: { some: { isActive: true, text: { contains: q, mode: 'insensitive' } } } },
         ],
       });
     }

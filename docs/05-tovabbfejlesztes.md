@@ -4,10 +4,10 @@ A Fázis 4 utáni fejlesztési javaslatok megvalósítása: bővebb szókincs, �
 
 ## 1. Szókincs és importálás
 
-- `backend/prisma/data/wortschatz.txt`: ~450 szó A1–B1 szinten, 21 tematikus kategóriában, soronként egy szó tömör formátumban (a fájl fejléce írja le). Főnévnél névelő és többes szám, igénél jelen idő / Präteritum / segédige + Partizip II és vonzat, melléknévnél fokozás.
-- `prisma/vocabulary.ts` – tiszta függvényes feldolgozó, hibás sornál a sorszámmal együtt jelez (egységtesztek: `vocabulary.spec.ts`).
+- `backend/prisma/data/vocabulary/`: a szókincs JSON fájlokban, nyelvenként és CEFR szintenként (`de/a1.json` … `de/b2.json`) és a kategóriák (`categories.json`). A formátumot a `docs/01-adatbazis-terv.md` 7. fejezete írja le.
+- `prisma/vocabulary-json.ts` – a formátum beolvasója és ellenőrzője; az összes hibát egyszerre jelzi a fájllal és a szó helyével (egységtesztek: `vocabulary-json.spec.ts`).
 - `prisma/seed-writer.ts` – a seed és az importáló közös, idempotens írója (UUID v5 a természetes kulcsból, egy szó egy tranzakció).
-- Saját lista importálása: `npm run db:import -- <fájl> [--dry-run]`.
+- Saját lista importálása ugyanebben a formátumban: `npm run db:import -- <fájl.json> [további fájlok…] [--dry-run]`.
 
 ## 2. Új kártyatípusok
 

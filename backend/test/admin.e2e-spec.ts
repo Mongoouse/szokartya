@@ -6,7 +6,7 @@ const API = '/api/v1';
 interface PullWord {
   id: string;
   version: number;
-  deletedAt: string | null;
+  isActive: boolean;
   reviewStatus: string | null;
   translations: { text: string; isPrimary: boolean }[];
 }
@@ -29,7 +29,7 @@ describe('Hibabejelentés és adminisztráció (integráció)', () => {
     originalTranslations = new Map();
     for (const lemma of LEMMAS) {
       const id = await wordId(t.prisma, lemma);
-      const rows = await t.prisma.translation.findMany({ where: { wordId: id, deletedAt: null }, orderBy: { sortOrder: 'asc' } });
+      const rows = await t.prisma.translation.findMany({ where: { wordId: id, isActive: true }, orderBy: { sortOrder: 'asc' } });
       originalTranslations.set(
         id,
         rows.map((r) => ({ text: r.text, isPrimary: r.isPrimary, sortOrder: r.sortOrder })),
@@ -264,7 +264,7 @@ describe('Hibabejelentés és adminisztráció (integráció)', () => {
       await t.http.patch(`${API}/admin/words/${leute}`).set(admin.auth).send({ reviewStatus: 'REJECTED' }).expect(200);
 
       const after = await pull(user, before.cursor);
-      expect(after.words.find((w) => w.id === leute)).toMatchObject({ deletedAt: expect.any(String) });
+      expect(after.words.find((w) => w.id === leute)).toMatchObject({ isActive: false });
       await t.http.get(`${API}/words/${leute}`).set(user.auth).expect(404);
       queue = (await t.http.get(`${API}/study/queue`).set(user.auth).expect(200)).body;
       expect(queue.newCards.map((c: { word: { lemma: string } }) => c.word.lemma)).not.toContain('Leute');
@@ -275,7 +275,7 @@ describe('Hibabejelentés és adminisztráció (integráció)', () => {
       // Az admin továbbra is látja és visszaállíthatja; a tanulási előzmény megmaradt.
       await t.http.patch(`${API}/admin/words/${leute}`).set(admin.auth).send({ reviewStatus: 'VERIFIED' }).expect(200);
       const restored = await pull(user, after.cursor);
-      expect(restored.words.find((w) => w.id === leute)).toMatchObject({ deletedAt: null, reviewStatus: 'VERIFIED' });
+      expect(restored.words.find((w) => w.id === leute)).toMatchObject({ isActive: true, reviewStatus: 'VERIFIED' });
       queue = (await t.http.get(`${API}/study/queue`).set(user.auth).expect(200)).body;
       expect(queue.newCards.map((c: { word: { lemma: string } }) => c.word.lemma)).toContain('Leute');
     });

@@ -9,7 +9,7 @@
 //   * Időbélyegek: timestamptz(3). Az `updated_at` mezőt DB-trigger tartja
 //     karban (lásd 2. migráció), így a nyers SQL-ből érkező módosítások is
 //     helyes szinkron-időbélyeget kapnak.
-//   * Szinkronizált táblák: `deleted_at` (soft delete / tombstone) és `version`
+//   * Szinkronizált táblák: `is_active` (soft delete / tombstone) és `version`
 //     (optimista konkurenciakezelés, triggerrel növelve).
 //
 // A Prisma séma nyelvén NEM kifejezhető objektumok (CHECK kényszerek, részleges
@@ -196,7 +196,8 @@ model User {
   role               UserRole    @default(USER)
   createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt          DateTime?   @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive           Boolean     @default(true) @map("is_active")
 
   refreshTokens RefreshToken[]
   ownedWords    Word[]         @relation("WordOwner")
@@ -269,7 +270,8 @@ model Word {
   version       Int          @default(1)
   createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt     DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt     DateTime?    @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive      Boolean      @default(true) @map("is_active")
 
   owner               User?                @relation("WordOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   reviewedBy          User?                @relation("WordReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
@@ -384,7 +386,8 @@ model Valency {
   version      Int             @default(1)
   createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt    DateTime?       @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive     Boolean         @default(true) @map("is_active")
 
   word     Word              @relation(fields: [wordId], references: [id], onDelete: Cascade)
   examples ExampleSentence[]
@@ -410,12 +413,13 @@ model Translation {
   version   Int       @default(1)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive  Boolean   @default(true) @map("is_active")
 
   word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
 
   @@unique([wordId, language, text])
-  // [SQL] részleges UNIQUE: (word_id, language) WHERE is_primary AND deleted_at IS NULL.
+  // [SQL] részleges UNIQUE: (word_id, language) WHERE is_primary AND is_active.
   /// Magyar → német keresés trigram GIN indexszel.
   @@index([text(ops: raw("gin_trgm_ops"))], map: "translations_text_trgm_idx", type: Gin)
   @@map("translations")
@@ -435,7 +439,8 @@ model ExampleSentence {
   version     Int        @default(1)
   createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt   DateTime?  @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive    Boolean    @default(true) @map("is_active")
 
   word    Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
   valency Valency? @relation(fields: [valencyId], references: [id], onDelete: SetNull)
@@ -526,7 +531,8 @@ model UserProgress {
   version   Int       @default(1)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+  /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
+  isActive  Boolean   @default(true) @map("is_active")
 
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   word       Word        @relation(fields: [wordId], references: [id], onDelete: Cascade)
@@ -537,9 +543,9 @@ model UserProgress {
   @@index([userId, updatedAt])
   @@index([wordId])
   // [SQL] részleges index – ESEDÉKES kártyák:
-  //       (user_id, next_review_at) WHERE state <> 'NEW' AND NOT is_suspended AND deleted_at IS NULL
+  //       (user_id, next_review_at) WHERE state <> 'NEW' AND NOT is_suspended AND is_active
   // [SQL] részleges index – ÚJ kártyák:
-  //       (user_id, created_at) WHERE state = 'NEW' AND NOT is_suspended AND deleted_at IS NULL
+  //       (user_id, created_at) WHERE state = 'NEW' AND NOT is_suspended AND is_active
   // [SQL] CHECK: ease_factor BETWEEN 1.30 AND 5.00; nemnegatív számlálók;
   //       correct_reviews <= total_reviews; state = 'NEW' <=> next_review_at IS NULL.
   @@map("user_progress")

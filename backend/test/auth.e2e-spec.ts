@@ -74,7 +74,7 @@ describe('Hitelesítés (integráció)', () => {
 
     it('törölt (soft delete) fiókkal nem lehet belépni', async () => {
       const u = await registerUser(t.http);
-      await t.prisma.user.update({ where: { id: u.id }, data: { deletedAt: new Date() } });
+      await t.prisma.user.update({ where: { id: u.id }, data: { isActive: false } });
       await t.http.post(`${API}/auth/login`).send({ email: u.email, password: PASSWORD }).expect(401);
     });
 
@@ -196,7 +196,7 @@ describe('Hitelesítés (integráció)', () => {
 
     it('törölt fiók tokenje nem frissíthető', async () => {
       const u = await registerUser(t.http);
-      await t.prisma.user.update({ where: { id: u.id }, data: { deletedAt: new Date() } });
+      await t.prisma.user.update({ where: { id: u.id }, data: { isActive: false } });
       await t.http.post(`${API}/auth/refresh`).send({ refreshToken: u.refreshToken }).expect(401);
     });
   });

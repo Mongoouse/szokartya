@@ -151,8 +151,8 @@ A szófaji konzisztenciát **deklaratív** szabály biztosítja trigger nélkül
 - `ease_factor` `numeric(4,2)`: pontos decimális tárolás, nincs lebegőpontos sodródás az ismételt szorzások során.
 
 ### D7 – Szinkronizációs oszlopok és triggerek
-A kliens által is módosítható táblákon `updated_at`, `version`, `deleted_at`:
-- **`deleted_at` (soft delete)** – a törlés tombstone-ként szinkronizálható; fizikai törlésnél a többi eszköz nem tudna róla.
+A kliens által is módosítható táblákon `updated_at`, `version`, `is_active`:
+- **`is_active` (logikai törlés)** – törléskor a sor megmarad, csak `false` lesz; a törlés tombstone-ként szinkronizálható (fizikai törlésnél a többi eszköz nem tudna róla), és a sorra hivatkozó napló és statisztika ép marad. A törlés időpontját az `updated_at` mutatja. (Korábban `deleted_at` időbélyeg volt; a `20261105000000_is_active` migráció alakította át, a már törölt sorok verziójának léptetése nélkül.)
 - **`updated_at`** – a „mi változott X óta” (pull) lekérdezés alapja. DB-trigger állítja **szerveridőre**, a kliens vagy a Prisma által küldött értéket felülírja (az eszközök órája nem megbízható).
 - **`version`** – optimista konkurenciakezelés: `UPDATE … WHERE id = $1 AND version = $2`; a trigger lépteti.
 - Valódi adatváltozás nélküli UPDATE egyiket sem lépteti (a seed ismételt futtatása `version = 1`-en hagyja a sorokat), így nincs fölösleges szinkronforgalom.
@@ -169,7 +169,7 @@ Minden doménszabály, ami egy soron belül eldönthető, CHECK kényszer (form�
 
 | Index | Lekérdezés | Indoklás |
 |---|---|---|
-| `user_progress_due_idx` **(részleges)** `(user_id, next_review_at) WHERE state <> 'NEW' AND NOT is_suspended AND deleted_at IS NULL` | napi esedékes kártyák: `WHERE user_id = $1 AND next_review_at <= $2 … ORDER BY next_review_at LIMIT n` | A leggyakoribb lekérdezés. Egyetlen index range scan, **külön rendezés nélkül** (a `verify` szkript EXPLAIN-nel ellenőrzi). A részleges feltétel miatt az index csak aktívan ütemezett kártyákat tartalmaz → kisebb, melegebb a cache-ben. |
+| `user_progress_due_idx` **(részleges)** `(user_id, next_review_at) WHERE state <> 'NEW' AND NOT is_suspended AND is_active` | napi esedékes kártyák: `WHERE user_id = $1 AND next_review_at <= $2 … ORDER BY next_review_at LIMIT n` | A leggyakoribb lekérdezés. Egyetlen index range scan, **külön rendezés nélkül** (a `verify` szkript EXPLAIN-nel ellenőrzi). A részleges feltétel miatt az index csak aktívan ütemezett kártyákat tartalmaz → kisebb, melegebb a cache-ben. |
 | `user_progress_new_idx` **(részleges)** `(user_id, created_at) WHERE state = 'NEW' …` | napi új kártya keret feltöltése | Az új kártyák kizárólag ebből jönnek; a due indextől elválasztva egyik sem tartalmaz felesleges sort. |
 | `user_progress (user_id, word_id, card_type)` UNIQUE | kártya keresése / upsert | Üzleti egyediség + a `user_id` FK indexe. |
 | `user_progress (user_id, updated_at)` | szinkron pull | Időbélyeg alapú változáslekérés. |
@@ -206,10 +206,49 @@ npm run db:verify                            # kényszerek, triggerek, EXPLAIN �
 
 A `db:verify` 17 állítást ellenőriz, köztük: igei attribútum nem köthető főnévhez; elöljárós vonzat nem lehet alanyeset; nincs duplikált lemma a központi szótárban; `ease_factor ≥ 1.30`; `grade ∈ [0, 5]`; a `review_logs` nem módosítható; a no-op UPDATE nem lépteti a verziót; az esedékes-kártya lekérdezés a részleges indexet használja.
 
-## 7. B2 szókincs (seed)
+## 7. Szókincs (seed) – JSON formátum
 
-A seed három forrásból tölti a központi szótárt: a `seed.ts` sémamintái, az A1–B1 szólista (`prisma/data/wortschatz.txt`, lásd `docs/05-tovabbfejlesztes.md`) és a B2 szókincs (`prisma/vocab/b2/`).
+A központi szótár forrása a `backend/prisma/data/vocabulary/` mappa JSON fájljai; a `seed.ts` ezekből tölti fel az adatbázist (idempotensen, az admin által ellenőrzött szavakat nem írja felül).
 
-A B2 készlet 1558 szó 11 új és 7 meglévő tematikus kategóriában, plusz a `b2-wortschatz` gyűjtőkategóriában: főnevek névelővel, többes számmal és birtokos esettel (és ahol jellemző, elöljárós vonzattal); igék alapalakokkal, segédigével, elváló igekötővel, visszaható típussal és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók. Az A1–B1 listában már szereplő szavak itt nem ismétlődnek.
+```
+data/vocabulary/
+  categories.json      kategóriák (slug, name_hu, name_de, parent); a szülő a gyermekei előtt
+  de/a1.json           237 szó   ─┐
+  de/a2.json           177 szó    │ egy nyelv egy CEFR szintje:
+  de/b1.json            57 szó    │ { "language": "de", "level": "A1", "words": [...] }
+  de/b2.json          1558 szó   ─┘
+```
 
-A B2 lista saját tömör formátumot használ (`vocab/dsl.ts`), mert a vonzatot főnévnél és melléknévnél is, a birtokos esetet főnévnél is tárolja; az értelmező minden sort szigorúan ellenőriz (pl. az elváló igekötőnek a lemma elejének kell lennie, nincs ismétlődő vonzat), a szabályos alakokat (birtokos eset, fokozás) szabályból képzi, a kivételeket a sor adja meg. A `prisma/vocab/vocab.spec.ts` egységteszt adatbázis nélkül ellenőrzi a teljes készletet: darabszám, kategóriák, névelő és többes szám megléte, ütközés az A1–B1 listával, oszlopméretek.
+Egy szó:
+
+```json
+{
+  "lemma": "Straße",
+  "pos": "noun",
+  "translations": ["utca", { "text": "út", "note": "városban" }],
+  "categories": ["stadt"],
+  "noun": { "gender": "feminine", "plural": "Straßen", "genitive": "Straße" },
+  "valencies": [],
+  "examples": [{ "sentence": "Die Straße ist breit.", "translation": "Az utca széles." }],
+  "audio_url": "audio/de/strasse.mp3",
+  "is_active": true
+}
+```
+
+| Mező | Jelentés |
+|---|---|
+| `lemma`, `pos`, `homograph` | szótári alak, szófaj, azonos alakú szavak sorszáma (alapértelmezés 1) – együtt a szó természetes kulcsa |
+| `translations` | magyar jelentések, az első az elsődleges; jelentésárnyalattal `{ "text", "note" }` |
+| `categories` | kategória-slugok (`categories.json`) |
+| `noun` / `verb` / `adjective` | a szófaj nyelvtani adatai: nem, többes szám, birtokos eset, n-deklináció; ragozási típus, segédige, alapalakok, elváló igekötő, visszahatóság; fokozás, állítmányi használat |
+| `valencies` | vonzatok: elöljáró (vagy `null`), eset, minta, jelentés, példamondatok |
+| `examples`, `ipa`, `frequency_rank`, `audio_url` | példamondatok, kiejtés, gyakorisági rang, hangfájl |
+| `is_active` | `false` = logikailag törölt szó (a seed is így írja be) |
+
+**Miért JSON.** A formátum szerkezetében követi az adatmodellt: a szófajfüggő nyelvtani adatok külön objektumban vannak, így egy újabb nyelv a saját mezőivel bővítheti anélkül, hogy a meglévőket érintené, és új szómező (pl. hanganyag) sem igényel új formátumot. A nyelv és a szint a fájl fejlécében van, így a fájlok nyelvenként és szintenként rendeződnek. A fájlokat a `vocabulary-json.ts` kanonikus alakban írja (a szó mezői soronként, a rövid tömbök egy sorban), így a verziókezelésben egy szó módosítása kis, olvasható különbség.
+
+**Ellenőrzés.** A `vocabulary-json.ts` beolvasója szigorú: ismeretlen (elgépelt) mező, hiányzó kötelező mező, érvénytelen felsorolt érték és az adatbázis CHECK kényszereibe ütköző kombináció (pl. csak többes számú főnévnek nincs neme, elöljárós vonzat nem lehet alanyeset, ismétlődő vonzat, az elváló igekötő nem a lemma eleje) mind hiba. Az összes hibát egyszerre jelzi, fájllal és a szó helyével (`de/a1.json › words[12] „Tisch” › noun: hiányzik: „plural”`), és ilyenkor semmit nem ír az adatbázisba. A `vocabulary-json.spec.ts` egységteszt adatbázis nélkül ellenőrzi a formátumot és a teljes mellékelt készletet (ismétlődés, kategóriák, kanonikus formázás, oda-vissza alakítás).
+
+A JSON fájlokat a korábbi forrásokból (a `seed.ts` sémamintái, a tömör szöveges A1–B1 lista és a B2 lista) generáltuk; az átalakítás veszteségmentességét szavanként ellenőriztük (mind a 2029 szó adatbázisba írt értékei azonosak).
+
+A B2 készlet 1558 szó 11 új és 7 meglévő tematikus kategóriában, plusz a `b2-wortschatz` gyűjtőkategóriában: főnevek névelővel, többes számmal és birtokos esettel (és ahol jellemző, elöljárós vonzattal); igék alapalakokkal, segédigével, elváló igekötővel, visszaható típussal és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók.

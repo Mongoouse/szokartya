@@ -17,11 +17,11 @@ export class UsersRepository {
 
   findActiveByEmail(email: string, db: DbClient = this.prisma): Promise<User | null> {
     // Az e-mail oszlop citext, így az összehasonlítás kis-/nagybetű-független.
-    return db.user.findFirst({ where: { email, deletedAt: null } });
+    return db.user.findFirst({ where: { email, isActive: true } });
   }
 
   findActiveById(id: string, db: DbClient = this.prisma): Promise<User | null> {
-    return db.user.findFirst({ where: { id, deletedAt: null } });
+    return db.user.findFirst({ where: { id, isActive: true } });
   }
 
   create(data: CreateUserData, db: DbClient = this.prisma): Promise<User> {
@@ -51,7 +51,7 @@ export class UsersRepository {
   async exportData(userId: string) {
     const [customWords, cards, reviewLogs, reports] = await this.prisma.$transaction([
       this.prisma.word.findMany({
-        where: { ownerId: userId, deletedAt: null },
+        where: { ownerId: userId, isActive: true },
         include: WORD_DETAIL_INCLUDE,
         orderBy: { createdAt: 'asc' },
       }),

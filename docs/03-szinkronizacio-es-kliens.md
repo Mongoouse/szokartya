@@ -37,7 +37,7 @@ A push tartalmazza a kliens aktuális óráját (`clientTime`). A szerver kiszá
 
 ### Pull – `GET /sync/pull?cursor=…&limit=…`
 - Három folyam: `progress` (kártyák), `words` (szavak), `reviewLogs` (napló); mindegyik **keyset lapozással** `(updated_at, id)` szerint – nincs kihagyott vagy ismételt sor lapozás közben.
-- Törölt tételek **tombstone**-ként jönnek (`deletedAt`), így más eszközön is törlődnek.
+- Törölt tételek **tombstone**-ként jönnek (`isActive: false`), így más eszközön is törlődnek.
 - A kurzor átlátszatlan; `hasMore = true` esetén azonnal újra kell hívni.
 - **Átfedő ablak:** egy teljesen lefutott pull után a következő 10 másodperccel korábbról indul, mert a PostgreSQL `now()` a tranzakció *kezdete*: egy hosszabb tranzakció a kurzornál korábbi időbélyeggel véglegesedhet. Az ismétlődő sorokat a kliens a `version` alapján szűri.
 - Szavak: a gyermektáblák (fordítás, vonzat, példamondat, attribútumok, kategóriák) változása a 3. migráció triggerével **a szülő szó verzióját is lépteti**, így a pull észreveszi. Változás nélküli UPDATE (pl. ismételt seed) nem léptet.

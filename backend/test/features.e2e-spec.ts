@@ -9,7 +9,7 @@ interface PullWord {
   lemma: string;
   cefrLevel: string | null;
   isCustom: boolean;
-  deletedAt: string | null;
+  isActive: boolean;
 }
 
 /**
@@ -105,7 +105,7 @@ describe('Továbbfejlesztett funkciók (integráció)', () => {
       await t.http.get(`${API}/words/${id}`).set(user.auth).expect(404);
       // A törlés tombstone-ként szinkronizálódik.
       const pulled = (await pullAllWords()).find((w) => w.id === id);
-      expect(pulled?.deletedAt).not.toBeNull();
+      expect(pulled?.isActive).toBe(false);
     });
 
     it('azonos alakú saját szó új homográf-sorszámot kap; szófajhoz nem illő mező 400', async () => {

@@ -172,7 +172,7 @@ export class SyncService {
 
     const existing = await this.repo.findCardByNaturalKey(userId, e.wordId, e.cardType);
     if (existing) {
-      if (existing.deletedAt) {
+      if (!existing.isActive) {
         await this.repo.restoreCard(existing.id);
       }
       return { progressId: e.progressId, status: EnrollmentStatus.EXISTS, serverProgressId: existing.id };
@@ -217,7 +217,7 @@ export class SyncService {
     if (!clientWins) {
       return result(ChangeStatus.CONFLICT, 'server_newer');
     }
-    const data: { isSuspended?: boolean; deletedAt?: Date | null; flagsChangedAt: Date } = {
+    const data: { isSuspended?: boolean; isActive?: boolean; flagsChangedAt: Date } = {
       // Verzióegyezésnél is a későbbi időpont marad meg (sorrenden kívüli feltöltés).
       flagsChangedAt: card.flagsChangedAt && card.flagsChangedAt > changedAt ? card.flagsChangedAt : changedAt,
     };
@@ -225,7 +225,7 @@ export class SyncService {
       data.isSuspended = c.isSuspended;
     }
     if (c.deleted !== undefined) {
-      data.deletedAt = c.deleted ? changedAt : null;
+      data.isActive = !c.deleted;
     }
     const applied = await this.repo.updateCardIfVersion(card.id, card.version, data);
     return applied ? result(ChangeStatus.APPLIED) : result(ChangeStatus.CONFLICT, 'concurrent_update');

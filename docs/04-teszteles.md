@@ -79,7 +79,7 @@ Időzóna (`time-zone.spec.ts`): normál nap, helyi/UTC napváltás eltérése, 
 | Kártyák lapozása **azonos `updated_at`-tel** | id szerinti holtverseny-bontás: nincs kihagyás / ismétlés |
 | Inkrementális pull | csak a változás; az átfedő ablak ismétlései azonos verzióval |
 | Gyermekrekord (fordítás) változása | a szó újra lejön, nagyobb verzióval |
-| Törlés | tombstone (`deletedAt`) |
+| Törlés | tombstone (`isActive: false`) |
 | Időrenden kívül érkező értékelések | időrendben alkalmazva (NEW → LEARNING → REVIEW) |
 | Teljes köteg ismételt küldése | `exists` / `duplicate`, az állapot változatlan |
 | Két eszköz ugyanazt veszi fel offline | 1 kártya; B megkapja a szerver azonosítóját; mindkét értékelés megmarad, eszközazonosítóval |
