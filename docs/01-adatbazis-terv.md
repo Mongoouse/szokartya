@@ -216,7 +216,8 @@ data/vocabulary/
   de/a1.json           237 szó   ─┐
   de/a2.json           177 szó    │ egy nyelv egy CEFR szintje:
   de/b1.json            57 szó    │ { "language": "de", "level": "A1", "words": [...] }
-  de/b2.json          1558 szó   ─┘
+  de/b2.json          1558 szó    │
+  de/c1.json          1480 szó   ─┘
 ```
 
 Egy szó:
@@ -252,3 +253,5 @@ Egy szó:
 A JSON fájlokat a korábbi forrásokból (a `seed.ts` sémamintái, a tömör szöveges A1–B1 lista és a B2 lista) generáltuk; az átalakítás veszteségmentességét szavanként ellenőriztük (mind a 2029 szó adatbázisba írt értékei azonosak).
 
 A B2 készlet 1558 szó 11 új és 7 meglévő tematikus kategóriában, plusz a `b2-wortschatz` gyűjtőkategóriában: főnevek névelővel, többes számmal és birtokos esettel (és ahol jellemző, elöljárós vonzattal); igék alapalakokkal, segédigével, elváló igekötővel, visszaható típussal és vonzattal; melléknevek fokozással és vonzattal; főnév-ige kapcsolatok; elöljárók esetvonzattal; kötő- és határozószók.
+
+A C1 készlet 1480 szó ugyanebben a szerkezetben, a `c1-wortschatz` gyűjtőkategóriában és 17 meglévő tematikus kategóriában (a legtöbb az `abstrakt`, `wirtschaft`, `politik`, `kultur` és `recht` témakörben): 710 főnév (mind névelővel és birtokos esettel), 310 ige (88%-uk vonzattal), 283 melléknév, 100 kifejezés (szólások, főnév-ige kapcsolatok), 59 határozószó, 10 kötőszó és 8 elöljáró. Csak olyan szó került bele, amely az alacsonyabb szinteken még nem szerepel; minden szónak van magyar fordítású példamondata.

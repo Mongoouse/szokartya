@@ -287,14 +287,14 @@ describe('a mellékelt szókincs', () => {
   const of = (pos: PartOfSpeech): SeedWord[] => words.filter((w) => w.partOfSpeech === pos);
 
   it('hibátlanul beolvasható, és nincs benne ismétlődő szó', () => {
-    expect(words.length).toBeGreaterThan(2000);
+    expect(words.length).toBeGreaterThan(3400);
     const keys = words.map(wordKey);
     expect(new Set(keys).size).toBe(keys.length);
   });
 
   it('a fájlok a kanonikus formázásban vannak (a formázó kimenete azonos a fájllal)', () => {
     expect(readFileSync(join(VOCABULARY_DIR, 'categories.json'), 'utf8')).toBe(formatCategories(categories));
-    for (const level of [CefrLevel.A1, CefrLevel.A2, CefrLevel.B1, CefrLevel.B2]) {
+    for (const level of [CefrLevel.A1, CefrLevel.A2, CefrLevel.B1, CefrLevel.B2, CefrLevel.C1]) {
       const file = readFileSync(join(VOCABULARY_DIR, 'de', `${level.toLowerCase()}.json`), 'utf8');
       expect(file).toBe(
         formatVocabularyFile(
@@ -314,22 +314,25 @@ describe('a mellékelt szókincs', () => {
     expect(missing.map(wordKey)).toEqual([]);
   });
 
-  it('minden főnévnek van neme (kivéve a csak többes számúakat), a B2 főneveknek birtokos esete is', () => {
+  it('minden főnévnek van neme (kivéve a csak többes számúakat), a B2 és C1 főneveknek birtokos esete is', () => {
     for (const w of of(PartOfSpeech.NOUN)) {
       if (w.attributes?.kind !== 'noun') throw new Error(`${w.lemma}: nincs főnévi attribútum`);
       const d = w.attributes.data;
       if (d.numberType === NumberType.PLURAL_ONLY) continue;
       expect(d.gender).toBeTruthy();
-      if (w.cefrLevel === CefrLevel.B2) expect(d.genitiveSingular).toBeTruthy();
+      if (w.cefrLevel === CefrLevel.B2 || w.cefrLevel === CefrLevel.C1) expect(d.genitiveSingular).toBeTruthy();
     }
   });
 
-  it('a B2 szavak a gyűjtő- és egy tematikus kategóriában vannak; az igék nagy része vonzatos', () => {
-    for (const w of words.filter((x) => x.cefrLevel === CefrLevel.B2)) {
-      expect(w.categories[0]).toBe('b2-wortschatz');
+  it.each([
+    [CefrLevel.B2, 'b2-wortschatz'],
+    [CefrLevel.C1, 'c1-wortschatz'],
+  ])('a %s szavak a gyűjtő- és egy tematikus kategóriában vannak; az igék nagy része vonzatos', (level, collection) => {
+    for (const w of words.filter((x) => x.cefrLevel === level)) {
+      expect(w.categories[0]).toBe(collection);
       expect(w.categories).toHaveLength(2);
     }
-    const verbs = of(PartOfSpeech.VERB).filter((w) => w.cefrLevel === CefrLevel.B2);
+    const verbs = of(PartOfSpeech.VERB).filter((w) => w.cefrLevel === level);
     expect(verbs.filter((w) => (w.valencies?.length ?? 0) > 0).length / verbs.length).toBeGreaterThan(0.5);
   });
 });
