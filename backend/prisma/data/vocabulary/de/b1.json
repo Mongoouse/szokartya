@@ -60,6 +60,7 @@
       "translations": ["esküvő"],
       "categories": ["familie"],
       "noun": { "gender": "feminine", "plural": "Hochzeiten" },
+      "examples": [{ "sentence": "Die Hochzeit findet im Juni statt.", "translation": "Az esküvő júniusban lesz." }],
       "is_active": true
     },
     {
@@ -68,6 +69,7 @@
       "translations": ["kapcsolat"],
       "categories": ["menschen"],
       "noun": { "gender": "feminine", "plural": "Beziehungen" },
+      "examples": [{ "sentence": "Die beiden haben eine gute Beziehung.", "translation": "Jó a kapcsolatuk." }],
       "is_active": true
     },
     {
@@ -76,6 +78,7 @@
       "translations": ["fájdalom"],
       "categories": ["gesundheit"],
       "noun": { "gender": "masculine", "plural": "Schmerzen" },
+      "examples": [{ "sentence": "Er hat starke Schmerzen im Knie.", "translation": "Erős fájdalmai vannak a térdében." }],
       "is_active": true
     },
     {
@@ -84,6 +87,12 @@
       "translations": ["betegség"],
       "categories": ["gesundheit"],
       "noun": { "gender": "feminine", "plural": "Krankheiten" },
+      "examples": [
+        {
+          "sentence": "Die Krankheit ist zum Glück nicht gefährlich.",
+          "translation": "A betegség szerencsére nem veszélyes."
+        }
+      ],
       "is_active": true
     },
     {
@@ -92,6 +101,7 @@
       "translations": ["bérbeadó"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Vermieter" },
+      "examples": [{ "sentence": "Der Vermieter will die Miete erhöhen.", "translation": "A bérbeadó emelni akarja a lakbért." }],
       "is_active": true
     },
     {
@@ -107,6 +117,7 @@
         "past_participle": "umgezogen",
         "separable_prefix": "um"
       },
+      "examples": [{ "sentence": "Nächsten Monat ziehen wir nach Graz um.", "translation": "Jövő hónapban Grazba költözünk." }],
       "is_active": true
     },
     {
@@ -115,6 +126,7 @@
       "translations": ["környék"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Umgebungen" },
+      "examples": [{ "sentence": "In der Umgebung gibt es viele Seen.", "translation": "A környéken sok tó van." }],
       "is_active": true
     },
     {
@@ -123,6 +135,7 @@
       "translations": ["szállás"],
       "categories": ["reisen"],
       "noun": { "gender": "feminine", "plural": "Unterkünfte" },
+      "examples": [{ "sentence": "Wir suchen eine günstige Unterkunft.", "translation": "Olcsó szállást keresünk." }],
       "is_active": true
     },
     {
@@ -131,6 +144,12 @@
       "translations": ["látványosság"],
       "categories": ["reisen"],
       "noun": { "gender": "feminine", "plural": "Sehenswürdigkeiten" },
+      "examples": [
+        {
+          "sentence": "Das Schloss ist die wichtigste Sehenswürdigkeit der Stadt.",
+          "translation": "A kastély a város legfontosabb látványossága."
+        }
+      ],
       "is_active": true
     },
     {
@@ -145,6 +164,7 @@
         "preterite_3sg": "besichtigte",
         "past_participle": "besichtigt"
       },
+      "examples": [{ "sentence": "Morgen besichtigen wir den Dom.", "translation": "Holnap megtekintjük a dómot." }],
       "is_active": true
     },
     {
@@ -153,6 +173,12 @@
       "translations": ["jövő"],
       "categories": ["zeit"],
       "noun": { "gender": "feminine", "number": "singular_only" },
+      "examples": [
+        {
+          "sentence": "In der Zukunft möchte ich im Ausland leben.",
+          "translation": "A jövőben külföldön szeretnék élni."
+        }
+      ],
       "is_active": true
     },
     {
@@ -161,6 +187,7 @@
       "translations": ["múlt"],
       "categories": ["zeit"],
       "noun": { "gender": "feminine", "number": "singular_only" },
+      "examples": [{ "sentence": "Über die Vergangenheit spricht er nicht gern.", "translation": "Nem szívesen beszél a múltról." }],
       "is_active": true
     },
     {
@@ -168,6 +195,12 @@
       "pos": "adverb",
       "translations": ["közben, időközben"],
       "categories": ["zeit"],
+      "examples": [
+        {
+          "sentence": "Inzwischen spricht sie fließend Deutsch.",
+          "translation": "Időközben folyékonyan megtanult németül."
+        }
+      ],
       "is_active": true
     },
     {
@@ -176,6 +209,12 @@
       "translations": ["pályázat, jelentkezés"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Bewerbungen" },
+      "examples": [
+        {
+          "sentence": "Ich schicke meine Bewerbung per E-Mail.",
+          "translation": "E-mailben küldöm el a jelentkezésemet."
+        }
+      ],
       "is_active": true
     },
     {
@@ -184,6 +223,7 @@
       "translations": ["tapasztalat"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Erfahrungen" },
+      "examples": [{ "sentence": "Sie hat viel Erfahrung im Verkauf.", "translation": "Sok tapasztalata van az értékesítésben." }],
       "is_active": true
     },
     {
@@ -192,6 +232,7 @@
       "translations": ["szakképzés"],
       "categories": ["bildung", "arbeit"],
       "noun": { "gender": "feminine", "plural": "Ausbildungen" },
+      "examples": [{ "sentence": "Er macht eine Ausbildung zum Koch.", "translation": "Szakácsnak tanul." }],
       "is_active": true
     },
     {
@@ -200,6 +241,7 @@
       "translations": ["szerződés"],
       "categories": ["arbeit"],
       "noun": { "gender": "masculine", "plural": "Verträge" },
+      "examples": [{ "sentence": "Bitte unterschreiben Sie den Vertrag.", "translation": "Kérem, írja alá a szerződést." }],
       "is_active": true
     },
     {
@@ -224,6 +266,7 @@
           "meaning": "pályázik valamire"
         }
       ],
+      "examples": [{ "sentence": "Ich bewerbe mich um eine Stelle als Lehrerin.", "translation": "Tanárnői állásra jelentkezem." }],
       "is_active": true
     },
     {
@@ -238,6 +281,7 @@
         "preterite_3sg": "verdiente",
         "past_participle": "verdient"
       },
+      "examples": [{ "sentence": "Er verdient genug Geld für die Familie.", "translation": "Elég pénzt keres a családnak." }],
       "is_active": true
     },
     {
@@ -254,6 +298,7 @@
         "separable_prefix": "teil"
       },
       "valencies": [{ "preposition": "an", "case": "dative", "pattern": "teilnehmen an + Dat.", "meaning": "részt vesz valamin" }],
+      "examples": [{ "sentence": "Ich nehme an einem Deutschkurs teil.", "translation": "Részt veszek egy némettanfolyamon." }],
       "is_active": true
     },
     {
@@ -262,6 +307,7 @@
       "translations": ["kiállítás"],
       "categories": ["freizeit"],
       "noun": { "gender": "feminine", "plural": "Ausstellungen" },
+      "examples": [{ "sentence": "Die Ausstellung zeigt Bilder von Klimt.", "translation": "A kiállítás Klimt képeit mutatja be." }],
       "is_active": true
     },
     {
@@ -270,6 +316,7 @@
       "translations": ["egyesület, klub"],
       "categories": ["freizeit"],
       "noun": { "gender": "masculine", "plural": "Vereine" },
+      "examples": [{ "sentence": "Mein Sohn spielt in einem Fußballverein.", "translation": "A fiam egy futballklubban játszik." }],
       "is_active": true
     },
     {
@@ -286,6 +333,7 @@
         "separable_prefix": "aus",
         "reflexive": "accusative"
       },
+      "examples": [{ "sentence": "Nach der Wanderung ruhen wir uns aus.", "translation": "A túra után kipihenjük magunkat." }],
       "is_active": true
     },
     {
@@ -294,6 +342,7 @@
       "translations": ["környezet"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "number": "singular_only" },
+      "examples": [{ "sentence": "Wir müssen die Umwelt schützen.", "translation": "Védenünk kell a környezetet." }],
       "is_active": true
     },
     {
@@ -302,6 +351,7 @@
       "translations": ["táj"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "plural": "Landschaften" },
+      "examples": [{ "sentence": "Die Landschaft hier ist wunderschön.", "translation": "Itt csodaszép a táj." }],
       "is_active": true
     },
     {
@@ -310,6 +360,7 @@
       "translations": ["bocsánatkérés"],
       "categories": ["kommunikation"],
       "noun": { "gender": "feminine", "plural": "Entschuldigungen" },
+      "examples": [{ "sentence": "Er bittet um Entschuldigung.", "translation": "Bocsánatot kér." }],
       "is_active": true
     },
     {
@@ -318,6 +369,7 @@
       "translations": ["javaslat"],
       "categories": ["kommunikation"],
       "noun": { "gender": "masculine", "plural": "Vorschläge" },
+      "examples": [{ "sentence": "Ich habe einen Vorschlag für das Wochenende.", "translation": "Van egy javaslatom a hétvégére." }],
       "is_active": true
     },
     {
@@ -342,6 +394,12 @@
           "meaning": "panaszkodik valamire"
         }
       ],
+      "examples": [
+        {
+          "sentence": "Die Gäste beschweren sich über den Lärm.",
+          "translation": "A vendégek panaszt tesznek a zaj miatt."
+        }
+      ],
       "is_active": true
     },
     {
@@ -357,6 +415,7 @@
         "past_participle": "überzeugt"
       },
       "valencies": [{ "preposition": "von", "case": "dative", "pattern": "überzeugen von + Dat.", "meaning": "meggyőz valamiről" }],
+      "examples": [{ "sentence": "Er hat mich von seiner Idee überzeugt.", "translation": "Meggyőzött az ötletéről." }],
       "is_active": true
     },
     {
@@ -379,6 +438,7 @@
           "meaning": "megvitat valamit"
         }
       ],
+      "examples": [{ "sentence": "Wir diskutieren über das neue Projekt.", "translation": "Az új projektről vitatkozunk." }],
       "is_active": true
     },
     {
@@ -403,6 +463,12 @@
           "meaning": "emlékszik valamire"
         }
       ],
+      "examples": [
+        {
+          "sentence": "Ich erinnere mich gern an meine Kindheit.",
+          "translation": "Szívesen emlékszem vissza a gyerekkoromra."
+        }
+      ],
       "is_active": true
     },
     {
@@ -411,6 +477,7 @@
       "translations": ["aggodalom"],
       "categories": ["gefuehle"],
       "noun": { "gender": "feminine", "plural": "Sorgen" },
+      "examples": [{ "sentence": "Mach dir keine Sorgen!", "translation": "Ne aggódj!" }],
       "is_active": true
     },
     {
@@ -419,6 +486,7 @@
       "translations": ["bosszúság"],
       "categories": ["gefuehle"],
       "noun": { "gender": "masculine", "number": "singular_only" },
+      "examples": [{ "sentence": "Er hat Ärger mit seinem Chef.", "translation": "Bosszúsága van a főnökével." }],
       "is_active": true
     },
     {
@@ -443,6 +511,7 @@
           "meaning": "bosszankodik valamin"
         }
       ],
+      "examples": [{ "sentence": "Ich ärgere mich über den Stau.", "translation": "Bosszankodom a dugó miatt." }],
       "is_active": true
     },
     {
@@ -467,6 +536,7 @@
           "meaning": "aggódik valakiért"
         }
       ],
+      "examples": [{ "sentence": "Die Eltern sorgen sich um ihr Kind.", "translation": "A szülők aggódnak a gyerekükért." }],
       "is_active": true
     },
     {
@@ -491,6 +561,7 @@
           "meaning": "fél valamitől"
         }
       ],
+      "examples": [{ "sentence": "Das Kind fürchtet sich vor dem Hund.", "translation": "A gyerek fél a kutyától." }],
       "is_active": true
     },
     {
@@ -499,6 +570,7 @@
       "translations": ["csalódott"],
       "categories": ["gefuehle"],
       "adjective": { "comparative": "enttäuschter", "superlative": "am enttäuschtesten" },
+      "examples": [{ "sentence": "Sie ist von dem Ergebnis enttäuscht.", "translation": "Csalódott az eredmény miatt." }],
       "is_active": true
     },
     {
@@ -507,6 +579,12 @@
       "translations": ["kíváncsi"],
       "categories": ["gefuehle"],
       "adjective": { "comparative": "neugieriger", "superlative": "am neugierigsten" },
+      "examples": [
+        {
+          "sentence": "Ich bin neugierig, wie der Film endet.",
+          "translation": "Kíváncsi vagyok, hogyan végződik a film."
+        }
+      ],
       "is_active": true
     },
     {
@@ -515,6 +593,7 @@
       "translations": ["hibás"],
       "categories": ["gefuehle"],
       "adjective": { "predicative_only": true },
+      "examples": [{ "sentence": "Du bist nicht schuld an dem Unfall.", "translation": "Nem te vagy a hibás a balesetben." }],
       "is_active": true
     },
     {
@@ -539,6 +618,7 @@
           "meaning": "gondoskodik valakiről"
         }
       ],
+      "examples": [{ "sentence": "Ich kümmere mich um die Kinder.", "translation": "Én gondoskodom a gyerekekről." }],
       "is_active": true
     },
     {
@@ -563,6 +643,7 @@
           "meaning": "hozzászokik valamihez"
         }
       ],
+      "examples": [{ "sentence": "Ich habe mich an das Wetter gewöhnt.", "translation": "Hozzászoktam az időjáráshoz." }],
       "is_active": true
     },
     {
@@ -579,6 +660,7 @@
         "separable_prefix": "vor",
         "reflexive": "accusative"
       },
+      "examples": [{ "sentence": "Darf ich mich kurz vorstellen?", "translation": "Bemutatkozhatom röviden?" }],
       "is_active": true
     },
     {
@@ -596,6 +678,7 @@
         "separable_prefix": "vor",
         "reflexive": "dative"
       },
+      "examples": [{ "sentence": "Ich kann mir das gut vorstellen.", "translation": "Ezt jól el tudom képzelni." }],
       "is_active": true
     },
     {
@@ -620,6 +703,7 @@
           "meaning": "számít valakire"
         }
       ],
+      "examples": [{ "sentence": "Du kannst dich auf mich verlassen.", "translation": "Számíthatsz rám." }],
       "is_active": true
     },
     {
@@ -635,6 +719,7 @@
         "past_participle": "bestanden"
       },
       "valencies": [{ "preposition": "aus", "case": "dative", "pattern": "bestehen aus + Dat.", "meaning": "áll valamiből" }],
+      "examples": [{ "sentence": "Die Gruppe besteht aus zehn Personen.", "translation": "A csoport tíz főből áll." }],
       "is_active": true
     },
     {
@@ -649,6 +734,7 @@
         "preterite_3sg": "erreichte",
         "past_participle": "erreicht"
       },
+      "examples": [{ "sentence": "Wir haben den Zug gerade noch erreicht.", "translation": "Épp hogy elértük a vonatot." }],
       "is_active": true
     },
     {
@@ -663,6 +749,7 @@
         "preterite_3sg": "vermied",
         "past_participle": "vermieden"
       },
+      "examples": [{ "sentence": "Ich versuche, Fehler zu vermeiden.", "translation": "Igyekszem elkerülni a hibákat." }],
       "is_active": true
     },
     {
@@ -677,6 +764,12 @@
         "preterite_3sg": "unterstützte",
         "past_participle": "unterstützt"
       },
+      "examples": [
+        {
+          "sentence": "Meine Eltern unterstützen mich beim Studium.",
+          "translation": "A szüleim támogatnak a tanulmányaimban."
+        }
+      ],
       "is_active": true
     },
     {
@@ -686,6 +779,7 @@
       "categories": ["grundwortschatz"],
       "adjective": { "comparative": "abhängiger", "superlative": "am abhängigsten" },
       "valencies": [{ "preposition": "von", "case": "dative", "pattern": "abhängig von + Dat.", "meaning": "függ valamitől" }],
+      "examples": [{ "sentence": "Der Preis ist abhängig von der Größe.", "translation": "Az ár a mérettől függ." }],
       "is_active": true
     },
     {
@@ -694,6 +788,7 @@
       "translations": ["megbízható"],
       "categories": ["menschen"],
       "adjective": { "comparative": "zuverlässiger", "superlative": "am zuverlässigsten" },
+      "examples": [{ "sentence": "Unser neuer Kollege ist sehr zuverlässig.", "translation": "Az új kollégánk nagyon megbízható." }],
       "is_active": true
     },
     {
@@ -702,6 +797,7 @@
       "translations": ["önálló"],
       "categories": ["arbeit"],
       "adjective": { "comparative": "selbstständiger", "superlative": "am selbstständigsten" },
+      "examples": [{ "sentence": "Sie arbeitet sehr selbstständig.", "translation": "Nagyon önállóan dolgozik." }],
       "is_active": true
     },
     {
@@ -710,6 +806,7 @@
       "translations": ["halott"],
       "categories": ["menschen"],
       "adjective": {  },
+      "examples": [{ "sentence": "Die Pflanze ist leider tot.", "translation": "A növény sajnos elpusztult." }],
       "is_active": true
     },
     {
@@ -717,6 +814,7 @@
       "pos": "conjunction",
       "translations": ["azért, hogy"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Ich spare Geld, damit ich reisen kann.", "translation": "Pénzt spórolok, hogy utazhassak." }],
       "is_active": true
     },
     {
@@ -724,6 +822,7 @@
       "pos": "adverb",
       "translations": ["mégis, ennek ellenére"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Es regnet, trotzdem gehen wir spazieren.", "translation": "Esik, mégis sétálni megyünk." }],
       "is_active": true
     }
   ]

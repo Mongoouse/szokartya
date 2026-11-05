@@ -115,6 +115,17 @@ class Word {
       .map((e) => (sentence: e['sentence'] as String, translation: e['translation'] as String?))
       .toList();
 
+  /// A kártyán mutatott példamondat: a szó saját példája, ennek hiányában az első
+  /// vonzat példája; null, ha egyik sincs.
+  ({String sentence, String? translation})? get example {
+    if (examples.isNotEmpty) return examples.first;
+    for (final v in _list('valencies')) {
+      final e = (v['examples'] as List?)?.cast<Json>() ?? const [];
+      if (e.isNotEmpty) return (sentence: e.first['sentence'] as String, translation: e.first['translation'] as String?);
+    }
+    return null;
+  }
+
   Json? get _noun => _json['noun'] as Json?;
 
   List<Json> _list(String key) => (_json[key] as List?)?.cast<Json>() ?? const [];

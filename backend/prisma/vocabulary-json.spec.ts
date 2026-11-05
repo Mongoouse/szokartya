@@ -306,6 +306,14 @@ describe('a mellékelt szókincs', () => {
     }
   });
 
+  it('minden szónak van példamondata fordítással (saját vagy vonzathoz kötött)', () => {
+    const missing = words.filter((w) => {
+      const all = [...(w.examples ?? []), ...(w.valencies ?? []).flatMap((v) => v.examples ?? [])];
+      return !all.some((e) => e.sentence.trim() && e.translation?.trim());
+    });
+    expect(missing.map(wordKey)).toEqual([]);
+  });
+
   it('minden főnévnek van neme (kivéve a csak többes számúakat), a B2 főneveknek birtokos esete is', () => {
     for (const w of of(PartOfSpeech.NOUN)) {
       if (w.attributes?.kind !== 'noun') throw new Error(`${w.lemma}: nincs főnévi attribútum`);

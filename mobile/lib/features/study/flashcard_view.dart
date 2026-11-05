@@ -99,17 +99,7 @@ class FlashcardView extends StatelessWidget {
         if (type != CardType.valency || v.meaning != null)
           type == CardType.valency ? '${v.pattern} – ${v.meaning}' : '${v.pattern}${v.meaning != null ? ' – ${v.meaning}' : ''}',
     ];
-    final example = w.valencies.map((v) => v.example).whereType<String>().followedBy(w.examples.map((e) => e.sentence));
-    return [
-      for (final line in lines) Text(line, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
-      if (example.isNotEmpty) ...[
-        const SizedBox(height: 12),
-        Text(
-          example.first,
-          style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    ];
+    // A példamondat a kártya alatt, a válasz kiértékelésénél látszik (study_screen).
+    return [for (final line in lines) Text(line, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center)];
   }
 }

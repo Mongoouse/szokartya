@@ -106,7 +106,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                   if (session.phase == StudyPhase.question)
                     ..._questionControls(card, saving: session.saving)
                   else ...[
-                    _ResultBanner(check: session.check!, typed: session.typed ?? ''),
+                    _ResultBanner(check: session.check!, typed: session.typed ?? '', example: card.word.example),
                     FilledButton(
                       key: const Key('nextCard'),
                       focusNode: _nextFocus,
@@ -186,13 +186,14 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
 }
 
 /// A válasz kiértékelése: Helyes / Majdnem / Helytelen, a begépelt válasszal és
-/// rövid magyarázattal. Az automatikus értékelés (osztályzat, következő
-/// ismétlés) szándékosan nem látszik – csak naplózódik.
+/// rövid magyarázattal, alatta a szó példamondata fordítással. Az automatikus
+/// értékelés (osztályzat, következő ismétlés) szándékosan nem látszik – csak naplózódik.
 class _ResultBanner extends StatelessWidget {
-  const _ResultBanner({required this.check, required this.typed});
+  const _ResultBanner({required this.check, required this.typed, required this.example});
 
   final AnswerCheck check;
   final String typed;
+  final ({String sentence, String? translation})? example;
 
   @override
   Widget build(BuildContext context) {
@@ -203,15 +204,27 @@ class _ResultBanner extends StatelessWidget {
     };
     final answerText = typed.isEmpty ? '' : ': „$typed”';
     final hint = check.hint == null ? '' : ' – ${check.hint}';
+    final example = this.example;
+    final textTheme = Theme.of(context).textTheme;
     return Semantics(
       liveRegion: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color),
-            const SizedBox(width: 8),
-            Expanded(child: Text('$label$answerText$hint')),
+            Row(
+              children: [
+                Icon(icon, color: color),
+                const SizedBox(width: 8),
+                Expanded(child: Text('$label$answerText$hint')),
+              ],
+            ),
+            if (example != null) ...[
+              const SizedBox(height: 6),
+              Text(example.sentence, key: const Key('exampleSentence'), style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
+              if (example.translation != null) Text(example.translation!, style: textTheme.bodySmall),
+            ],
           ],
         ),
       ),
