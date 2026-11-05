@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/study_card.dart';
+import '../../data/models/word.dart';
 import '../../domain/answer_check.dart';
 import '../../providers.dart';
 import '../reports/report_dialog.dart';
+import 'article_table_view.dart';
 import 'flashcard_view.dart';
 import 'study_session_controller.dart';
 
@@ -106,7 +108,14 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                   if (session.phase == StudyPhase.question)
                     ..._questionControls(card, saving: session.saving)
                   else ...[
-                    _ResultBanner(check: session.check!, typed: session.typed ?? '', example: card.word.example),
+                    // A példamondat és a névelőtáblázat legfeljebb a képernyő ~40%-át foglalja,
+                    // kis kijelzőn görgethető – a kártya mindig látható marad.
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
+                      child: SingleChildScrollView(
+                        child: _ResultBanner(check: session.check!, typed: session.typed ?? '', word: card.word),
+                      ),
+                    ),
                     FilledButton(
                       key: const Key('nextCard'),
                       focusNode: _nextFocus,
@@ -189,11 +198,11 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
 /// rövid magyarázattal, alatta a szó példamondata fordítással. Az automatikus
 /// értékelés (osztályzat, következő ismétlés) szándékosan nem látszik – csak naplózódik.
 class _ResultBanner extends StatelessWidget {
-  const _ResultBanner({required this.check, required this.typed, required this.example});
+  const _ResultBanner({required this.check, required this.typed, required this.word});
 
   final AnswerCheck check;
   final String typed;
-  final ({String sentence, String? translation})? example;
+  final Word word;
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +213,8 @@ class _ResultBanner extends StatelessWidget {
     };
     final answerText = typed.isEmpty ? '' : ': „$typed”';
     final hint = check.hint == null ? '' : ' – ${check.hint}';
-    final example = this.example;
+    final example = word.example;
+    final article = example?.article;
     final textTheme = Theme.of(context).textTheme;
     return Semantics(
       liveRegion: true,
@@ -222,8 +232,18 @@ class _ResultBanner extends StatelessWidget {
             ),
             if (example != null) ...[
               const SizedBox(height: 6),
-              Text(example.sentence, key: const Key('exampleSentence'), style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
+              HighlightedSentence(
+                key: const Key('exampleSentence'),
+                sentence: example.sentence,
+                form: article?.form,
+                style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+              ),
               if (example.translation != null) Text(example.translation!, style: textTheme.bodySmall),
+              // Főnévnél: honnan jön a mondatbeli névelő (der → einen).
+              if (article != null) ...[
+                const SizedBox(height: 8),
+                ArticleTableView(article: article, gender: word.genderColumn, lemma: word.lemma),
+              ],
             ],
           ],
         ),

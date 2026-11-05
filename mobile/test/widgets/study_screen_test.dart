@@ -135,6 +135,45 @@ void main() {
     expect(find.text('A könyv az asztalon fekszik.'), findsOneWidget);
   });
 
+  testWidgets('főnévnél névelőtáblázat: der → einen kiemelve, a mondatban is', (tester) async {
+    final json = wordJson(id: 'w3', lemma: 'Wein', translation: 'bor')
+      ..['examples'] = [
+        {
+          'sentence': 'Zum Essen trinken wir einen Wein.',
+          'translation': 'Evéshez bort iszunk.',
+          'article': {'case': 'ACCUSATIVE', 'type': 'INDEFINITE', 'number': 'SINGULAR', 'form': 'einen'},
+        },
+      ];
+    await pump(tester, [cardOf(Word.fromJson(json), CardType.recognition)]);
+    expect(find.byKey(const Key('articleTable')), findsNothing, reason: 'a válasz előtt nem látszik');
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'bor');
+    await tester.tap(find.text('Ellenőrzés'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('articleTable')), findsOneWidget);
+    expect(find.text('Wein: der (hímnem) → tárgyeset, határozatlan névelő: ein + en = einen'), findsOneWidget);
+    final highlight = find.byKey(const Key('articleHighlight'));
+    expect(find.descendant(of: highlight, matching: find.text('einen')), findsOneWidget);
+    // A mondatban a névelő külön (kiemelt) szakasz.
+    final sentence = tester.widget<Text>(find.descendant(of: find.byKey(const Key('exampleSentence')), matching: find.byType(Text)));
+    final spans = (sentence.textSpan! as TextSpan).children!.cast<TextSpan>();
+    expect(spans.map((s) => s.text).toList(), ['Zum Essen trinken wir ', 'einen', ' Wein.']);
+    expect(spans[1].style?.fontWeight, FontWeight.bold);
+  });
+
+  testWidgets('névelő nélküli példamondatnál nincs táblázat', (tester) async {
+    final json = wordJson(id: 'w4', lemma: 'Tisch', translation: 'asztal')
+      ..['examples'] = [
+        {'sentence': 'Tische sind teuer.', 'translation': 'Az asztalok drágák.'},
+      ];
+    await pump(tester, [cardOf(Word.fromJson(json), CardType.recognition)]);
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'asztal');
+    await tester.tap(find.text('Ellenőrzés'));
+    await tester.pumpAndSettle();
+    expect(find.text('Tische sind teuer.'), findsOneWidget);
+    expect(find.byKey(const Key('articleTable')), findsNothing);
+  });
+
   testWidgets('kiejtés a válasz után; nincs ékezetsor (a telefon billentyűzete adja)', (tester) async {
     final (study, speaker) = await pump(tester, [cardOf(tisch, CardType.production)]);
     expect(find.byKey(const Key('accent-ä')), findsNothing);
