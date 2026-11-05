@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../domain/article_table.dart';
 
@@ -56,9 +57,21 @@ int? _findWord(String sentence, String word) {
 /// hátteret kap, a metszetük erősebb zöldet; a metszet alakja vastag zöld, a
 /// megváltozott végződés (ein**en**) feketével, egyszeresen aláhúzva.
 class ArticleTableView extends StatelessWidget {
-  const ArticleTableView({super.key, required this.article, required this.gender, required this.lemma});
+  const ArticleTableView({
+    super.key,
+    required this.article,
+    required this.gender,
+    required this.lemma,
+    this.compact = false,
+  });
 
   final ExampleArticle article;
+
+  /// Tömör (fekvő elrendezésű) változat: minden oszlop csak olyan széles, mint
+  /// a tartalma, így a cellákban nincs sortörés, és a táblázat a lehető
+  /// legkeskenyebb. A magyarázó szöveg nem szélesíti, hanem a táblázat
+  /// szélességéhez tördelődik; ha a hely kevés, a táblázat arányosan kicsinyedik.
+  final bool compact;
 
   /// A főnév nemének oszlopa; null, ha csak többes számú.
   final ArticleColumn? gender;
@@ -115,10 +128,10 @@ class ArticleTableView extends StatelessWidget {
       key: const Key('articleTable'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(_explanation(column), key: const Key('articleExplanation'), style: small),
+        _widthNeutral(Text(_explanation(column), key: const Key('articleExplanation'), style: small)),
         // Összevont alak (am, zum, ins …): az elöljáró vonzata is látszik.
         if (contraction != null)
-          Text.rich(
+          _widthNeutral(Text.rich(
             TextSpan(
               style: small,
               children: [
@@ -130,9 +143,9 @@ class ArticleTableView extends StatelessWidget {
               ],
             ),
             key: const Key('articleIrregular'),
-          ),
+          )),
         const SizedBox(height: 4),
-        Table(
+        _fit(Table(
           border: TableBorder(
             top: border,
             bottom: border,
@@ -142,12 +155,18 @@ class ArticleTableView extends StatelessWidget {
             verticalInside: border,
           ),
           columnWidths: const {0: IntrinsicColumnWidth()},
+          defaultColumnWidth: compact ? const IntrinsicColumnWidth() : const FlexColumnWidth(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [header, for (final c in ArticleCase.values) row(c)],
-        ),
+        )),
       ],
     );
   }
+
+  Widget _widthNeutral(Widget child) => compact ? _NoIntrinsicWidth(child: child) : child;
+
+  Widget _fit(Widget table) =>
+      compact ? FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.topLeft, child: table) : table;
 
   Widget _cell(
     BuildContext context,
@@ -196,4 +215,21 @@ class ArticleTableView extends StatelessWidget {
     }
     return buffer.toString();
   }
+}
+
+/// A gyermek tördelhető szövegét kizárja a szélességszámításból (intrinsic
+/// width = 0): a tömör táblázat szélességét így csak maga a táblázat adja meg.
+class _NoIntrinsicWidth extends SingleChildRenderObjectWidget {
+  const _NoIntrinsicWidth({required Widget super.child});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => _RenderNoIntrinsicWidth();
+}
+
+class _RenderNoIntrinsicWidth extends RenderProxyBox {
+  @override
+  double computeMinIntrinsicWidth(double height) => 0;
+
+  @override
+  double computeMaxIntrinsicWidth(double height) => 0;
 }

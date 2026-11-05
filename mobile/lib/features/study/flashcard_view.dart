@@ -14,10 +14,26 @@ import 'article_table_view.dart';
 /// - VERB_FORMS:  „fahren” → fährt – fuhr – ist gefahren
 /// - VALENCY:     „warten ___” → warten auf + Akk.
 class FlashcardView extends StatelessWidget {
-  const FlashcardView({super.key, required this.card, required this.showAnswer, this.onSpeak});
+  const FlashcardView({
+    super.key,
+    required this.card,
+    required this.showAnswer,
+    this.onSpeak,
+    this.showExample = true,
+    this.dense = false,
+  });
 
   final StudyCard card;
   final bool showAnswer;
+
+  /// A példamondat a hátlapon. Fekvő elrendezésben false: ott a kiértékelés
+  /// alatt, a kártyán kívül jelenik meg ([ExampleSentenceView]).
+  final bool showExample;
+
+  /// Tömörebb kártya (fekvő elrendezés, alacsony kijelző): kisebb térközök, a
+  /// kiejtés gomb a kérdés címkéje mellett, hogy alatta a kiértékelés és a
+  /// példamondat görgetés nélkül is látsszon.
+  final bool dense;
 
   /// A német alak felolvasása; null = nincs kiejtés gomb.
   final VoidCallback? onSpeak;
@@ -33,35 +49,58 @@ class FlashcardView extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(dense ? 12 : 24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(_typeLabel, style: theme.textTheme.labelMedium, textAlign: TextAlign.center),
-              if (onSpeak != null && _speakVisible)
-                Align(
-                  child: IconButton(
-                    icon: const Icon(Icons.volume_up),
-                    tooltip: 'Kiejtés',
-                    onPressed: onSpeak,
-                  ),
+              if (dense)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(_typeLabel, style: theme.textTheme.labelMedium),
+                    if (onSpeak != null && _speakVisible)
+                      IconButton(
+                        icon: const Icon(Icons.volume_up),
+                        tooltip: 'Kiejtés',
+                        visualDensity: VisualDensity.compact,
+                        onPressed: onSpeak,
+                      )
+                    else
+                      const SizedBox(height: 40),
+                  ],
                 )
-              else
-                const SizedBox(height: 16),
-              Text(_prompt(word), style: theme.textTheme.headlineMedium, textAlign: TextAlign.center),
+              else ...[
+                Text(_typeLabel, style: theme.textTheme.labelMedium, textAlign: TextAlign.center),
+                if (onSpeak != null && _speakVisible)
+                  Align(
+                    child: IconButton(
+                      icon: const Icon(Icons.volume_up),
+                      tooltip: 'Kiejtés',
+                      onPressed: onSpeak,
+                    ),
+                  )
+                else
+                  const SizedBox(height: 16),
+              ],
+              Text(
+                _prompt(word),
+                style: dense ? theme.textTheme.headlineSmall : theme.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
               if (card.cardType == CardType.recognition && word.ipa != null) ...[
                 const SizedBox(height: 4),
                 Text('[${word.ipa}]', style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
               ],
               if (showAnswer) ...[
-                const Divider(height: 32),
+                Divider(height: dense ? 16 : 32),
                 Text(
                   expectedAnswer(card),
-                  style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.primary),
+                  style: (dense ? theme.textTheme.titleLarge : theme.textTheme.headlineSmall)
+                      ?.copyWith(color: theme.colorScheme.primary),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: dense ? 4 : 16),
                 ..._grammar(word, theme),
               ],
             ],
@@ -105,22 +144,40 @@ class FlashcardView extends StatelessWidget {
       for (final line in lines) Text(line, style: style, textAlign: TextAlign.center),
       // A példamondat (a névelő kiemelve) a többes szám sora helyén; a névelőtáblázat
       // a kártya alatt, a kiértékelésnél látszik (study_screen).
-      if (example != null) ...[
+      if (example != null && showExample) ...[
         const SizedBox(height: 12),
+        ExampleSentenceView(example: example),
+      ],
+      if (type != CardType.plural && w.pluralForm != null && w.article != null) ...[
+        SizedBox(height: dense ? 4 : 12),
+        Text('Többes szám: die ${w.pluralForm}', style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
+      ],
+    ];
+  }
+}
+
+/// A példamondat (a névelő kiemelve) és a fordítása, középre igazítva.
+class ExampleSentenceView extends StatelessWidget {
+  const ExampleSentenceView({super.key, required this.example});
+
+  final Example example;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
         HighlightedSentence(
           key: const Key('exampleSentence'),
           sentence: example.sentence,
           form: example.article?.form,
-          style: style?.copyWith(fontStyle: FontStyle.italic),
+          style: theme.textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
           textAlign: TextAlign.center,
         ),
         if (example.translation != null)
           Text(example.translation!, style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
       ],
-      if (type != CardType.plural && w.pluralForm != null && w.article != null) ...[
-        const SizedBox(height: 12),
-        Text('Többes szám: die ${w.pluralForm}', style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
-      ],
-    ];
+    );
   }
 }

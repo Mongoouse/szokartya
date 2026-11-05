@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:szokartya/core/tts/speaker.dart';
@@ -67,7 +68,16 @@ void main() {
 
   late RecordingReports reports;
 
-  Future<(FakeStudyRepository, RecordingSpeaker)> pump(WidgetTester tester, List<StudyCard> cards) async {
+  /// Alapból álló telefon; [size] logikai képpontban (fekvő: pl. 800 × 380).
+  Future<(FakeStudyRepository, RecordingSpeaker)> pump(
+    WidgetTester tester,
+    List<StudyCard> cards, {
+    Size size = const Size(400, 800),
+  }) async {
+    tester.view
+      ..physicalSize = size
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     final study = FakeStudyRepository(cards);
     final speaker = RecordingSpeaker();
     reports = RecordingReports();
@@ -246,5 +256,85 @@ void main() {
     expect(find.textContaining('Köszönjük'), findsOneWidget);
     // A tanulás ugyanott folytatódik.
     expect(find.text('Ellenőrzés'), findsOneWidget);
+  });
+
+  group('fekvő elrendezés', () {
+    const landscape = Size(800, 380);
+
+    Word wein() => Word.fromJson(wordJson(id: 'w3', lemma: 'Wein', translation: 'bor')
+      ..['examples'] = [
+        {
+          'sentence': 'Zum Essen trinken wir einen Wein.',
+          'translation': 'Evéshez bort iszunk.',
+          'article': {'case': 'ACCUSATIVE', 'type': 'INDEFINITE', 'number': 'SINGULAR', 'form': 'einen'},
+        },
+      ]);
+
+    testWidgets('kérdés: a válaszadás a kártya mellett, jobbra', (tester) async {
+      await pump(tester, [cardOf(tisch, CardType.production)], size: landscape);
+      final card = tester.getRect(find.byType(Card));
+      final input = tester.getRect(find.byKey(const Key('typedAnswer')));
+      final check = tester.getRect(find.byKey(const Key('checkAnswer')));
+      expect(input.left, greaterThan(card.right), reason: 'a beviteli mező a kártyától jobbra');
+      expect(check.left, greaterThan(card.right));
+      expect(input.top, lessThan(card.bottom), reason: 'egymás mellett, nem alatta');
+    });
+
+    testWidgets('válasz: balra kártya, alatta jelzés, alatta példamondat; jobbra tördelés nélküli tömör táblázat', (tester) async {
+      await pump(tester, [cardOf(wein(), CardType.recognition)], size: landscape);
+      await tester.enterText(find.byKey(const Key('typedAnswer')), 'bor');
+      await tester.tap(find.text('Ellenőrzés'));
+      await tester.pumpAndSettle();
+
+      final card = tester.getRect(find.byType(Card));
+      final verdict = tester.getRect(find.textContaining('Helyes'));
+      final sentence = tester.getRect(find.byKey(const Key('exampleSentence')));
+      final table = tester.getRect(find.byKey(const Key('articleTable')));
+      final next = tester.getRect(find.byKey(const Key('nextCard')));
+
+      // Bal oszlop: kártya → jelzés → példamondat (a példamondat már nem a kártyán van).
+      expect(find.descendant(of: find.byType(Card), matching: find.byKey(const Key('exampleSentence'))), findsNothing);
+      expect(verdict.top, greaterThanOrEqualTo(card.bottom));
+      expect(sentence.top, greaterThanOrEqualTo(verdict.bottom));
+      expect(find.text('Evéshez bort iszunk.'), findsOneWidget);
+
+      // Jobb oszlop: táblázat, alatta a Tovább gomb.
+      expect(table.left, greaterThan(card.right));
+      expect(table.left, greaterThan(sentence.right));
+      expect(next.left, greaterThan(card.right));
+      expect(next.top, greaterThanOrEqualTo(table.bottom));
+
+      // A táblázat összenyomva: legfeljebb a szélesség 45%-a, a bal oldal kapja a többit.
+      expect(tester.getSize(find.byKey(const Key('landscapeAnswerPanel'))).width, lessThanOrEqualTo(800 * 0.45));
+      expect(card.width, greaterThan(table.width));
+
+      // Egyik cellában sincs sortörés: minden szöveg megkapta a teljes kívánt szélességét.
+      for (final element in find.descendant(of: find.byType(Table), matching: find.byType(RichText)).evaluate()) {
+        final paragraph = element.renderObject! as RenderParagraph;
+        expect(
+          paragraph.getMaxIntrinsicWidth(double.infinity),
+          lessThanOrEqualTo(paragraph.size.width + 0.01),
+          reason: '„${paragraph.text.toPlainText()}” nem tördelődhet',
+        );
+      }
+      expect(find.byKey(const Key('articleHighlight')), findsOneWidget);
+    });
+
+    testWidgets('névelő nélküli szónál is jobbra kerül a Tovább gomb', (tester) async {
+      await pump(tester, [cardOf(tisch, CardType.recognition)], size: landscape);
+      await tester.tap(find.byKey(const Key('dontKnow')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('articleTable')), findsNothing);
+      expect(tester.getRect(find.byKey(const Key('nextCard'))).left, greaterThan(tester.getRect(find.byType(Card)).right));
+      await tester.tap(find.byKey(const Key('nextCard')));
+      await tester.pumpAndSettle();
+      expect(find.text('Mit jelent?'), findsOneWidget);
+    });
+  });
+
+  testWidgets('álló elrendezésben a kártya alatt marad a válaszadás', (tester) async {
+    await pump(tester, [cardOf(tisch, CardType.production)]);
+    expect(find.byKey(const Key('landscapeQuestionPanel')), findsNothing);
+    expect(tester.getRect(find.byKey(const Key('typedAnswer'))).top, greaterThan(tester.getRect(find.byType(Card)).bottom));
   });
 }
