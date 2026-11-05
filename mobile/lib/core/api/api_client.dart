@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -36,6 +35,10 @@ class ApiClient {
   void Function()? onSessionExpired;
 
   Future<AuthTokens?>? _refreshInFlight;
+
+  // HTTP státuszkódok – a dart:io HttpStatus helyett, mert a dart:io böngészőben nem érhető el.
+  static const _ok = 200;
+  static const _unauthorized = 401;
 
   Future<Json> get(String path, {Map<String, String>? query}) => _send('GET', path, query: query);
 
@@ -76,7 +79,7 @@ class ApiClient {
     }
 
     var response = await _raw(method, path, body: body, query: query, accessToken: tokens?.accessToken);
-    if (authenticated && response.statusCode == HttpStatus.unauthorized) {
+    if (authenticated && response.statusCode == _unauthorized) {
       tokens = await _refreshTokens(tokens!);
       if (tokens == null) {
         onSessionExpired?.call();
@@ -109,10 +112,10 @@ class ApiClient {
       return await http.Response.fromStream(streamed);
     } on TimeoutException {
       throw const NetworkException('Időtúllépés – ellenőrizd a kapcsolatot.');
-    } on SocketException catch (e) {
-      throw NetworkException('Nincs hálózati kapcsolat (${e.message}).');
     } on http.ClientException catch (e) {
-      throw NetworkException(e.message);
+      // Mobilon a SocketException is ClientException-ként érkezik (http csomag),
+      // böngészőben pedig a sikertelen fetch (nincs hálózat, CORS-tiltás) is ez.
+      throw NetworkException('Nincs hálózati kapcsolat (${e.message}).');
     }
   }
 
@@ -127,7 +130,7 @@ class ApiClient {
           return current;
         }
         final response = await _raw('POST', '/auth/refresh', body: {'refreshToken': stale.refreshToken});
-        if (response.statusCode != HttpStatus.ok) {
+        if (response.statusCode != _ok) {
           await _tokens.clear();
           return null;
         }
@@ -156,7 +159,7 @@ class ApiClient {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return decoded;
     }
-    if (response.statusCode == HttpStatus.unauthorized) {
+    if (response.statusCode == _unauthorized) {
       throw UnauthorizedException(_message(decoded) ?? 'Nincs jogosultság.');
     }
     throw HttpStatusException(response.statusCode, _message(decoded) ?? 'HTTP ${response.statusCode}');

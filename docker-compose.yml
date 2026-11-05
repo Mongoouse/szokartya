@@ -43,6 +43,8 @@ services:
       # Csak helyi bemutatóhoz! Éles környezetben véletlen, titkos érték kell.
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-local-demo-secret-change-me-0123456789abcdef}
       LOG_LEVEL: info
+      # A böngészős kliens (flutter run -d chrome --web-port 8080) originje.
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
     ports:
       - "3000:3000"
     depends_on:

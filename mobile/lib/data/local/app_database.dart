@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+import 'platform_database_factory.dart';
+
 /// Helyi SQLite adatbázis – az offline-first működés alapja.
 ///
 /// Táblák:
@@ -26,7 +28,8 @@ class AppDatabase {
 
   final Database db;
 
-  /// Megnyitás az alapértelmezett helyen. Tesztben [path] lehet
+  /// Megnyitás az alapértelmezett helyen (mobilon fájl, böngészőben IndexedDB –
+  /// lásd [platformDatabaseFactory]). Tesztben [path] lehet
   /// `inMemoryDatabasePath`, [factory] pedig a `sqflite_common_ffi` gyára.
   /// A [version] csak a migrációs tesztekhez írható felül (régi séma előállítása).
   static Future<AppDatabase> open({
@@ -34,7 +37,7 @@ class AppDatabase {
     DatabaseFactory? factory,
     @visibleForTesting int version = _version,
   }) async {
-    final dbFactory = factory ?? databaseFactory;
+    final dbFactory = factory ?? platformDatabaseFactory;
     final dbPath = path ?? p.join(await dbFactory.getDatabasesPath(), 'szokartya.db');
     final db = await dbFactory.openDatabase(
       dbPath,
