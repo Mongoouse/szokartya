@@ -68,6 +68,12 @@
       "translations": ["kolléga"],
       "categories": ["arbeit", "menschen"],
       "noun": { "gender": "masculine", "plural": "Kollegen", "n_declension": true },
+      "examples": [
+        {
+          "sentence": "Mein Kollege hilft mir oft bei der Arbeit.",
+          "translation": "A kollégám gyakran segít a munkában."
+        }
+      ],
       "is_active": true
     },
     {
@@ -76,6 +82,7 @@
       "translations": ["szomszéd"],
       "categories": ["menschen"],
       "noun": { "gender": "masculine", "plural": "Nachbarn", "n_declension": true },
+      "examples": [{ "sentence": "Unser Nachbar hat einen großen Hund.", "translation": "A szomszédunknak nagy kutyája van." }],
       "is_active": true
     },
     {
@@ -84,6 +91,12 @@
       "translations": ["nagymama"],
       "categories": ["familie"],
       "noun": { "gender": "feminine", "plural": "Großmütter" },
+      "examples": [
+        {
+          "sentence": "Meine Großmutter backt den besten Kuchen.",
+          "translation": "A nagymamám süti a legjobb süteményt."
+        }
+      ],
       "is_active": true
     },
     {
@@ -92,6 +105,12 @@
       "translations": ["nagyapa"],
       "categories": ["familie"],
       "noun": { "gender": "masculine", "plural": "Großväter" },
+      "examples": [
+        {
+          "sentence": "Mein Großvater erzählt gern Geschichten.",
+          "translation": "A nagyapám szívesen mesél történeteket."
+        }
+      ],
       "is_active": true
     },
     {
@@ -100,6 +119,7 @@
       "translations": ["nagybácsi"],
       "categories": ["familie"],
       "noun": { "gender": "masculine", "plural": "Onkel" },
+      "examples": [{ "sentence": "Mein Onkel wohnt in Deutschland.", "translation": "A nagybátyám Németországban lakik." }],
       "is_active": true
     },
     {
@@ -108,6 +128,12 @@
       "translations": ["nagynéni"],
       "categories": ["familie"],
       "noun": { "gender": "feminine", "plural": "Tanten" },
+      "examples": [
+        {
+          "sentence": "Am Wochenende besuchen wir meine Tante.",
+          "translation": "Hétvégén meglátogatjuk a nagynénémet."
+        }
+      ],
       "is_active": true
     },
     {
@@ -116,6 +142,7 @@
       "translations": ["láb"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Beine" },
+      "examples": [{ "sentence": "Er hat sich das Bein gebrochen.", "translation": "Eltörte a lábát." }],
       "is_active": true
     },
     {
@@ -124,6 +151,7 @@
       "translations": ["kar"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Arme" },
+      "examples": [{ "sentence": "Das Kind schläft in meinem Arm.", "translation": "A gyerek a karomban alszik." }],
       "is_active": true
     },
     {
@@ -132,6 +160,7 @@
       "translations": ["has"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Bäuche" },
+      "examples": [{ "sentence": "Ich habe Bauchschmerzen.", "translation": "Fáj a hasam." }],
       "is_active": true
     },
     {
@@ -140,6 +169,7 @@
       "translations": ["hát"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Rücken" },
+      "examples": [{ "sentence": "Nach der Arbeit tut mir der Rücken weh.", "translation": "Munka után fáj a hátam." }],
       "is_active": true
     },
     {
@@ -148,6 +178,7 @@
       "translations": ["fül"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Ohren" },
+      "examples": [{ "sentence": "Mein linkes Ohr tut weh.", "translation": "Fáj a bal fülem." }],
       "is_active": true
     },
     {
@@ -156,6 +187,7 @@
       "translations": ["orr"],
       "categories": ["koerper"],
       "noun": { "gender": "feminine", "plural": "Nasen" },
+      "examples": [{ "sentence": "Meine Nase läuft.", "translation": "Folyik az orrom." }],
       "is_active": true
     },
     {
@@ -164,6 +196,7 @@
       "translations": ["száj"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Münder" },
+      "examples": [{ "sentence": "Mach bitte den Mund auf.", "translation": "Nyisd ki, kérlek, a szádat." }],
       "is_active": true
     },
     {
@@ -172,6 +205,7 @@
       "translations": ["fog"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Zähne" },
+      "examples": [{ "sentence": "Ich putze mir zweimal am Tag die Zähne.", "translation": "Naponta kétszer mosok fogat." }],
       "is_active": true
     },
     {
@@ -180,6 +214,7 @@
       "translations": ["szív"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Herzen" },
+      "examples": [{ "sentence": "Sein Herz schlägt sehr schnell.", "translation": "Nagyon gyorsan ver a szíve." }],
       "is_active": true
     },
     {
@@ -188,6 +223,7 @@
       "translations": ["orvosnő"],
       "categories": ["gesundheit", "arbeit"],
       "noun": { "gender": "feminine", "plural": "Ärztinnen" },
+      "examples": [{ "sentence": "Die Ärztin untersucht das Kind.", "translation": "Az orvosnő megvizsgálja a gyereket." }],
       "is_active": true
     },
     {
@@ -196,6 +232,7 @@
       "translations": ["kórház"],
       "categories": ["gesundheit"],
       "noun": { "gender": "neuter", "plural": "Krankenhäuser" },
+      "examples": [{ "sentence": "Er liegt seit drei Tagen im Krankenhaus.", "translation": "Három napja fekszik kórházban." }],
       "is_active": true
     },
     {
@@ -204,6 +241,7 @@
       "translations": ["gyógyszertár"],
       "categories": ["gesundheit"],
       "noun": { "gender": "feminine", "plural": "Apotheken" },
+      "examples": [{ "sentence": "Die Apotheke ist am Sonntag geschlossen.", "translation": "A gyógyszertár vasárnap zárva van." }],
       "is_active": true
     },
     {
@@ -212,6 +250,12 @@
       "translations": ["gyógyszer"],
       "categories": ["gesundheit"],
       "noun": { "gender": "neuter", "plural": "Medikamente" },
+      "examples": [
+        {
+          "sentence": "Nehmen Sie das Medikament dreimal täglich.",
+          "translation": "Naponta háromszor vegye be a gyógyszert."
+        }
+      ],
       "is_active": true
     },
     {
@@ -220,6 +264,7 @@
       "translations": ["láz"],
       "categories": ["gesundheit"],
       "noun": { "gender": "neuter", "number": "singular_only" },
+      "examples": [{ "sentence": "Das Kind hat hohes Fieber.", "translation": "A gyereknek magas láza van." }],
       "is_active": true
     },
     {
@@ -228,6 +273,7 @@
       "translations": ["egészség"],
       "categories": ["gesundheit"],
       "noun": { "gender": "feminine", "number": "singular_only" },
+      "examples": [{ "sentence": "Sport ist gut für die Gesundheit.", "translation": "A sport jót tesz az egészségnek." }],
       "is_active": true
     },
     {
@@ -236,6 +282,7 @@
       "translations": ["egészséges"],
       "categories": ["gesundheit"],
       "adjective": { "comparative": "gesünder", "superlative": "am gesündesten" },
+      "examples": [{ "sentence": "Gemüse ist sehr gesund.", "translation": "A zöldség nagyon egészséges." }],
       "is_active": true
     },
     {
@@ -244,6 +291,7 @@
       "translations": ["paradicsom"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "feminine", "plural": "Tomaten" },
+      "examples": [{ "sentence": "Ich schneide die Tomaten für den Salat.", "translation": "Felvágom a paradicsomot a salátához." }],
       "is_active": true
     },
     {
@@ -252,6 +300,7 @@
       "translations": ["leves"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "feminine", "plural": "Suppen" },
+      "examples": [{ "sentence": "Die Suppe ist noch zu heiß.", "translation": "A leves még túl forró." }],
       "is_active": true
     },
     {
@@ -260,6 +309,7 @@
       "translations": ["sütemény, torta"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "masculine", "plural": "Kuchen" },
+      "examples": [{ "sentence": "Zum Geburtstag backe ich einen Kuchen.", "translation": "A születésnapra sütök egy tortát." }],
       "is_active": true
     },
     {
@@ -268,6 +318,7 @@
       "translations": ["reggeli"],
       "categories": ["lebensmittel", "zeit"],
       "noun": { "gender": "neuter", "plural": "Frühstücke" },
+      "examples": [{ "sentence": "Das Frühstück ist um sieben Uhr fertig.", "translation": "A reggeli hétkor van kész." }],
       "is_active": true
     },
     {
@@ -276,6 +327,7 @@
       "translations": ["ebéd"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "neuter", "plural": "Mittagessen" },
+      "examples": [{ "sentence": "Zum Mittagessen gibt es Nudeln.", "translation": "Ebédre tészta van." }],
       "is_active": true
     },
     {
@@ -284,6 +336,7 @@
       "translations": ["vacsora"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "neuter", "plural": "Abendessen" },
+      "examples": [{ "sentence": "Das Abendessen ist um sieben Uhr fertig.", "translation": "A vacsora hétkor van kész." }],
       "is_active": true
     },
     {
@@ -292,6 +345,12 @@
       "translations": ["étterem"],
       "categories": ["lebensmittel", "stadt"],
       "noun": { "gender": "neuter", "plural": "Restaurants" },
+      "examples": [
+        {
+          "sentence": "Wir gehen heute in ein italienisches Restaurant.",
+          "translation": "Ma egy olasz étterembe megyünk."
+        }
+      ],
       "is_active": true
     },
     {
@@ -325,6 +384,7 @@
       "translations": ["édes"],
       "categories": ["lebensmittel"],
       "adjective": { "comparative": "süßer", "superlative": "am süßesten" },
+      "examples": [{ "sentence": "Der Tee ist mir zu süß.", "translation": "A tea nekem túl édes." }],
       "is_active": true
     },
     {
@@ -333,6 +393,7 @@
       "translations": ["csípős", "éles"],
       "categories": ["lebensmittel"],
       "adjective": { "comparative": "schärfer", "superlative": "am schärfsten" },
+      "examples": [{ "sentence": "Das Essen ist sehr scharf.", "translation": "Az étel nagyon csípős." }],
       "is_active": true
     },
     {
@@ -341,6 +402,7 @@
       "translations": ["szekrény"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Schränke" },
+      "examples": [{ "sentence": "Die Kleider hängen im Schrank.", "translation": "A ruhák a szekrényben lógnak." }],
       "is_active": true
     },
     {
@@ -349,6 +411,7 @@
       "translations": ["kanapé"],
       "categories": ["haushalt"],
       "noun": { "gender": "neuter", "plural": "Sofas" },
+      "examples": [{ "sentence": "Wir sitzen auf dem Sofa und sehen fern.", "translation": "A kanapén ülünk és tévét nézünk." }],
       "is_active": true
     },
     {
@@ -357,6 +420,7 @@
       "translations": ["lámpa"],
       "categories": ["haushalt"],
       "noun": { "gender": "feminine", "plural": "Lampen" },
+      "examples": [{ "sentence": "Die Lampe über dem Tisch ist kaputt.", "translation": "Az asztal fölötti lámpa elromlott." }],
       "is_active": true
     },
     {
@@ -365,6 +429,7 @@
       "translations": ["kulcs"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Schlüssel" },
+      "examples": [{ "sentence": "Ich habe meinen Schlüssel vergessen.", "translation": "Elfelejtettem a kulcsomat." }],
       "is_active": true
     },
     {
@@ -373,6 +438,7 @@
       "translations": ["kert"],
       "categories": ["haushalt", "natur"],
       "noun": { "gender": "masculine", "plural": "Gärten" },
+      "examples": [{ "sentence": "Im Garten wachsen viele Blumen.", "translation": "A kertben sok virág nő." }],
       "is_active": true
     },
     {
@@ -381,6 +447,7 @@
       "translations": ["hűtőszekrény"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Kühlschränke" },
+      "examples": [{ "sentence": "Stell die Milch in den Kühlschrank.", "translation": "Tedd a tejet a hűtőbe." }],
       "is_active": true
     },
     {
@@ -389,6 +456,7 @@
       "translations": ["lakbér"],
       "categories": ["haushalt"],
       "noun": { "gender": "feminine", "plural": "Mieten" },
+      "examples": [{ "sentence": "Die Miete ist sehr hoch.", "translation": "A lakbér nagyon magas." }],
       "is_active": true
     },
     {
@@ -403,6 +471,7 @@
         "preterite_3sg": "putzte",
         "past_participle": "geputzt"
       },
+      "examples": [{ "sentence": "Am Samstag putzen wir die Wohnung.", "translation": "Szombaton kitakarítjuk a lakást." }],
       "is_active": true
     },
     {
@@ -417,6 +486,7 @@
         "preterite_3sg": "wusch",
         "past_participle": "gewaschen"
       },
+      "examples": [{ "sentence": "Ich wasche heute die Wäsche.", "translation": "Ma kimosom a ruhákat." }],
       "is_active": true
     },
     {
@@ -433,6 +503,7 @@
         "past_participle": "gewaschen",
         "reflexive": "accusative"
       },
+      "examples": [{ "sentence": "Ich wasche mich jeden Morgen kalt.", "translation": "Minden reggel hideg vízzel mosakszom." }],
       "is_active": true
     },
     {
@@ -448,6 +519,7 @@
         "past_participle": "aufgeräumt",
         "separable_prefix": "auf"
       },
+      "examples": [{ "sentence": "Räum bitte dein Zimmer auf!", "translation": "Kérlek, rakj rendet a szobádban!" }],
       "is_active": true
     },
     {
@@ -456,6 +528,7 @@
       "translations": ["világos"],
       "categories": ["haushalt"],
       "adjective": { "comparative": "heller", "superlative": "am hellsten" },
+      "examples": [{ "sentence": "Die Wohnung ist hell und freundlich.", "translation": "A lakás világos és barátságos." }],
       "is_active": true
     },
     {
@@ -464,6 +537,7 @@
       "translations": ["sötét"],
       "categories": ["haushalt"],
       "adjective": { "comparative": "dunkler", "superlative": "am dunkelsten" },
+      "examples": [{ "sentence": "Im Winter wird es früh dunkel.", "translation": "Télen korán sötétedik." }],
       "is_active": true
     },
     {
@@ -472,6 +546,7 @@
       "translations": ["tiszta"],
       "categories": ["haushalt"],
       "adjective": { "comparative": "sauberer", "superlative": "am saubersten" },
+      "examples": [{ "sentence": "Die Küche ist jetzt sauber.", "translation": "A konyha most tiszta." }],
       "is_active": true
     },
     {
@@ -480,6 +555,7 @@
       "translations": ["piszkos"],
       "categories": ["haushalt"],
       "adjective": { "comparative": "schmutziger", "superlative": "am schmutzigsten" },
+      "examples": [{ "sentence": "Deine Schuhe sind ganz schmutzig.", "translation": "A cipőd egészen piszkos." }],
       "is_active": true
     },
     {
@@ -488,6 +564,7 @@
       "translations": ["kényelmes"],
       "categories": ["haushalt"],
       "adjective": { "comparative": "bequemer", "superlative": "am bequemsten" },
+      "examples": [{ "sentence": "Das Sofa ist sehr bequem.", "translation": "A kanapé nagyon kényelmes." }],
       "is_active": true
     },
     {
@@ -496,6 +573,7 @@
       "translations": ["metró"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "U-Bahnen" },
+      "examples": [{ "sentence": "Mit der U-Bahn bin ich schneller.", "translation": "Metróval gyorsabban odaérek." }],
       "is_active": true
     },
     {
@@ -504,6 +582,7 @@
       "translations": ["közlekedési lámpa"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "Ampeln" },
+      "examples": [{ "sentence": "Die Ampel ist rot, wir müssen warten.", "translation": "Piros a lámpa, várnunk kell." }],
       "is_active": true
     },
     {
@@ -512,6 +591,7 @@
       "translations": ["kereszteződés"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "Kreuzungen" },
+      "examples": [{ "sentence": "An der Kreuzung biegen Sie links ab.", "translation": "A kereszteződésnél forduljon balra." }],
       "is_active": true
     },
     {
@@ -520,6 +600,7 @@
       "translations": ["közlekedés, forgalom"],
       "categories": ["verkehr"],
       "noun": { "gender": "masculine", "number": "singular_only" },
+      "examples": [{ "sentence": "Am Morgen ist viel Verkehr.", "translation": "Reggel nagy a forgalom." }],
       "is_active": true
     },
     {
@@ -528,6 +609,7 @@
       "translations": ["késés"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "Verspätungen" },
+      "examples": [{ "sentence": "Der Zug hat zwanzig Minuten Verspätung.", "translation": "A vonat húsz percet késik." }],
       "is_active": true
     },
     {
@@ -536,6 +618,7 @@
       "translations": ["templom"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Kirchen" },
+      "examples": [{ "sentence": "Die Kirche ist über 500 Jahre alt.", "translation": "A templom több mint 500 éves." }],
       "is_active": true
     },
     {
@@ -544,6 +627,7 @@
       "translations": ["múzeum"],
       "categories": ["stadt", "freizeit"],
       "noun": { "gender": "neuter", "plural": "Museen" },
+      "examples": [{ "sentence": "Am Sonntag ist das Museum kostenlos.", "translation": "Vasárnap ingyenes a múzeum." }],
       "is_active": true
     },
     {
@@ -552,6 +636,7 @@
       "translations": ["tér", "hely"],
       "categories": ["stadt"],
       "noun": { "gender": "masculine", "plural": "Plätze" },
+      "examples": [{ "sentence": "Auf dem Platz gibt es einen Markt.", "translation": "A téren piac van." }],
       "is_active": true
     },
     {
@@ -560,6 +645,7 @@
       "translations": ["híd"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Brücken" },
+      "examples": [{ "sentence": "Wir gehen über die Brücke.", "translation": "Átmegyünk a hídon." }],
       "is_active": true
     },
     {
@@ -575,6 +661,7 @@
         "past_participle": "umgestiegen",
         "separable_prefix": "um"
       },
+      "examples": [{ "sentence": "In Köln müssen wir umsteigen.", "translation": "Kölnben át kell szállnunk." }],
       "is_active": true
     },
     {
@@ -589,6 +676,7 @@
         "preterite_3sg": "flog",
         "past_participle": "geflogen"
       },
+      "examples": [{ "sentence": "Morgen fliegen wir nach Spanien.", "translation": "Holnap Spanyolországba repülünk." }],
       "is_active": true
     },
     {
@@ -603,6 +691,7 @@
         "preterite_3sg": "lief",
         "past_participle": "gelaufen"
       },
+      "examples": [{ "sentence": "Ich laufe jeden Morgen fünf Kilometer.", "translation": "Minden reggel öt kilométert futok." }],
       "is_active": true
     },
     {
@@ -611,6 +700,7 @@
       "translations": ["pontos"],
       "categories": ["verkehr", "zeit"],
       "adjective": { "comparative": "pünktlicher", "superlative": "am pünktlichsten" },
+      "examples": [{ "sentence": "Der Zug ist heute pünktlich.", "translation": "A vonat ma pontos." }],
       "is_active": true
     },
     {
@@ -619,6 +709,12 @@
       "translations": ["utazás"],
       "categories": ["reisen"],
       "noun": { "gender": "feminine", "plural": "Reisen" },
+      "examples": [
+        {
+          "sentence": "Die Reise nach Italien war wunderschön.",
+          "translation": "Az olaszországi utazás csodaszép volt."
+        }
+      ],
       "is_active": true
     },
     {
@@ -627,6 +723,7 @@
       "translations": ["útlevél"],
       "categories": ["reisen"],
       "noun": { "gender": "masculine", "plural": "Pässe" },
+      "examples": [{ "sentence": "Vergiss deinen Pass nicht!", "translation": "Ne felejtsd el az útleveledet!" }],
       "is_active": true
     },
     {
@@ -635,6 +732,7 @@
       "translations": ["külföld"],
       "categories": ["reisen"],
       "noun": { "gender": "neuter", "number": "singular_only" },
+      "examples": [{ "sentence": "Sie arbeitet seit zwei Jahren im Ausland.", "translation": "Két éve dolgozik külföldön." }],
       "is_active": true
     },
     {
@@ -643,6 +741,7 @@
       "translations": ["tenger"],
       "categories": ["reisen", "natur"],
       "noun": { "gender": "neuter", "plural": "Meere" },
+      "examples": [{ "sentence": "Im Sommer fahren wir ans Meer.", "translation": "Nyáron a tengerhez utazunk." }],
       "is_active": true
     },
     {
@@ -651,6 +750,7 @@
       "translations": ["strand"],
       "categories": ["reisen", "natur"],
       "noun": { "gender": "masculine", "plural": "Strände" },
+      "examples": [{ "sentence": "Die Kinder spielen am Strand.", "translation": "A gyerekek a strandon játszanak." }],
       "is_active": true
     },
     {
@@ -665,6 +765,7 @@
         "preterite_3sg": "reiste",
         "past_participle": "gereist"
       },
+      "examples": [{ "sentence": "Ich reise gern mit dem Zug.", "translation": "Szeretek vonattal utazni." }],
       "is_active": true
     },
     {
@@ -679,6 +780,7 @@
         "preterite_3sg": "buchte",
         "past_participle": "gebucht"
       },
+      "examples": [{ "sentence": "Wir haben ein Zimmer im Hotel gebucht.", "translation": "Foglaltunk egy szobát a szállodában." }],
       "is_active": true
     },
     {
@@ -693,6 +795,7 @@
         "preterite_3sg": "übernachtete",
         "past_participle": "übernachtet"
       },
+      "examples": [{ "sentence": "Wir übernachten bei Freunden.", "translation": "Barátoknál szállunk meg." }],
       "is_active": true
     },
     {
@@ -701,6 +804,7 @@
       "translations": ["időpont, megbeszélt időpont"],
       "categories": ["zeit", "arbeit"],
       "noun": { "gender": "masculine", "plural": "Termine" },
+      "examples": [{ "sentence": "Ich habe morgen einen Termin beim Arzt.", "translation": "Holnap orvosi időpontom van." }],
       "is_active": true
     },
     {
@@ -709,6 +813,7 @@
       "translations": ["születésnap"],
       "categories": ["zeit", "familie"],
       "noun": { "gender": "masculine", "plural": "Geburtstage" },
+      "examples": [{ "sentence": "Wann hast du Geburtstag?", "translation": "Mikor van a születésnapod?" }],
       "is_active": true
     },
     {
@@ -717,6 +822,7 @@
       "translations": ["tavasz"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Frühlinge" },
+      "examples": [{ "sentence": "Im Frühling blühen die Bäume.", "translation": "Tavasszal virágoznak a fák." }],
       "is_active": true
     },
     {
@@ -725,6 +831,7 @@
       "translations": ["nyár"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Sommer" },
+      "examples": [{ "sentence": "Der Sommer war dieses Jahr sehr heiß.", "translation": "Idén nagyon forró volt a nyár." }],
       "is_active": true
     },
     {
@@ -733,6 +840,7 @@
       "translations": ["ősz"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Herbste" },
+      "examples": [{ "sentence": "Im Herbst fallen die Blätter.", "translation": "Ősszel hullanak a levelek." }],
       "is_active": true
     },
     {
@@ -741,6 +849,7 @@
       "translations": ["tél"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Winter" },
+      "examples": [{ "sentence": "Im Winter fahren wir Ski.", "translation": "Télen síelni megyünk." }],
       "is_active": true
     },
     {
@@ -748,6 +857,7 @@
       "pos": "adverb",
       "translations": ["régebben, korábban"],
       "categories": ["zeit"],
+      "examples": [{ "sentence": "Früher habe ich in Berlin gewohnt.", "translation": "Régebben Berlinben laktam." }],
       "is_active": true
     },
     {
@@ -755,6 +865,12 @@
       "pos": "adverb",
       "translations": ["azután"],
       "categories": ["zeit"],
+      "examples": [
+        {
+          "sentence": "Zuerst essen wir, danach gehen wir spazieren.",
+          "translation": "Először eszünk, azután sétálni megyünk."
+        }
+      ],
       "is_active": true
     },
     {
@@ -763,6 +879,7 @@
       "translations": ["egyetem"],
       "categories": ["bildung"],
       "noun": { "gender": "feminine", "plural": "Universitäten" },
+      "examples": [{ "sentence": "Meine Schwester studiert an der Universität.", "translation": "A nővérem az egyetemen tanul." }],
       "is_active": true
     },
     {
@@ -780,6 +897,12 @@
       "translations": ["tanfolyam"],
       "categories": ["bildung"],
       "noun": { "gender": "masculine", "plural": "Kurse" },
+      "examples": [
+        {
+          "sentence": "Der Deutschkurs beginnt im September.",
+          "translation": "A némettanfolyam szeptemberben kezdődik."
+        }
+      ],
       "is_active": true
     },
     {
@@ -788,6 +911,7 @@
       "translations": ["cég"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Firmen" },
+      "examples": [{ "sentence": "Er arbeitet bei einer großen Firma.", "translation": "Egy nagy cégnél dolgozik." }],
       "is_active": true
     },
     {
@@ -796,6 +920,7 @@
       "translations": ["főnök"],
       "categories": ["arbeit"],
       "noun": { "gender": "masculine", "plural": "Chefs" },
+      "examples": [{ "sentence": "Der Chef ist heute nicht im Büro.", "translation": "A főnök ma nincs az irodában." }],
       "is_active": true
     },
     {
@@ -804,6 +929,7 @@
       "translations": ["fizetés"],
       "categories": ["arbeit"],
       "noun": { "gender": "neuter", "plural": "Gehälter" },
+      "examples": [{ "sentence": "Sie bekommt ein gutes Gehalt.", "translation": "Jó fizetést kap." }],
       "is_active": true
     },
     {
@@ -812,6 +938,7 @@
       "translations": ["megbeszélés"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Besprechungen" },
+      "examples": [{ "sentence": "Die Besprechung dauert bis elf Uhr.", "translation": "A megbeszélés tizenegyig tart." }],
       "is_active": true
     },
     {
@@ -826,6 +953,7 @@
         "preterite_3sg": "studierte",
         "past_participle": "studiert"
       },
+      "examples": [{ "sentence": "Er studiert Medizin in Wien.", "translation": "Bécsben orvosnak tanul." }],
       "is_active": true
     },
     {
@@ -840,6 +968,7 @@
         "preterite_3sg": "wusste",
         "past_participle": "gewusst"
       },
+      "examples": [{ "sentence": "Ich weiß nicht, wo er wohnt.", "translation": "Nem tudom, hol lakik." }],
       "is_active": true
     },
     {
@@ -854,6 +983,7 @@
         "preterite_3sg": "kannte",
         "past_participle": "gekannt"
       },
+      "examples": [{ "sentence": "Kennst du meinen Bruder?", "translation": "Ismered a bátyámat?" }],
       "is_active": true
     },
     {
@@ -891,6 +1021,7 @@
         "preterite_3sg": "brachte",
         "past_participle": "gebracht"
       },
+      "examples": [{ "sentence": "Kannst du mir ein Glas Wasser bringen?", "translation": "Hoznál nekem egy pohár vizet?" }],
       "is_active": true
     },
     {
@@ -905,6 +1036,7 @@
         "preterite_3sg": "vergaß",
         "past_participle": "vergessen"
       },
+      "examples": [{ "sentence": "Ich habe ihren Namen vergessen.", "translation": "Elfelejtettem a nevét." }],
       "is_active": true
     },
     {
@@ -913,6 +1045,7 @@
       "translations": ["szorgalmas"],
       "categories": ["bildung", "arbeit"],
       "adjective": { "comparative": "fleißiger", "superlative": "am fleißigsten" },
+      "examples": [{ "sentence": "Die Studentin ist sehr fleißig.", "translation": "A hallgatónő nagyon szorgalmas." }],
       "is_active": true
     },
     {
@@ -921,6 +1054,7 @@
       "translations": ["nehéz, bonyolult"],
       "categories": ["bildung"],
       "adjective": { "comparative": "schwieriger", "superlative": "am schwierigsten" },
+      "examples": [{ "sentence": "Die Aufgabe ist ziemlich schwierig.", "translation": "A feladat elég nehéz." }],
       "is_active": true
     },
     {
@@ -929,6 +1063,7 @@
       "translations": ["mozi"],
       "categories": ["freizeit", "stadt"],
       "noun": { "gender": "neuter", "plural": "Kinos" },
+      "examples": [{ "sentence": "Gehen wir heute Abend ins Kino?", "translation": "Elmegyünk ma este moziba?" }],
       "is_active": true
     },
     {
@@ -937,6 +1072,7 @@
       "translations": ["színház"],
       "categories": ["freizeit", "stadt"],
       "noun": { "gender": "neuter", "plural": "Theater" },
+      "examples": [{ "sentence": "Im Theater läuft ein neues Stück.", "translation": "A színházban új darabot játszanak." }],
       "is_active": true
     },
     {
@@ -945,6 +1081,7 @@
       "translations": ["koncert"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Konzerte" },
+      "examples": [{ "sentence": "Das Konzert beginnt um acht Uhr.", "translation": "A koncert nyolckor kezdődik." }],
       "is_active": true
     },
     {
@@ -953,6 +1090,7 @@
       "translations": ["játék", "mérkőzés"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Spiele" },
+      "examples": [{ "sentence": "Das Spiel endet unentschieden.", "translation": "A meccs döntetlenre végződik." }],
       "is_active": true
     },
     {
@@ -961,6 +1099,7 @@
       "translations": ["buli"],
       "categories": ["freizeit"],
       "noun": { "gender": "feminine", "plural": "Partys" },
+      "examples": [{ "sentence": "Am Samstag mache ich eine Party.", "translation": "Szombaton bulit tartok." }],
       "is_active": true
     },
     {
@@ -969,6 +1108,7 @@
       "translations": ["dal"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Lieder" },
+      "examples": [{ "sentence": "Das Lied höre ich sehr gern.", "translation": "Ezt a dalt nagyon szeretem hallgatni." }],
       "is_active": true
     },
     {
@@ -993,6 +1133,7 @@
           "meaning": "érdeklődik valami iránt"
         }
       ],
+      "examples": [{ "sentence": "Ich interessiere mich für Geschichte.", "translation": "Érdeklődöm a történelem iránt." }],
       "is_active": true
     },
     {
@@ -1007,6 +1148,7 @@
         "preterite_3sg": "wanderte",
         "past_participle": "gewandert"
       },
+      "examples": [{ "sentence": "Am Wochenende wandern wir in den Bergen.", "translation": "Hétvégén a hegyekben túrázunk." }],
       "is_active": true
     },
     {
@@ -1031,6 +1173,7 @@
           "meaning": "találkozik valakivel"
         }
       ],
+      "examples": [{ "sentence": "Ich treffe mich heute mit Freunden.", "translation": "Ma a barátaimmal találkozom." }],
       "is_active": true
     },
     {
@@ -1047,6 +1190,7 @@
         "separable_prefix": "ein"
       },
       "valencies": [{ "preposition": "zu", "case": "dative", "pattern": "einladen zu + Dat.", "meaning": "meghív valamire" }],
+      "examples": [{ "sentence": "Ich lade dich zu meiner Party ein.", "translation": "Meghívlak a bulimra." }],
       "is_active": true
     },
     {
@@ -1055,6 +1199,7 @@
       "translations": ["vicces"],
       "categories": ["freizeit", "gefuehle"],
       "adjective": { "comparative": "lustiger", "superlative": "am lustigsten" },
+      "examples": [{ "sentence": "Mein Onkel ist sehr lustig.", "translation": "A nagybátyám nagyon vicces." }],
       "is_active": true
     },
     {
@@ -1063,6 +1208,7 @@
       "translations": ["kabát"],
       "categories": ["kleidung"],
       "noun": { "gender": "masculine", "plural": "Mäntel" },
+      "examples": [{ "sentence": "Zieh deinen Mantel an, es ist kalt.", "translation": "Vedd fel a kabátodat, hideg van." }],
       "is_active": true
     },
     {
@@ -1071,6 +1217,7 @@
       "translations": ["pulóver"],
       "categories": ["kleidung"],
       "noun": { "gender": "masculine", "plural": "Pullover" },
+      "examples": [{ "sentence": "Der Pullover ist aus Wolle.", "translation": "A pulóver gyapjúból van." }],
       "is_active": true
     },
     {
@@ -1079,6 +1226,7 @@
       "translations": ["méret"],
       "categories": ["kleidung"],
       "noun": { "gender": "feminine", "plural": "Größen" },
+      "examples": [{ "sentence": "Haben Sie diese Hose auch in Größe 40?", "translation": "Van ez a nadrág 40-es méretben is?" }],
       "is_active": true
     },
     {
@@ -1087,6 +1235,7 @@
       "translations": ["üzlet"],
       "categories": ["stadt"],
       "noun": { "gender": "neuter", "plural": "Geschäfte" },
+      "examples": [{ "sentence": "Das Geschäft schließt um sechs Uhr.", "translation": "Az üzlet hatkor zár." }],
       "is_active": true
     },
     {
@@ -1095,6 +1244,7 @@
       "translations": ["pénztár"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Kassen" },
+      "examples": [{ "sentence": "Bitte zahlen Sie an der Kasse.", "translation": "Kérem, a pénztárnál fizessen." }],
       "is_active": true
     },
     {
@@ -1110,6 +1260,7 @@
         "past_participle": "angezogen",
         "separable_prefix": "an"
       },
+      "examples": [{ "sentence": "Ich ziehe mich schnell an.", "translation": "Gyorsan felöltözöm." }],
       "is_active": true
     },
     {
@@ -1124,6 +1275,7 @@
         "preterite_3sg": "trug",
         "past_participle": "getragen"
       },
+      "examples": [{ "sentence": "Sie trägt heute ein blaues Kleid.", "translation": "Ma kék ruhát visel." }],
       "is_active": true
     },
     {
@@ -1139,6 +1291,7 @@
         "past_participle": "gepasst"
       },
       "valencies": [{ "preposition": null, "case": "dative", "pattern": "passen + Dat.", "meaning": "jó valakire" }],
+      "examples": [{ "sentence": "Die Schuhe passen mir nicht.", "translation": "A cipő nem jó rám." }],
       "is_active": true
     },
     {
@@ -1163,6 +1316,7 @@
       "translations": ["modern"],
       "categories": ["kleidung"],
       "adjective": { "comparative": "moderner", "superlative": "am modernsten" },
+      "examples": [{ "sentence": "Die Wohnung ist modern eingerichtet.", "translation": "A lakás modern berendezésű." }],
       "is_active": true
     },
     {
@@ -1171,6 +1325,7 @@
       "translations": ["hó"],
       "categories": ["wetter"],
       "noun": { "gender": "masculine", "number": "singular_only" },
+      "examples": [{ "sentence": "Im Januar liegt hier viel Schnee.", "translation": "Januárban itt sok hó van." }],
       "is_active": true
     },
     {
@@ -1179,6 +1334,7 @@
       "translations": ["szél"],
       "categories": ["wetter"],
       "noun": { "gender": "masculine", "plural": "Winde" },
+      "examples": [{ "sentence": "Heute weht ein starker Wind.", "translation": "Ma erős szél fúj." }],
       "is_active": true
     },
     {
@@ -1187,6 +1343,7 @@
       "translations": ["felhő"],
       "categories": ["wetter"],
       "noun": { "gender": "feminine", "plural": "Wolken" },
+      "examples": [{ "sentence": "Am Himmel ist keine Wolke.", "translation": "Egy felhő sincs az égen." }],
       "is_active": true
     },
     {
@@ -1195,6 +1352,7 @@
       "translations": ["zivatar"],
       "categories": ["wetter"],
       "noun": { "gender": "neuter", "plural": "Gewitter" },
+      "examples": [{ "sentence": "Am Abend gibt es ein Gewitter.", "translation": "Este zivatar lesz." }],
       "is_active": true
     },
     {
@@ -1203,6 +1361,7 @@
       "translations": ["hőmérséklet"],
       "categories": ["wetter"],
       "noun": { "gender": "feminine", "plural": "Temperaturen" },
+      "examples": [{ "sentence": "Die Temperatur liegt bei zwanzig Grad.", "translation": "A hőmérséklet húsz fok körül van." }],
       "is_active": true
     },
     {
@@ -1211,6 +1370,7 @@
       "translations": ["madár"],
       "categories": ["tiere"],
       "noun": { "gender": "masculine", "plural": "Vögel" },
+      "examples": [{ "sentence": "Ein Vogel sitzt auf dem Dach.", "translation": "Egy madár ül a tetőn." }],
       "is_active": true
     },
     {
@@ -1219,6 +1379,7 @@
       "translations": ["ló"],
       "categories": ["tiere"],
       "noun": { "gender": "neuter", "plural": "Pferde" },
+      "examples": [{ "sentence": "Das Mädchen reitet auf einem Pferd.", "translation": "A lány lovon lovagol." }],
       "is_active": true
     },
     {
@@ -1227,6 +1388,7 @@
       "translations": ["tehén"],
       "categories": ["tiere"],
       "noun": { "gender": "feminine", "plural": "Kühe" },
+      "examples": [{ "sentence": "Die Kuh steht auf der Wiese.", "translation": "A tehén a réten áll." }],
       "is_active": true
     },
     {
@@ -1235,6 +1397,7 @@
       "translations": ["fa"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Bäume" },
+      "examples": [{ "sentence": "Vor dem Haus steht ein alter Baum.", "translation": "A ház előtt egy öreg fa áll." }],
       "is_active": true
     },
     {
@@ -1243,6 +1406,7 @@
       "translations": ["virág"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "plural": "Blumen" },
+      "examples": [{ "sentence": "Ich schenke meiner Mutter Blumen.", "translation": "Virágot ajándékozok anyámnak." }],
       "is_active": true
     },
     {
@@ -1251,6 +1415,7 @@
       "translations": ["erdő"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Wälder" },
+      "examples": [{ "sentence": "Wir gehen im Wald spazieren.", "translation": "Az erdőben sétálunk." }],
       "is_active": true
     },
     {
@@ -1259,6 +1424,7 @@
       "translations": ["hegy"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Berge" },
+      "examples": [{ "sentence": "Der Berg ist über 2000 Meter hoch.", "translation": "A hegy több mint 2000 méter magas." }],
       "is_active": true
     },
     {
@@ -1267,6 +1433,7 @@
       "translations": ["folyó"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Flüsse" },
+      "examples": [{ "sentence": "Die Donau ist ein langer Fluss.", "translation": "A Duna hosszú folyó." }],
       "is_active": true
     },
     {
@@ -1281,6 +1448,7 @@
         "preterite_3sg": "schneite",
         "past_participle": "geschneit"
       },
+      "examples": [{ "sentence": "Es schneit seit gestern.", "translation": "Tegnap óta havazik." }],
       "is_active": true
     },
     {
@@ -1295,6 +1463,7 @@
         "preterite_3sg": "schien",
         "past_participle": "geschienen"
       },
+      "examples": [{ "sentence": "Heute scheint die Sonne.", "translation": "Ma süt a nap." }],
       "is_active": true
     },
     {
@@ -1303,6 +1472,7 @@
       "translations": ["hűvös"],
       "categories": ["wetter"],
       "adjective": { "comparative": "kühler", "superlative": "am kühlsten" },
+      "examples": [{ "sentence": "Am Abend wird es kühl.", "translation": "Estére hűvös lesz." }],
       "is_active": true
     },
     {
@@ -1311,6 +1481,7 @@
       "translations": ["napos"],
       "categories": ["wetter"],
       "adjective": { "comparative": "sonniger", "superlative": "am sonnigsten" },
+      "examples": [{ "sentence": "Morgen wird es sonnig.", "translation": "Holnap napos idő lesz." }],
       "is_active": true
     },
     {
@@ -1319,6 +1490,7 @@
       "translations": ["nedves"],
       "categories": ["wetter"],
       "adjective": { "comparative": "nässer", "superlative": "am nässesten" },
+      "examples": [{ "sentence": "Meine Haare sind noch nass.", "translation": "Még nedves a hajam." }],
       "is_active": true
     },
     {
@@ -1327,6 +1499,7 @@
       "translations": ["cím"],
       "categories": ["kommunikation"],
       "noun": { "gender": "feminine", "plural": "Adressen" },
+      "examples": [{ "sentence": "Wie ist deine Adresse?", "translation": "Mi a címed?" }],
       "is_active": true
     },
     {
@@ -1335,6 +1508,7 @@
       "translations": ["beszélgetés"],
       "categories": ["kommunikation"],
       "noun": { "gender": "neuter", "plural": "Gespräche" },
+      "examples": [{ "sentence": "Das Gespräch war sehr angenehm.", "translation": "A beszélgetés nagyon kellemes volt." }],
       "is_active": true
     },
     {
@@ -1343,6 +1517,7 @@
       "translations": ["vélemény"],
       "categories": ["kommunikation"],
       "noun": { "gender": "feminine", "plural": "Meinungen" },
+      "examples": [{ "sentence": "Was ist deine Meinung?", "translation": "Mi a véleményed?" }],
       "is_active": true
     },
     {
@@ -1358,6 +1533,7 @@
         "past_participle": "erzählt"
       },
       "valencies": [{ "preposition": "von", "case": "dative", "pattern": "erzählen von + Dat.", "meaning": "mesél valamiről" }],
+      "examples": [{ "sentence": "Erzähl mir von deiner Reise!", "translation": "Mesélj az utazásodról!" }],
       "is_active": true
     },
     {
@@ -1372,6 +1548,7 @@
         "preterite_3sg": "erklärte",
         "past_participle": "erklärt"
       },
+      "examples": [{ "sentence": "Kannst du mir das Wort erklären?", "translation": "El tudod magyarázni ezt a szót?" }],
       "is_active": true
     },
     {
@@ -1396,6 +1573,7 @@
           "meaning": "bocsánatot kér valamiért"
         }
       ],
+      "examples": [{ "sentence": "Ich entschuldige mich für die Verspätung.", "translation": "Elnézést kérek a késésért." }],
       "is_active": true
     },
     {
@@ -1404,6 +1582,7 @@
       "translations": ["szerelem, szeretet"],
       "categories": ["gefuehle"],
       "noun": { "gender": "feminine", "number": "singular_only" },
+      "examples": [{ "sentence": "Die Liebe zur Musik verbindet uns.", "translation": "A zene szeretete összeköt minket." }],
       "is_active": true
     },
     {
@@ -1412,6 +1591,7 @@
       "translations": ["szerencse", "boldogság"],
       "categories": ["gefuehle"],
       "noun": { "gender": "neuter", "number": "singular_only" },
+      "examples": [{ "sentence": "Wir hatten Glück mit dem Wetter.", "translation": "Szerencsénk volt az időjárással." }],
       "is_active": true
     },
     {
@@ -1420,6 +1600,7 @@
       "translations": ["öröm"],
       "categories": ["gefuehle"],
       "noun": { "gender": "feminine", "plural": "Freuden" },
+      "examples": [{ "sentence": "Die Kinder springen vor Freude.", "translation": "A gyerekek ugrálnak örömükben." }],
       "is_active": true
     },
     {
@@ -1435,6 +1616,7 @@
         "past_participle": "gelacht"
       },
       "valencies": [{ "preposition": "über", "case": "accusative", "pattern": "lachen über + Akk.", "meaning": "nevet valamin" }],
+      "examples": [{ "sentence": "Wir lachen über den Witz.", "translation": "Nevetünk a viccen." }],
       "is_active": true
     },
     {
@@ -1449,6 +1631,7 @@
         "preterite_3sg": "weinte",
         "past_participle": "geweint"
       },
+      "examples": [{ "sentence": "Das Baby weint die ganze Nacht.", "translation": "A baba egész éjjel sír." }],
       "is_active": true
     },
     {
@@ -1471,6 +1654,7 @@
           "meaning": "reménykedik valamiben"
         }
       ],
+      "examples": [{ "sentence": "Wir hoffen auf gutes Wetter.", "translation": "Jó időben reménykedünk." }],
       "is_active": true
     },
     {
@@ -1479,6 +1663,7 @@
       "translations": ["fáradt"],
       "categories": ["gefuehle", "gesundheit"],
       "adjective": { "comparative": "müder", "superlative": "am müdesten" },
+      "examples": [{ "sentence": "Nach der Arbeit bin ich sehr müde.", "translation": "Munka után nagyon fáradt vagyok." }],
       "is_active": true
     },
     {
@@ -1487,6 +1672,7 @@
       "translations": ["ideges"],
       "categories": ["gefuehle"],
       "adjective": { "comparative": "nervöser", "superlative": "am nervösesten" },
+      "examples": [{ "sentence": "Vor der Prüfung bin ich nervös.", "translation": "A vizsga előtt ideges vagyok." }],
       "is_active": true
     },
     {
@@ -1496,6 +1682,7 @@
       "categories": ["gefuehle"],
       "adjective": { "comparative": "zufriedener", "superlative": "am zufriedensten" },
       "valencies": [{ "preposition": "mit", "case": "dative", "pattern": "zufrieden mit + Dat.", "meaning": "elégedett valamivel" }],
+      "examples": [{ "sentence": "Der Chef ist mit meiner Arbeit zufrieden.", "translation": "A főnök elégedett a munkámmal." }],
       "is_active": true
     },
     {
@@ -1511,6 +1698,7 @@
         "past_participle": "vorbereitet",
         "separable_prefix": "vor"
       },
+      "examples": [{ "sentence": "Ich bereite das Essen für die Gäste vor.", "translation": "Előkészítem az ételt a vendégeknek." }],
       "is_active": true
     },
     {
@@ -1525,6 +1713,7 @@
         "preterite_3sg": "bekam",
         "past_participle": "bekommen"
       },
+      "examples": [{ "sentence": "Ich habe ein schönes Geschenk bekommen.", "translation": "Szép ajándékot kaptam." }],
       "is_active": true
     },
     {
@@ -1539,6 +1728,7 @@
         "preterite_3sg": "verlor",
         "past_participle": "verloren"
       },
+      "examples": [{ "sentence": "Ich habe meine Brille verloren.", "translation": "Elvesztettem a szemüvegemet." }],
       "is_active": true
     },
     {
@@ -1553,6 +1743,7 @@
         "preterite_3sg": "gewann",
         "past_participle": "gewonnen"
       },
+      "examples": [{ "sentence": "Unsere Mannschaft hat gewonnen.", "translation": "A csapatunk nyert." }],
       "is_active": true
     },
     {
@@ -1568,6 +1759,7 @@
         "past_participle": "gedankt"
       },
       "valencies": [{ "preposition": null, "case": "dative", "pattern": "danken + Dat.", "meaning": "megköszön valakinek" }],
+      "examples": [{ "sentence": "Ich danke dir für deine Hilfe.", "translation": "Köszönöm a segítségedet." }],
       "is_active": true
     },
     {
@@ -1583,6 +1775,7 @@
         "past_participle": "gehört"
       },
       "valencies": [{ "preposition": null, "case": "dative", "pattern": "gehören + Dat.", "meaning": "valakié" }],
+      "examples": [{ "sentence": "Das Fahrrad gehört meinem Bruder.", "translation": "A kerékpár a bátyámé." }],
       "is_active": true
     },
     {
@@ -1597,6 +1790,7 @@
         "preterite_3sg": "benutzte",
         "past_participle": "benutzt"
       },
+      "examples": [{ "sentence": "Darf ich dein Telefon benutzen?", "translation": "Használhatom a telefonodat?" }],
       "is_active": true
     },
     {
@@ -1611,6 +1805,7 @@
         "preterite_3sg": "entschied",
         "past_participle": "entschieden"
       },
+      "examples": [{ "sentence": "Ich kann mich nicht entscheiden.", "translation": "Nem tudok dönteni." }],
       "is_active": true
     },
     {
@@ -1625,6 +1820,7 @@
         "preterite_3sg": "versuchte",
         "past_participle": "versucht"
       },
+      "examples": [{ "sentence": "Ich versuche, pünktlich zu sein.", "translation": "Megpróbálok pontos lenni." }],
       "is_active": true
     },
     {
@@ -1639,6 +1835,7 @@
         "preterite_3sg": "passierte",
         "past_participle": "passiert"
       },
+      "examples": [{ "sentence": "Was ist passiert?", "translation": "Mi történt?" }],
       "is_active": true
     },
     {
@@ -1653,6 +1850,7 @@
         "preterite_3sg": "starb",
         "past_participle": "gestorben"
       },
+      "examples": [{ "sentence": "Sein Großvater ist letztes Jahr gestorben.", "translation": "A nagyapja tavaly meghalt." }],
       "is_active": true
     },
     {
@@ -1661,6 +1859,7 @@
       "translations": ["magas"],
       "categories": ["grundwortschatz"],
       "adjective": { "comparative": "höher", "superlative": "am höchsten", "irregular_comparison": true },
+      "examples": [{ "sentence": "Der Turm ist sehr hoch.", "translation": "A torony nagyon magas." }],
       "is_active": true
     },
     {
@@ -1669,6 +1868,7 @@
       "translations": ["lehetséges"],
       "categories": ["grundwortschatz"],
       "adjective": {  },
+      "examples": [{ "sentence": "Ist es möglich, heute zu bezahlen?", "translation": "Lehetséges ma fizetni?" }],
       "is_active": true
     },
     {
@@ -1677,6 +1877,12 @@
       "translations": ["hasonló"],
       "categories": ["grundwortschatz"],
       "adjective": { "comparative": "ähnlicher", "superlative": "am ähnlichsten" },
+      "examples": [
+        {
+          "sentence": "Die Geschwister sehen sich sehr ähnlich.",
+          "translation": "A testvérek nagyon hasonlítanak egymásra."
+        }
+      ],
       "is_active": true
     },
     {
@@ -1685,6 +1891,7 @@
       "translations": ["barátságos"],
       "categories": ["menschen"],
       "adjective": { "comparative": "freundlicher", "superlative": "am freundlichsten" },
+      "examples": [{ "sentence": "Die Verkäuferin ist sehr freundlich.", "translation": "Az eladónő nagyon barátságos." }],
       "is_active": true
     },
     {
@@ -1693,6 +1900,7 @@
       "translations": ["udvarias"],
       "categories": ["menschen"],
       "adjective": { "comparative": "höflicher", "superlative": "am höflichsten" },
+      "examples": [{ "sentence": "Das Kind ist immer höflich.", "translation": "A gyerek mindig udvarias." }],
       "is_active": true
     },
     {
@@ -1701,6 +1909,7 @@
       "translations": ["nyugodt, csendes"],
       "categories": ["grundwortschatz"],
       "adjective": { "comparative": "ruhiger", "superlative": "am ruhigsten" },
+      "examples": [{ "sentence": "Unsere Straße ist sehr ruhig.", "translation": "Az utcánk nagyon csendes." }],
       "is_active": true
     },
     {
@@ -1709,6 +1918,7 @@
       "translations": ["hangos"],
       "categories": ["grundwortschatz"],
       "adjective": { "comparative": "lauter", "superlative": "am lautesten" },
+      "examples": [{ "sentence": "Die Musik ist zu laut.", "translation": "A zene túl hangos." }],
       "is_active": true
     },
     {
@@ -1717,6 +1927,7 @@
       "translations": ["nőtlen, hajadon"],
       "categories": ["familie"],
       "adjective": {  },
+      "examples": [{ "sentence": "Mein Bruder ist noch ledig.", "translation": "A bátyám még nőtlen." }],
       "is_active": true
     },
     {
@@ -1724,6 +1935,7 @@
       "pos": "preposition",
       "translations": ["miatt"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Wegen des Regens bleiben wir zu Hause.", "translation": "Az eső miatt itthon maradunk." }],
       "is_active": true
     },
     {
@@ -1731,6 +1943,7 @@
       "pos": "preposition",
       "translations": ["alatt, közben"],
       "categories": ["grundwortschatz", "zeit"],
+      "examples": [{ "sentence": "Während des Essens spricht er nicht.", "translation": "Evés közben nem beszél." }],
       "is_active": true
     },
     {
@@ -1738,6 +1951,7 @@
       "pos": "conjunction",
       "translations": ["hogy"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Ich weiß, dass du recht hast.", "translation": "Tudom, hogy igazad van." }],
       "is_active": true
     },
     {
@@ -1745,6 +1959,7 @@
       "pos": "conjunction",
       "translations": ["ha", "amikor"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Wenn es regnet, nehme ich den Bus.", "translation": "Ha esik, busszal megyek." }],
       "is_active": true
     },
     {
@@ -1752,6 +1967,7 @@
       "pos": "conjunction",
       "translations": ["habár, bár"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Er geht spazieren, obwohl es regnet.", "translation": "Sétálni megy, pedig esik." }],
       "is_active": true
     },
     {
@@ -1759,6 +1975,7 @@
       "pos": "adverb",
       "translations": ["sajnos"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Ich habe leider keine Zeit.", "translation": "Sajnos nincs időm." }],
       "is_active": true
     },
     {
@@ -1766,6 +1983,7 @@
       "pos": "adverb",
       "translations": ["együtt"],
       "categories": ["grundwortschatz"],
+      "examples": [{ "sentence": "Wir fahren zusammen in den Urlaub.", "translation": "Együtt megyünk szabadságra." }],
       "is_active": true
     },
     {
@@ -1773,6 +1991,7 @@
       "pos": "phrase",
       "translations": ["sok szerencsét!"],
       "categories": ["kommunikation"],
+      "examples": [{ "sentence": "Viel Glück bei der Prüfung!", "translation": "Sok szerencsét a vizsgához!" }],
       "is_active": true
     }
   ]

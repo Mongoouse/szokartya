@@ -121,6 +121,20 @@ void main() {
     expect(find.text('Mit jelent?'), findsOneWidget, reason: 'a hibás kártya újra előjön');
   });
 
+  testWidgets('példamondat fordítással a kiértékelés alatt, csak a válasz után', (tester) async {
+    final json = wordJson(id: 'w2', lemma: 'Tisch', translation: 'asztal')
+      ..['examples'] = [
+        {'sentence': 'Das Buch liegt auf dem Tisch.', 'translation': 'A könyv az asztalon fekszik.'},
+      ];
+    await pump(tester, [cardOf(Word.fromJson(json), CardType.recognition)]);
+    expect(find.byKey(const Key('exampleSentence')), findsNothing, reason: 'a példamondat elárulná a választ');
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'asztal');
+    await tester.tap(find.text('Ellenőrzés'));
+    await tester.pumpAndSettle();
+    expect(find.text('Das Buch liegt auf dem Tisch.'), findsOneWidget);
+    expect(find.text('A könyv az asztalon fekszik.'), findsOneWidget);
+  });
+
   testWidgets('kiejtés a válasz után; nincs ékezetsor (a telefon billentyűzete adja)', (tester) async {
     final (study, speaker) = await pump(tester, [cardOf(tisch, CardType.production)]);
     expect(find.byKey(const Key('accent-ä')), findsNothing);
