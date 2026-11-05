@@ -212,7 +212,8 @@ describe('Hibabejelentés és adminisztráció (integráció)', () => {
       const verified = await t.http.get(`${API}/admin/words`).set(admin.auth).query({ status: 'VERIFIED', q: 'Angst' }).expect(200);
       expect(verified.body.items.map((w: { lemma: string }) => w.lemma)).toEqual(['Angst']);
       const queue = await t.http.get(`${API}/admin/words`).set(admin.auth).query({ status: 'UNREVIEWED', q: 'Angst' }).expect(200);
-      expect(queue.body.total).toBe(0);
+      // A keresés részleges egyezés (pl. „Angststörung” is), ezért csak azt nézzük, hogy az „Angst” kikerült a sorból.
+      expect(queue.body.items.map((w: { lemma: string }) => w.lemma)).not.toContain('Angst');
     });
 
     it('jelentés javítása: ellenőrzöttnek jelöli, és a felhasználó eszközére leszinkronizálódik', async () => {

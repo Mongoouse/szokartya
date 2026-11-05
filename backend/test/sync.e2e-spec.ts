@@ -95,7 +95,8 @@ describe('Szinkronizáció (integráció)', () => {
           ['RECOGNITION', 'PRODUCTION'].map((cardType) => ({ userId: user.id, wordId: w.id, cardType: cardType as never })),
         ),
       });
-      const all = await pullAll(undefined, 3);
+      // Kis lapméret, hogy a holtverseny sok laphatáron átnyúljon (a katalógus több ezer szó).
+      const all = await pullAll(undefined, 7);
       const ids = all.progress.map((p) => p.id);
       expect(new Set(ids).size).toBe(words.length * 2);
       expect(ids).toHaveLength(words.length * 2);

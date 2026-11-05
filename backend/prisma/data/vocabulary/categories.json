@@ -21,6 +21,7 @@
   { "slug": "reisen", "name_hu": "Utazás", "name_de": "Reisen" },
   { "slug": "kommunikation", "name_hu": "Kommunikáció", "name_de": "Kommunikation" },
   { "slug": "b2-wortschatz", "name_hu": "B2 szókincs", "name_de": "B2-Wortschatz" },
+  { "slug": "c1-wortschatz", "name_hu": "C1 szókincs", "name_de": "C1-Wortschatz" },
   { "slug": "wirtschaft", "name_hu": "Gazdaság és pénzügyek", "name_de": "Wirtschaft und Finanzen" },
   { "slug": "gesellschaft", "name_hu": "Társadalom", "name_de": "Gesellschaft" },
   { "slug": "politik", "name_hu": "Politika és közigazgatás", "name_de": "Politik und Verwaltung" },

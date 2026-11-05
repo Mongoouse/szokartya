@@ -78,7 +78,7 @@ cd backend
 cp .env.example .env              # PowerShell: Copy-Item .env.example .env
 npm install                       # a Prisma klienst is legenerálja (postinstall)
 npm run db:migrate                # migrációk alkalmazása
-npm run db:seed                   # szókincs – várt kimenet: „Seed kész: 32 kategória, 2029 szó.”
+npm run db:seed                   # szókincs – várt kimenet: „Seed kész: 33 kategória, 3509 szó.”
 npm run db:verify                 # séma-ellenőrzés: kényszerek, triggerek, indexhasználat
 npm run start:dev                 # API: http://localhost:3000/api/v1 – Swagger: http://localhost:3000/docs
 
