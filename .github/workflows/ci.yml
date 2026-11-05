@@ -1,6 +1,6 @@
 # Folyamatos integráció: minden push és pull request futtatja.
 #  - backend: típusellenőrzés, lint, formázás, egységtesztek, migrációk + séma-ellenőrzés, integrációs tesztek
-#  - mobile:  statikus elemzés, egység- és widgetszintű tesztek
+#  - mobile:  statikus elemzés, egység- és widgetszintű tesztek, böngészős (web) build
 #  - sync-e2e: Flutter kliensek valódi backend ellen (többeszközös adatintegritás)
 #  - docker:   a teljes stack (db + migráció + API) image-ből indul
 name: CI
@@ -78,6 +78,8 @@ jobs:
       - run: flutter analyze
       - name: Tesztek (az e2e csomag backend nélkül kihagyódik)
         run: flutter test
+      - name: Böngészős (web) build
+        run: flutter build web --release
 
   sync-e2e:
     runs-on: ubuntu-latest

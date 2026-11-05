@@ -6,7 +6,7 @@ Keresztplatformos, offline-first szókincsfejlesztő alkalmazás német nyelvtan
 |---|---|
 | Backend | NestJS (TypeScript), rétegzett architektúra (Controller / Service / Repository) |
 | Adatbázis | PostgreSQL 16 + Prisma ORM |
-| Kliens | Flutter (Dart), offline-first helyi tárolással |
+| Kliens | Flutter (Dart), offline-first helyi tárolással – Android, iOS és böngésző (Flutter web) |
 | Kommunikáció | REST + JSON, JWT (access + refresh token), argon2id |
 
 ## Állapot
@@ -86,7 +86,12 @@ npm run start:dev                 # API: http://localhost:3000/api/v1 – Swagge
 cd ../mobile
 flutter pub get
 flutter run
+
+# 3/b. …vagy böngészőben (Chrome / Edge) – a backend CORS_ORIGINS-e engedi a localhost:8080-at
+flutter run -d chrome --web-port 8080
 ```
+
+A böngészős változat részletei (korlátok, éles build): [mobile/README.md](mobile/README.md#böngészős-változat-flutter-web).
 
 Admin felhasználó (szóellenőrzés és a bejelentések kezelése az appban): regisztrálj az appban, majd `npm run user:role -- <email> ADMIN`, és jelentkezz be újra.
 
