@@ -2,17 +2,20 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
+  ArticleType,
   AuxiliaryVerb,
   CefrLevel,
   ConjugationType,
   GrammaticalCase,
   GrammaticalGender,
+  GrammaticalNumber,
   NumberType,
   PartOfSpeech,
   ReflexiveType,
 } from '@prisma/client';
 import { SeedWord, wordKey } from './seed-writer';
 import {
+  articleCell,
   formatCategories,
   formatVocabularyFile,
   loadVocabulary,
@@ -217,6 +220,72 @@ describe('szólista JSON formátum', () => {
     expect(problems.join('\n')).toMatch(message);
   });
 
+  describe('a példamondat névelője (névelőtáblázat)', () => {
+    const wein = { ...base, lemma: 'Wein', pos: 'noun', noun: { gender: 'masculine', plural: 'Weine', genitive: 'Wein(e)s' } };
+    const ex = (sentence: string, article: object) => ({ ...wein, examples: [{ sentence, translation: 'x', article }] });
+    const acc = { case: 'accusative', type: 'indefinite', number: 'singular', form: 'einen' };
+
+    it('beolvasás és visszaírás: der → einen (tárgyeset, határozatlan)', () => {
+      const w = readOne(ex('Zum Essen trinken wir einen Wein.', acc));
+      expect(w.examples![0]!.article).toEqual({
+        case: GrammaticalCase.ACCUSATIVE,
+        type: ArticleType.INDEFINITE,
+        number: GrammaticalNumber.SINGULAR,
+        form: 'einen',
+      });
+      expect(toVocabularyEntry(w).examples![0]!.article).toEqual(acc);
+    });
+
+    it.each([
+      ['mondatkezdő nagybetűs alak', 'Der Wein ist gut.', { case: 'nominative', type: 'definite', number: 'singular', form: 'Der' }],
+      ['összevonás (zum = zu + dem)', 'Wir gehen zum Wein.', { case: 'dative', type: 'definite', number: 'singular', form: 'zum' }],
+      ['birtokos névmás', 'Ich trinke meinen Wein.', { case: 'accusative', type: 'possessive', number: 'singular', form: 'meinen' }],
+      ['euer → eure', 'Das sind eure Weine.', { case: 'nominative', type: 'possessive', number: 'plural', form: 'eure' }],
+      ['kein többes számban', 'Ich trinke keine Weine.', { case: 'accusative', type: 'negative', number: 'plural', form: 'keine' }],
+    ])('elfogadja: %s', (_name, sentence, article) => {
+      expect(read(ex(sentence, article)).problems).toEqual([]);
+    });
+
+    it.each([
+      [
+        'nem illő alak (der helyett die)',
+        'Die Wein ist gut.',
+        { ...acc, case: 'nominative', type: 'definite', form: 'Die' },
+        /nem nominative definite masculine alak \(várt: der\)/,
+      ],
+      ['nem szerepel a mondatban', 'Wir trinken Wein.', acc, /„einen” nem szerepel a mondatban/],
+      ['határozatlan névelő többes számban', 'Wir trinken eine Weine.', { ...acc, number: 'plural', form: 'eine' }, /nincs többes száma/],
+      [
+        'összevonás nem határozott névelővel',
+        'Wir gehen zum Wein.',
+        { case: 'dative', type: 'indefinite', number: 'singular', form: 'zum' },
+        /nem dative indefinite/,
+      ],
+      ['ismeretlen mező', 'Zum Essen trinken wir einen Wein.', { ...acc, gender: 'masculine' }, /ismeretlen mező: „gender”/],
+      ['érvénytelen eset', 'Zum Essen trinken wir einen Wein.', { ...acc, case: 'akkusativ' }, /„case”: érvénytelen érték/],
+    ])('elutasítja: %s', (_name, sentence, article, message) => {
+      expect(read(ex(sentence, article)).problems.join('\n')).toMatch(message);
+    });
+
+    it('csak főnév saját példamondatánál adható meg', () => {
+      const { problems } = read({
+        ...base,
+        lemma: 'gut',
+        pos: 'adjective',
+        examples: [{ sentence: 'Der Wein ist gut.', translation: 'x', article: acc }],
+      });
+      expect(problems.join()).toMatch(/„article” csak főnév saját példamondatánál/);
+    });
+
+    it('a táblázat cellái: der/ein/kein és a birtokos névmások', () => {
+      expect(articleCell(GrammaticalCase.ACCUSATIVE, ArticleType.INDEFINITE, 'MASCULINE')).toBe('einen');
+      expect(articleCell(GrammaticalCase.GENITIVE, ArticleType.DEFINITE, 'PLURAL')).toBe('der');
+      expect(articleCell(GrammaticalCase.DATIVE, ArticleType.NEGATIVE, 'PLURAL')).toBe('keinen');
+      expect(articleCell(GrammaticalCase.NOMINATIVE, ArticleType.INDEFINITE, 'PLURAL')).toBeNull();
+      expect(articleCell(GrammaticalCase.DATIVE, ArticleType.POSSESSIVE, 'FEMININE', 'euer')).toBe('eurer');
+    });
+  });
+
   it('a hibaüzenet megadja a fájlt, a szó helyét és a lemmát', () => {
     const { problems } = read({ ...base, lemma: 'Tisch', pos: 'noun', noun: { gender: 'masculine' } });
     expect(problems).toEqual(['teszt.json › words[0] „Tisch” › noun: hiányzik: „plural”']);
@@ -312,6 +381,12 @@ describe('a mellékelt szókincs', () => {
       return !all.some((e) => e.sentence.trim() && e.translation?.trim());
     });
     expect(missing.map(wordKey)).toEqual([]);
+  });
+
+  it('a főnévi példamondatok többségénél ismert a névelő (névelőtáblázat)', () => {
+    const nouns = of(PartOfSpeech.NOUN);
+    const tagged = nouns.filter((w) => w.examples?.some((e) => e.article));
+    expect(tagged.length / nouns.length).toBeGreaterThan(0.6);
   });
 
   it('minden főnévnek van neme (kivéve a csak többes számúakat), a B2 és C1 főneveknek birtokos esete is', () => {

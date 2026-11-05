@@ -87,7 +87,7 @@ loading ──► question ──reveal()──► answer ──grade(q)──�
 - **Gombok:** Nem tudtam (1) · Nehéz (3) · Jó (4) · Könnyű (5), alattuk az ütemező előnézete (pl. „10 perc”, „4 nap”).
 - A tanulási lépcsőn maradt kártyák (1–10 perc) a munkamenet végére visszakerülnek.
 - Mentés közben a gombok tiltva (dupla koppintás ellen).
-- Kártyatípusok: felismerés (de → hu), felidézés (hu → de, gépelt válasszal is), névelő (`___ Tisch` → der), többes szám, igei alapalakok, vonzat (lásd [05-tovabbfejlesztes.md](05-tovabbfejlesztes.md)). A hátlapon: többes szám, igei alapalakok segédigével, fokozás, vonzatok jelentéssel, példamondat.
+- Kártyatípusok: felismerés (de → hu), felidézés (hu → de, gépelt válasszal is), névelő (`___ Tisch` → der), többes szám, igei alapalakok, vonzat (lásd [05-tovabbfejlesztes.md](05-tovabbfejlesztes.md)). A hátlapon: többes szám, igei alapalakok segédigével, fokozás, vonzatok jelentéssel, példamondat. A válasz után a példamondat alatt főnévnél névelőtáblázat is megjelenik: a der/ein/kein (vagy birtokos névmás) ragozása, kiemelve a cellát, amelyből a mondat névelője származik (der → ein**en**); a szerver ezt a példamondat `article` mezőjében küldi, a kliens a nyers payloadból olvassa, így helyi migráció nem kell.
 
 ## 5. Ellenőrzés
 

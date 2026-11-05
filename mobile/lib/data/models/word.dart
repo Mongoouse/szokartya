@@ -1,4 +1,8 @@
 import '../../core/api/api_client.dart';
+import '../../domain/article_table.dart';
+
+/// Példamondat fordítással; főnév saját példájánál a főnév előtti névelővel.
+typedef Example = ({String sentence, String? translation, ExampleArticle? article});
 
 /// Egy szó a kártyán megjelenítendő adataival.
 ///
@@ -36,6 +40,9 @@ class Word {
   /// der / die / das (csak nemmel rendelkező főnévnél).
   String? get article => _noun?['article'] as String?;
   String? get pluralForm => _noun?['pluralForm'] as String?;
+
+  /// A névelőtáblázat oszlopa a főnév neméből; null, ha nincs neme (csak többes számú).
+  ArticleColumn? get genderColumn => ArticleColumn.fromGender(_noun?['gender'] as String?);
   bool get isNoun => partOfSpeech == 'NOUN';
   bool get hasGender => article != null;
 
@@ -111,17 +118,26 @@ class Word {
         );
       }).toList();
 
-  List<({String sentence, String? translation})> get examples => _list('examples')
-      .map((e) => (sentence: e['sentence'] as String, translation: e['translation'] as String?))
+  /// A szó saját példamondatai; főnévnél a névelő adataival (a névelőtáblázathoz).
+  List<Example> get examples => _list('examples')
+      .map(
+        (e) => (
+          sentence: e['sentence'] as String,
+          translation: e['translation'] as String?,
+          article: isNoun ? ExampleArticle.fromJson(e['article']) : null,
+        ),
+      )
       .toList();
 
   /// A kártyán mutatott példamondat: a szó saját példája, ennek hiányában az első
   /// vonzat példája; null, ha egyik sincs.
-  ({String sentence, String? translation})? get example {
+  Example? get example {
     if (examples.isNotEmpty) return examples.first;
     for (final v in _list('valencies')) {
       final e = (v['examples'] as List?)?.cast<Json>() ?? const [];
-      if (e.isNotEmpty) return (sentence: e.first['sentence'] as String, translation: e.first['translation'] as String?);
+      if (e.isNotEmpty) {
+        return (sentence: e.first['sentence'] as String, translation: e.first['translation'] as String?, article: null);
+      }
     }
     return null;
   }

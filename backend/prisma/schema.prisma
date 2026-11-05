@@ -111,6 +111,24 @@ enum GrammaticalCase {
   @@map("grammatical_case")
 }
 
+/// A példamondatban a főnév előtt álló névelő fajtája (a névelőtáblázat oszlopa).
+enum ArticleType {
+  DEFINITE //   der, die, das
+  INDEFINITE // ein, eine
+  NEGATIVE //   kein, keine
+  POSSESSIVE // mein, dein, sein, ihr, unser, euer – az ein mintájára ragozódik
+
+  @@map("article_type")
+}
+
+/// Nyelvtani szám egy konkrét előfordulásban (a NumberType a szó tulajdonsága).
+enum GrammaticalNumber {
+  SINGULAR
+  PLURAL
+
+  @@map("grammatical_number")
+}
+
 /// Egy szóból több, egymástól függetlenül ütemezett kártya képezhető.
 enum CardType {
   RECOGNITION // német → magyar (felismerés)
@@ -427,20 +445,28 @@ model Translation {
 
 /// Példamondat kontextussal; opcionálisan egy konkrét vonzatot illusztrál.
 model ExampleSentence {
-  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  wordId      String     @map("word_id") @db.Uuid
-  valencyId   String?    @map("valency_id") @db.Uuid
+  id            String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  wordId        String             @map("word_id") @db.Uuid
+  valencyId     String?            @map("valency_id") @db.Uuid
   /// Forrásnyelvi mondat (de).
-  sentence    String     @db.VarChar(1000)
+  sentence      String             @db.VarChar(1000)
   /// Célnyelvi fordítás (hu).
-  translation String?    @db.VarChar(1000)
-  cefrLevel   CefrLevel? @map("cefr_level")
-  sortOrder   Int        @default(0) @map("sort_order") @db.SmallInt
-  version     Int        @default(1)
-  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  translation   String?            @db.VarChar(1000)
+  cefrLevel     CefrLevel?         @map("cefr_level")
+  sortOrder     Int                @default(0) @map("sort_order") @db.SmallInt
+  /// Főnévi példamondatnál: a főnév előtti névelő esete, fajtája, száma és pontos alakja
+  /// a mondatban (pl. ACCUSATIVE / INDEFINITE / SINGULAR / „einen”, vagy összevonásnál „zum”).
+  /// Ebből rajzolja a kliens a névelőtáblázatot a kiemelt cellával. Vagy mind a négy
+  /// ki van töltve, vagy egyik sem (CHECK megkötés).
+  articleCase   GrammaticalCase?   @map("article_case")
+  articleType   ArticleType?       @map("article_type")
+  articleNumber GrammaticalNumber? @map("article_number")
+  articleForm   String?            @map("article_form") @db.VarChar(30)
+  version       Int                @default(1)
+  createdAt     DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime           @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
   /// false = logikailag törölt: a sor megmarad (a hivatkozások és a statisztika ép), de sehol nem jelenik meg.
-  isActive    Boolean    @default(true) @map("is_active")
+  isActive      Boolean            @default(true) @map("is_active")
 
   word    Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
   valency Valency? @relation(fields: [valencyId], references: [id], onDelete: SetNull)

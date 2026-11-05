@@ -230,7 +230,13 @@ Egy szó:
   "categories": ["stadt"],
   "noun": { "gender": "feminine", "plural": "Straßen", "genitive": "Straße" },
   "valencies": [],
-  "examples": [{ "sentence": "Die Straße ist breit.", "translation": "Az utca széles." }],
+  "examples": [
+    {
+      "sentence": "Die Straße ist breit.",
+      "translation": "Az utca széles.",
+      "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+    }
+  ],
   "audio_url": "audio/de/strasse.mp3",
   "is_active": true
 }
@@ -244,11 +250,14 @@ Egy szó:
 | `noun` / `verb` / `adjective` | a szófaj nyelvtani adatai: nem, többes szám, birtokos eset, n-deklináció; ragozási típus, segédige, alapalakok, elváló igekötő, visszahatóság; fokozás, állítmányi használat |
 | `valencies` | vonzatok: elöljáró (vagy `null`), eset, minta, jelentés, példamondatok |
 | `examples`, `ipa`, `frequency_rank`, `audio_url` | példamondatok (mondat + magyar fordítás), kiejtés, gyakorisági rang, hangfájl |
+| `examples[].article` | csak főnév saját példamondatánál, opcionális: a főnév előtti névelő esete, fajtája (`definite`, `indefinite`, `negative`, `possessive`), száma és pontos mondatbeli alakja (lásd lent: névelőtáblázat) |
 | `is_active` | `false` = logikailag törölt szó (a seed is így írja be) |
 
 **Miért JSON.** A formátum szerkezetében követi az adatmodellt: a szófajfüggő nyelvtani adatok külön objektumban vannak, így egy újabb nyelv a saját mezőivel bővítheti anélkül, hogy a meglévőket érintené, és új szómező (pl. hanganyag) sem igényel új formátumot. A nyelv és a szint a fájl fejlécében van, így a fájlok nyelvenként és szintenként rendeződnek. A fájlokat a `vocabulary-json.ts` kanonikus alakban írja (a szó mezői soronként, a rövid tömbök egy sorban), így a verziókezelésben egy szó módosítása kis, olvasható különbség.
 
 **Ellenőrzés.** A `vocabulary-json.ts` beolvasója szigorú: ismeretlen (elgépelt) mező, hiányzó kötelező mező, érvénytelen felsorolt érték és az adatbázis CHECK kényszereibe ütköző kombináció (pl. csak többes számú főnévnek nincs neme, elöljárós vonzat nem lehet alanyeset, ismétlődő vonzat, az elváló igekötő nem a lemma eleje) mind hiba. Az összes hibát egyszerre jelzi, fájllal és a szó helyével (`de/a1.json › words[12] „Tisch” › noun: hiányzik: „plural”`), és ilyenkor semmit nem ír az adatbázisba. A `vocabulary-json.spec.ts` egységteszt adatbázis nélkül ellenőrzi a formátumot és a teljes mellékelt készletet (ismétlődés, kategóriák, kanonikus formázás, oda-vissza alakítás, és hogy minden szónak van fordított példamondata, sajátja vagy egy vonzatáé). A tanulókártya a válasz kiértékelése alatt ezt a példamondatot mutatja.
+
+**Névelőtáblázat.** A főnévi példamondat megmondhatja, milyen névelő áll a mondatban a főnév előtt: „Zum Essen trinken wir *einen* Wein.” → tárgyeset, határozatlan névelő, egyes szám, `einen`. Az `example_sentences` tábla négy oszlopban tárolja (`article_case`, `article_type`, `article_number`, `article_form`; CHECK: mind a négy vagy egyik sem, és határozatlan névelőnek nincs többes száma). A beolvasó ellenőrzi, hogy az alak a főnév neméhez, az esethez, a fajtához és a számhoz illik (der/ein/kein és a birtokos névmások ragozása, az összevont alakok – *zum, im, ins* … – a bennük rejlő határozott névelővel), és hogy szerepel a mondatban. A kliens ebből rajzolja a válasz után a der/ein/kein táblázatot: oszlop a főnév neme (der → hímnem) vagy a többes szám, sor az eset, és zölden, vastagon kiemeli azt a cellát, amelyből a mondatbeli alak származik (der → ein**en**); a mondatban is kiemeli a névelőt. A mellékelt készletben 1259 főnévi példamondat ilyen; ahol a főnév előtt nincs névelő, vagy más determináns áll (*dieser, jeder, viele* …), nincs táblázat. A címkéket a mondatokból gépi elemzés és kézi ellenőrzés (a nem egyértelmű alany- és tárgyesetek mondatonkénti eldöntése) állította elő.
 
 A JSON fájlokat a korábbi forrásokból (a `seed.ts` sémamintái, a tömör szöveges A1–B1 lista és a B2 lista) generáltuk; az átalakítás veszteségmentességét szavanként ellenőriztük (mind a 2029 szó adatbázisba írt értékei azonosak).
 
