@@ -91,14 +91,27 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: LinearProgressIndicator(value: session.answered / session.goal!),
                     ),
+                  // A kártya, alatta közvetlenül az értékelés és a névelőtáblázat;
+                  // kis kijelzőn együtt görgethető, a Tovább gomb lent marad.
                   Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: FlashcardView(
-                        key: ValueKey('${card!.id}-${session.answered}-${session.phase}'),
-                        card: card,
-                        showAnswer: session.phase == StudyPhase.answer,
-                        onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: FlashcardView(
+                              key: ValueKey('${card!.id}-${session.answered}-${session.phase}'),
+                              card: card,
+                              showAnswer: session.phase == StudyPhase.answer,
+                              onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
+                            ),
+                          ),
+                          if (session.phase == StudyPhase.answer) ...[
+                            const SizedBox(height: 12),
+                            _ResultBanner(check: session.check!, typed: session.typed ?? '', word: card.word),
+                          ],
+                        ],
                       ),
                     ),
                   ),
@@ -108,14 +121,6 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                   if (session.phase == StudyPhase.question)
                     ..._questionControls(card, saving: session.saving)
                   else ...[
-                    // A példamondat és a névelőtáblázat legfeljebb a képernyő ~40%-át foglalja,
-                    // kis kijelzőn görgethető – a kártya mindig látható marad.
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
-                      child: SingleChildScrollView(
-                        child: _ResultBanner(check: session.check!, typed: session.typed ?? '', word: card.word),
-                      ),
-                    ),
                     FilledButton(
                       key: const Key('nextCard'),
                       focusNode: _nextFocus,
@@ -195,8 +200,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
 }
 
 /// A válasz kiértékelése: Helyes / Majdnem / Helytelen, a begépelt válasszal és
-/// rövid magyarázattal, alatta a szó példamondata fordítással. Az automatikus
-/// értékelés (osztályzat, következő ismétlés) szándékosan nem látszik – csak naplózódik.
+/// rövid magyarázattal; főnévnél alatta a névelőtáblázat (a példamondat a kártyán
+/// van). Az automatikus értékelés (osztályzat, következő ismétlés) szándékosan
+/// nem látszik – csak naplózódik.
 class _ResultBanner extends StatelessWidget {
   const _ResultBanner({required this.check, required this.typed, required this.word});
 
@@ -213,9 +219,7 @@ class _ResultBanner extends StatelessWidget {
     };
     final answerText = typed.isEmpty ? '' : ': „$typed”';
     final hint = check.hint == null ? '' : ' – ${check.hint}';
-    final example = word.example;
-    final article = example?.article;
-    final textTheme = Theme.of(context).textTheme;
+    final article = word.example?.article;
     return Semantics(
       liveRegion: true,
       child: Padding(
@@ -230,20 +234,10 @@ class _ResultBanner extends StatelessWidget {
                 Expanded(child: Text('$label$answerText$hint')),
               ],
             ),
-            if (example != null) ...[
-              const SizedBox(height: 6),
-              HighlightedSentence(
-                key: const Key('exampleSentence'),
-                sentence: example.sentence,
-                form: article?.form,
-                style: textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
-              ),
-              if (example.translation != null) Text(example.translation!, style: textTheme.bodySmall),
-              // Főnévnél: honnan jön a mondatbeli névelő (der → einen).
-              if (article != null) ...[
-                const SizedBox(height: 8),
-                ArticleTableView(article: article, gender: word.genderColumn, lemma: word.lemma),
-              ],
+            // Főnévnél: honnan jön a kártyán lévő példamondat névelője (der → einen).
+            if (article != null) ...[
+              const SizedBox(height: 8),
+              ArticleTableView(article: article, gender: word.genderColumn, lemma: word.lemma),
             ],
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/study_card.dart';
 import '../../data/models/word.dart';
 import '../../domain/card_answer.dart';
+import 'article_table_view.dart';
 
 /// Egy kártya elő- vagy hátlapja a kártyatípus szerint.
 ///
@@ -92,14 +93,34 @@ class FlashcardView extends StatelessWidget {
     final lines = <String>[
       if (type == CardType.gender) w.display,
       if (type != CardType.recognition && type != CardType.production && type != CardType.gender) w.primaryTranslation,
-      if (type != CardType.plural && w.pluralForm != null && w.article != null) 'Többes szám: die ${w.pluralForm}',
       if (type != CardType.verbForms && w.verbForms != null) w.verbForms!,
       if (w.comparison != null) w.comparison!,
       for (final v in w.valencies)
         if (type != CardType.valency || v.meaning != null)
           type == CardType.valency ? '${v.pattern} – ${v.meaning}' : '${v.pattern}${v.meaning != null ? ' – ${v.meaning}' : ''}',
     ];
-    // A példamondat a kártya alatt, a válasz kiértékelésénél látszik (study_screen).
-    return [for (final line in lines) Text(line, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center)];
+    final example = w.example;
+    final style = theme.textTheme.bodyLarge;
+    return [
+      for (final line in lines) Text(line, style: style, textAlign: TextAlign.center),
+      // A példamondat (a névelő kiemelve) a többes szám sora helyén; a névelőtáblázat
+      // a kártya alatt, a kiértékelésnél látszik (study_screen).
+      if (example != null) ...[
+        const SizedBox(height: 12),
+        HighlightedSentence(
+          key: const Key('exampleSentence'),
+          sentence: example.sentence,
+          form: example.article?.form,
+          style: style?.copyWith(fontStyle: FontStyle.italic),
+          textAlign: TextAlign.center,
+        ),
+        if (example.translation != null)
+          Text(example.translation!, style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
+      ],
+      if (type != CardType.plural && w.pluralForm != null && w.article != null) ...[
+        const SizedBox(height: 12),
+        Text('Többes szám: die ${w.pluralForm}', style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
+      ],
+    ];
   }
 }

@@ -9,15 +9,20 @@
 library;
 
 enum ArticleCase {
-  nominative('NOMINATIVE', 'Nom.', 'alanyeset'),
-  accusative('ACCUSATIVE', 'Akk.', 'tárgyeset'),
-  dative('DATIVE', 'Dat.', 'részes eset'),
-  genitive('GENITIVE', 'Gen.', 'birtokos eset');
+  nominative('NOMINATIVE', 'Nom.', 'alany e.', 'alanyeset'),
+  accusative('ACCUSATIVE', 'Akk.', 'tárgy e.', 'tárgyeset'),
+  dative('DATIVE', 'Dat.', 'részes eset', 'részes eset'),
+  genitive('GENITIVE', 'Gen.', 'birt. e.', 'birtokos eset');
 
-  const ArticleCase(this.code, this.abbreviation, this.nameHu);
+  const ArticleCase(this.code, this.abbreviation, this.label, this.nameHu);
 
   final String code;
+
+  /// Német rövidítés a vonzat jelöléséhez (an + Dat.).
   final String abbreviation;
+
+  /// A táblázat sorának fejléce.
+  final String label;
   final String nameHu;
 }
 
@@ -37,8 +42,8 @@ enum ArticleType {
 enum ArticleColumn {
   masculine('hímnem', 'der'),
   feminine('nőnem', 'die'),
-  neuter('semleges', 'das'),
-  plural('többes', 'die');
+  neuter('semleges nem', 'das'),
+  plural('többes szám', 'die');
 
   const ArticleColumn(this.nameHu, this.definite);
 

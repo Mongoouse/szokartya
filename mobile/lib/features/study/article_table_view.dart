@@ -6,22 +6,28 @@ import '../../domain/article_table.dart';
 Color articleHighlightColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark ? Colors.green.shade300 : Colors.green.shade800;
 
-Color _highlightBackground(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark ? Colors.green.withValues(alpha: 0.25) : Colors.green.shade50;
+/// A kiemelt sor és oszlop lágy háttere.
+Color _softBackground(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark ? Colors.green.withValues(alpha: 0.14) : Colors.green.shade50;
+
+/// A sor és az oszlop metszete: erősebb zöld.
+Color _strongBackground(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark ? Colors.green.withValues(alpha: 0.4) : Colors.green.shade200;
 
 /// A példamondat, benne a névelő (einen, zum …) zölden, vastagon kiemelve.
 class HighlightedSentence extends StatelessWidget {
-  const HighlightedSentence({super.key, required this.sentence, required this.form, this.style});
+  const HighlightedSentence({super.key, required this.sentence, required this.form, this.style, this.textAlign});
 
   final String sentence;
   final String? form;
   final TextStyle? style;
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
     final form = this.form;
     final match = form == null ? null : _findWord(sentence, form);
-    if (form == null || match == null) return Text(sentence, style: style);
+    if (form == null || match == null) return Text(sentence, style: style, textAlign: textAlign);
     final highlight = TextStyle(fontWeight: FontWeight.bold, color: articleHighlightColor(context));
     return Text.rich(
       TextSpan(
@@ -32,6 +38,7 @@ class HighlightedSentence extends StatelessWidget {
           TextSpan(text: sentence.substring(match + form.length)),
         ],
       ),
+      textAlign: textAlign,
     );
   }
 }
@@ -42,10 +49,12 @@ int? _findWord(String sentence, String word) {
   return pattern.firstMatch(sentence)?.start;
 }
 
-/// Névelőtáblázat a példamondat alatt: négy eset × három nem + többes szám,
-/// a mondatbeli névelő fajtájának alakjaival. Zölden, vastagon kiemelve a cella,
-/// amelyből a mondat névelője származik, és az oszlop fejléce (a főnév névelője,
-/// pl. der) – így látszik, hogy a der-ből lett az ein**en**.
+/// Névelőtáblázat: négy eset × három nem + többes szám, a mondatbeli névelő
+/// fajtájának alakjaival (der/ein/kein/mein …).
+///
+/// Kiemelés: a főnév nemének oszlopa és a mondat esetének sora lágy zöld
+/// hátteret kap, a metszetük erősebb zöldet; a metszet alakja vastag zöld, a
+/// megváltozott végződés (ein**en**) feketével, egyszeresen aláhúzva.
 class ArticleTableView extends StatelessWidget {
   const ArticleTableView({super.key, required this.article, required this.gender, required this.lemma});
 
@@ -60,46 +69,68 @@ class ArticleTableView extends StatelessWidget {
     final column = article.column(gender);
     if (column == null) return const SizedBox.shrink();
     final theme = Theme.of(context);
-    final green = articleHighlightColor(context);
     final small = theme.textTheme.bodySmall;
     final border = BorderSide(color: theme.dividerColor);
+    final soft = _softBackground(context);
 
-    Widget pad(Widget child, {Color? background, Key? key}) => Container(
-          key: key,
-          color: background,
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
-          alignment: Alignment.center,
-          child: child,
+    // A cella a sor teljes magasságát kitölti, így a háttér egybefüggő sávot ad.
+    Widget box(Widget child, {Color? background, Key? key}) => TableCell(
+          verticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
+          child: Container(
+            key: key,
+            color: background,
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            alignment: Alignment.center,
+            child: child,
+          ),
         );
 
     final header = TableRow(
       children: [
-        pad(const SizedBox.shrink()),
+        box(const SizedBox.shrink()),
         for (final c in ArticleColumn.values)
-          pad(
-            Text(
-              '${c.nameHu}\n${c.definite}',
-              textAlign: TextAlign.center,
-              style: c == column
-                  ? small?.copyWith(fontWeight: FontWeight.bold, color: green)
-                  : small?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-            ),
+          box(
+            Text(c.nameHu, textAlign: TextAlign.center, style: small?.copyWith(fontWeight: FontWeight.w600)),
+            background: c == column ? soft : null,
           ),
       ],
     );
 
-    TableRow row(ArticleCase c) => TableRow(
-          children: [
-            pad(Text(c.abbreviation, style: small?.copyWith(fontWeight: FontWeight.w600))),
-            for (final col in ArticleColumn.values) _cell(context, c, col, isTarget: c == article.grammaticalCase && col == column, pad: pad),
-          ],
-        );
+    TableRow row(ArticleCase c) {
+      final inRow = c == article.grammaticalCase;
+      return TableRow(
+        children: [
+          box(
+            Text(c.label, style: small?.copyWith(fontWeight: FontWeight.w600)),
+            background: inRow ? soft : null,
+          ),
+          for (final col in ArticleColumn.values)
+            _cell(context, c, col, row: inRow, column: col == column, box: box),
+        ],
+      );
+    }
 
+    final contraction = article.contraction;
     return Column(
       key: const Key('articleTable'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(_explanation(column), key: const Key('articleExplanation'), style: small),
+        // Összevont alak (am, zum, ins …): az elöljáró vonzata is látszik.
+        if (contraction != null)
+          Text.rich(
+            TextSpan(
+              style: small,
+              children: [
+                const TextSpan(text: 'Rendhagyó: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                  text: '${article.form} = ${contraction.$1} + ${contraction.$2}, '
+                      'vonzat: ${contraction.$1} + ${article.grammaticalCase.abbreviation}',
+                ),
+              ],
+            ),
+            key: const Key('articleIrregular'),
+          ),
         const SizedBox(height: 4),
         Table(
           border: TableBorder(
@@ -122,28 +153,35 @@ class ArticleTableView extends StatelessWidget {
     BuildContext context,
     ArticleCase c,
     ArticleColumn col, {
-    required bool isTarget,
-    required Widget Function(Widget child, {Color? background, Key? key}) pad,
+    required bool row,
+    required bool column,
+    required Widget Function(Widget child, {Color? background, Key? key}) box,
   }) {
     final small = Theme.of(context).textTheme.bodySmall;
+    final target = row && column;
+    final background = target ? _strongBackground(context) : (row || column ? _softBackground(context) : null);
     final form = article.cell(c, col);
-    if (form == null) return pad(Text('—', style: small));
-    final green = articleHighlightColor(context);
-    final base = isTarget ? small?.copyWith(fontWeight: FontWeight.bold, color: green) : small;
-    // A végződés (ein-en) külön kiemelve, hogy látszódjon, mi változott.
-    final ending = form.ending.isEmpty ? null : (isTarget ? base : base?.copyWith(fontWeight: FontWeight.w600));
-    return pad(
+    if (form == null) return box(Text('—', style: small), background: background);
+    if (!target) return box(Text(form.text, style: small), background: background);
+    final bold = small?.copyWith(fontWeight: FontWeight.bold, color: articleHighlightColor(context));
+    final ending = small?.copyWith(
+      fontWeight: FontWeight.bold,
+      color: articleHighlightColor(context),
+      decoration: TextDecoration.underline,
+      decorationColor: Colors.black,
+    );
+    return box(
       Text.rich(
         TextSpan(
-          style: base,
+          style: bold,
           children: [
             TextSpan(text: form.stem),
-            if (ending != null) TextSpan(text: form.ending, style: ending.copyWith(decoration: isTarget ? TextDecoration.underline : null)),
+            if (form.ending.isNotEmpty) TextSpan(text: form.ending, style: ending),
           ],
         ),
       ),
-      background: isTarget ? _highlightBackground(context) : null,
-      key: isTarget ? const Key('articleHighlight') : null,
+      background: background,
+      key: const Key('articleHighlight'),
     );
   }
 
@@ -151,13 +189,11 @@ class ArticleTableView extends StatelessWidget {
   String _explanation(ArticleColumn column) {
     final source = column == ArticleColumn.plural ? 'többes szám (die)' : '${column.definite} (${column.nameHu})';
     final form = article.cell(article.grammaticalCase, column);
-    final contraction = article.contraction;
     final buffer = StringBuffer('$lemma: $source → ${article.grammaticalCase.nameHu}, ${article.type.nameHu}');
     if (form != null) {
       buffer.write(': ');
       buffer.write(form.ending.isEmpty ? form.text : '${form.stem} + ${form.ending} = ${form.text}');
     }
-    if (contraction != null) buffer.write(' (${article.form} = ${contraction.$1} + ${contraction.$2})');
     return buffer.toString();
   }
 }
