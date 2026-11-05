@@ -10,6 +10,7 @@ import 'data/local/app_database.dart';
 import 'data/local/local_store.dart';
 import 'data/repositories/admin_repository.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/placement_repository.dart';
 import 'data/repositories/report_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/study_repository.dart';
@@ -67,6 +68,10 @@ final reportRepositoryProvider = Provider<ReportRepository>(
     api: ref.watch(apiClientProvider),
     clock: ref.watch(clockProvider),
   ),
+);
+
+final placementRepositoryProvider = Provider<PlacementRepository>(
+  (ref) => PlacementRepository(store: ref.watch(localStoreProvider), clock: ref.watch(clockProvider)),
 );
 
 final adminRepositoryProvider = Provider<AdminRepository>((ref) => AdminRepository(api: ref.watch(apiClientProvider)));

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/user_settings.dart';
+import '../../data/repositories/placement_repository.dart';
 import '../../data/repositories/study_repository.dart';
 import '../../domain/word_scope.dart';
 import '../admin/admin_screen.dart';
 import '../auth/auth_controller.dart';
+import '../placement/placement_screen.dart';
 import '../reports/my_reports_screen.dart';
 import '../settings/settings_screen.dart';
 import '../stats/stats_screen.dart';
@@ -26,6 +28,10 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final summary = ref.watch(homeSummaryProvider);
     final sync = ref.watch(syncControllerProvider);
+    final recommended = switch (ref.watch(placementOutcomeProvider).value) {
+      PlacementDone(:final result) => result.recommendedLevel,
+      _ => null,
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -41,12 +47,14 @@ class HomeScreen extends ConsumerWidget {
               'settings' => _open(context, ref, SettingsScreen(profile: profile)),
               'reports' => _open(context, ref, const MyReportsScreen()),
               'admin' => _open(context, ref, const AdminScreen()),
+              'placement' => _open(context, ref, const PlacementScreen()),
               _ => _signOut(context, ref),
             },
             itemBuilder: (_) => [
               const PopupMenuItem(value: 'stats', child: Text('Statisztika')),
               const PopupMenuItem(value: 'words', child: Text('Szókereső')),
               const PopupMenuItem(value: 'custom', child: Text('Új saját szó')),
+              const PopupMenuItem(value: 'placement', child: Text('Szintfelmérő')),
               const PopupMenuItem(value: 'reports', child: Text('Bejelentéseim')),
               if (profile.isAdmin) const PopupMenuItem(value: 'admin', child: Text('Adminisztráció')),
               const PopupMenuItem(value: 'settings', child: Text('Beállítások')),
@@ -70,6 +78,15 @@ class HomeScreen extends ConsumerWidget {
                   _Stat(label: 'Ma értékelve', value: s.reviewedToday),
                 ],
               ),
+              if (s.enrolledWords == 0) ...[
+                const SizedBox(height: 16),
+                _PlacementCard(
+                  recommended: recommended,
+                  available: recommended != null && s.levels.any((l) => l.level == recommended),
+                  onStartLevel: () => _study(context, ref, StudySessionArgs(scope: LevelScope(recommended!))),
+                  onTakeTest: () => _open(context, ref, const PlacementScreen()),
+                ),
+              ],
               const SizedBox(height: 24),
               FilledButton.icon(
                 key: const Key('startLesson'),
@@ -94,12 +111,21 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     for (final l in s.levels)
                       Tooltip(
-                        message: '${l.level}: ${l.words} szó',
-                        child: FilledButton.tonal(
-                          key: Key('level-${l.level}'),
-                          onPressed: () => _study(context, ref, StudySessionArgs(scope: LevelScope(l.level))),
-                          child: Text(l.level, style: const TextStyle(fontSize: 16)),
-                        ),
+                        message: l.level == recommended
+                            ? '${l.level}: ${l.words} szó · a szintfelmérő alapján ajánlott'
+                            : '${l.level}: ${l.words} szó',
+                        child: l.level == recommended
+                            ? FilledButton.icon(
+                                key: Key('level-${l.level}'),
+                                icon: const Icon(Icons.star, size: 18),
+                                onPressed: () => _study(context, ref, StudySessionArgs(scope: LevelScope(l.level))),
+                                label: Text(l.level, style: const TextStyle(fontSize: 16)),
+                              )
+                            : FilledButton.tonal(
+                                key: Key('level-${l.level}'),
+                                onPressed: () => _study(context, ref, StudySessionArgs(scope: LevelScope(l.level))),
+                                child: Text(l.level, style: const TextStyle(fontSize: 16)),
+                              ),
                       ),
                   ],
                 ),
@@ -156,6 +182,70 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
     if (force == true) await auth.signOut(force: true);
+  }
+}
+
+/// Új felhasználónak (még nincs felvett szava): a szintfelmérő alapján
+/// ajánlott szint leckéje, vagy ha még nem töltötte ki, a felmérő felajánlása.
+class _PlacementCard extends StatelessWidget {
+  const _PlacementCard({
+    required this.recommended,
+    required this.available,
+    required this.onStartLevel,
+    required this.onTakeTest,
+  });
+
+  final String? recommended;
+
+  /// A javasolt szint szavai már letöltődtek (különben a lecke üres lenne).
+  final bool available;
+  final VoidCallback onStartLevel;
+  final VoidCallback onTakeTest;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final level = recommended;
+    return Card(
+      color: theme.colorScheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: level == null
+              ? [
+                  Text('Nem tudod, hol kezdj?', style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 4),
+                  const Text('Egy 2–3 perces szókincsteszt megmondja, melyik szinttel érdemes indulnod.'),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    key: const Key('takePlacement'),
+                    icon: const Icon(Icons.flag_outlined),
+                    label: const Text('Szintfelmérő'),
+                    onPressed: onTakeTest,
+                  ),
+                ]
+              : [
+                  Text('A szintfelmérő alapján: $level', style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 4),
+                  Text(
+                    available
+                        ? 'Kezdd a $level szint szavaival – a lecke magától veszi fel az új szavakat.'
+                        : 'A $level szint szavai még töltődnek. Ha a szint nem jelenik meg, a Beállításokban '
+                            'a letöltött szintek közé is felveheted.',
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    key: const Key('startRecommended'),
+                    icon: const Icon(Icons.play_arrow),
+                    label: Text('$level lecke indítása'),
+                    onPressed: available ? onStartLevel : null,
+                  ),
+                  TextButton(onPressed: onTakeTest, child: const Text('Szintfelmérő újra')),
+                ],
+        ),
+      ),
+    );
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'features/auth/auth_controller.dart';
 import 'features/auth/login_screen.dart';
 import 'features/home/home_screen.dart';
+import 'features/placement/placement_screen.dart';
 import 'features/sync/sync_controller.dart';
 import 'providers.dart';
 
@@ -31,10 +32,29 @@ class _AuthGate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authControllerProvider);
     return switch (auth) {
-      AsyncData(value: final profile?) => _BackgroundSync(child: HomeScreen(profile: profile)),
+      AsyncData(value: final profile?) => _BackgroundSync(child: _PlacementGate(child: HomeScreen(profile: profile))),
       AsyncLoading() when auth.value == null && !auth.hasError =>
         const Scaffold(body: Center(child: CircularProgressIndicator())),
       _ => const LoginScreen(),
+    };
+  }
+}
+
+/// Az app elején, új felhasználónál (még nincs felvett szava, és a
+/// szintfelmérőt sem töltötte ki / hagyta ki) a szintfelmérő jön a
+/// kezdőképernyő helyett. A döntés a mentett állapotból jön, ezért egy
+/// háttérszinkron nem kapja ki a felhasználó alól a félbehagyott tesztet.
+class _PlacementGate extends ConsumerWidget {
+  const _PlacementGate({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return switch (ref.watch(placementOfferProvider)) {
+      AsyncData(value: true) => const PlacementScreen(),
+      AsyncLoading() => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      _ => child, // nincs ajánlat, vagy hiba – a kezdőképernyő mindenképp elérhető
     };
   }
 }
