@@ -159,6 +159,34 @@ void main() {
     final spans = (sentence.textSpan! as TextSpan).children!.cast<TextSpan>();
     expect(spans.map((s) => s.text).toList(), ['Zum Essen trinken wir ', 'einen', ' Wein.']);
     expect(spans[1].style?.fontWeight, FontWeight.bold);
+    // A metszet: vastag zöld, a megváltozott végződés (en) feketével aláhúzva.
+    final cell = tester.widget<Text>(find.descendant(of: highlight, matching: find.byType(Text)));
+    final parts = (cell.textSpan! as TextSpan).children!.cast<TextSpan>();
+    expect(parts.map((s) => s.text).toList(), ['ein', 'en']);
+    expect(parts[1].style?.decoration, TextDecoration.underline);
+    expect(parts[1].style?.decorationColor, Colors.black);
+    expect((cell.textSpan! as TextSpan).style?.fontWeight, FontWeight.bold);
+    expect(find.byKey(const Key('articleIrregular')), findsNothing);
+  });
+
+  testWidgets('összevont alaknál „Rendhagyó” és az elöljáró vonzata', (tester) async {
+    final json = wordJson(id: 'w5', lemma: 'Abend', translation: 'este')
+      ..['examples'] = [
+        {
+          'sentence': 'Am Abend sehen wir fern.',
+          'translation': 'Este tévét nézünk.',
+          'article': {'case': 'DATIVE', 'type': 'DEFINITE', 'number': 'SINGULAR', 'form': 'Am'},
+        },
+      ];
+    await pump(tester, [cardOf(Word.fromJson(json), CardType.recognition)]);
+    await tester.enterText(find.byKey(const Key('typedAnswer')), 'este');
+    await tester.tap(find.text('Ellenőrzés'));
+    await tester.pumpAndSettle();
+    expect(find.text('Rendhagyó: Am = an + dem, vonzat: an + Dat.'), findsOneWidget);
+    expect(find.descendant(of: find.byKey(const Key('articleHighlight')), matching: find.text('dem')), findsOneWidget);
+    for (final header in ['hímnem', 'nőnem', 'semleges nem', 'többes szám', 'alany e.', 'tárgy e.', 'részes eset', 'birt. e.']) {
+      expect(find.text(header), findsOneWidget, reason: header);
+    }
   });
 
   testWidgets('névelő nélküli példamondatnál nincs táblázat', (tester) async {
