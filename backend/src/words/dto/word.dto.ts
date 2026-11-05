@@ -1,10 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ArticleType,
   AuxiliaryVerb,
   CefrLevel,
   ConjugationType,
   GrammaticalCase,
   GrammaticalGender,
+  GrammaticalNumber,
   NumberType,
   PartOfSpeech,
   ReflexiveType,
@@ -101,12 +103,30 @@ export class TranslationDto {
   isPrimary!: boolean;
 }
 
+/** A főnév előtti névelő a példamondatban – ebből rajzolja a kliens a névelőtáblázatot. */
+export class ExampleArticleDto {
+  @ApiProperty({ enum: GrammaticalCase, enumName: 'GrammaticalCase', example: GrammaticalCase.ACCUSATIVE })
+  case!: GrammaticalCase;
+
+  @ApiProperty({ enum: ArticleType, enumName: 'ArticleType', example: ArticleType.INDEFINITE })
+  type!: ArticleType;
+
+  @ApiProperty({ enum: GrammaticalNumber, enumName: 'GrammaticalNumber', example: GrammaticalNumber.SINGULAR })
+  number!: GrammaticalNumber;
+
+  @ApiProperty({ example: 'einen', description: 'A névelő pontos alakja a mondatban (összevonásnál pl. „zum”).' })
+  form!: string;
+}
+
 export class ExampleDto {
   @ApiProperty({ example: 'Ich warte auf den Bus.' })
   sentence!: string;
 
   @ApiPropertyOptional({ nullable: true, example: 'A buszra várok.', type: String })
   translation!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, type: ExampleArticleDto, description: 'Csak főnév saját példamondatánál.' })
+  article!: ExampleArticleDto | null;
 }
 
 export class ValencyDto {
@@ -205,9 +225,13 @@ export class WordDto {
     const verb = word.verbAttributes;
     const adjective = word.adjectiveAttributes;
     const article = noun?.gender ? ARTICLE_BY_GENDER[noun.gender] : null;
-    const toExample = (e: { sentence: string; translation: string | null }): ExampleDto => ({
+    const toExample = (e: WordWithDetails['examples'][number]): ExampleDto => ({
       sentence: e.sentence,
       translation: e.translation,
+      article:
+        e.articleCase && e.articleType && e.articleNumber && e.articleForm
+          ? { case: e.articleCase, type: e.articleType, number: e.articleNumber, form: e.articleForm }
+          : null,
     });
 
     return {

@@ -20,7 +20,13 @@
  *       "translations": ["utca"],
  *       "categories": ["stadt"],
  *       "noun": { "gender": "feminine", "plural": "Straßen", "genitive": "Straße" },
- *       "examples": [{ "sentence": "Die Straße ist breit.", "translation": "Az utca széles." }],
+ *       "examples": [
+ *         {
+ *           "sentence": "Die Straße ist breit.",
+ *           "translation": "Az utca széles.",
+ *           "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+ *         }
+ *       ],
  *       "audio_url": "audio/de/strasse.mp3",
  *       "is_active": true
  *     }
@@ -33,6 +39,11 @@
  * objektumban vannak (`noun`, `verb`, `adjective`), így egy újabb nyelv a saját
  * mezőivel bővítheti a formátumot anélkül, hogy a meglévőket érintené.
  *
+ * Főnév példamondatánál az opcionális `article` azt írja le, milyen névelő áll a
+ * mondatban a főnév előtt (eset, fajta, szám és a mondatbeli pontos alak, akár
+ * összevonva: „zum”). Ebből rajzolja a kliens a névelőtáblázatot. Az alakot a
+ * beolvasás a főnév nemével összeveti, és ellenőrzi, hogy a mondatban szerepel.
+ *
  * Az ellenőrzés szigorú: ismeretlen mező, hiányzó kötelező mező, érvénytelen
  * érték vagy az adatbázis CHECK kényszereibe ütköző kombináció hibát ad, a fájl
  * és a szó megjelölésével. Hiba esetén semmi nem íródik az adatbázisba.
@@ -42,14 +53,16 @@ import { join } from 'node:path';
 import {
   AuxiliaryVerb,
   CefrLevel,
+  ArticleType,
   ConjugationType,
   GrammaticalCase,
   GrammaticalGender,
+  GrammaticalNumber,
   NumberType,
   PartOfSpeech,
   ReflexiveType,
 } from '@prisma/client';
-import { SeedAttributes, SeedCategory, SeedExample, SeedTranslation, SeedValency, SeedWord, wordKey } from './seed-writer';
+import { SeedArticle, SeedAttributes, SeedCategory, SeedExample, SeedTranslation, SeedValency, SeedWord, wordKey } from './seed-writer';
 
 export const VOCABULARY_DIR = join(__dirname, 'data', 'vocabulary');
 
@@ -69,6 +82,16 @@ export type TranslationEntry = string | { text: string; note: string };
 export interface ExampleEntry {
   sentence: string;
   translation: string;
+  /** Csak főnév saját példamondatánál: a főnév előtti névelő a mondatban. */
+  article?: ArticleEntry;
+}
+
+export interface ArticleEntry {
+  case: string;
+  type: string;
+  number: string;
+  /** A névelő pontos alakja a mondatban (nagybetűvel is, ha mondatkezdő), vagy az összevont alak (zum, im …). */
+  form: string;
 }
 
 export interface NounEntry {
@@ -291,7 +314,9 @@ function readWord(value: unknown, where: string, problems: string[], language: s
   const attributes = readAttributes(r, partOfSpeech, lemma ?? '');
   const valencies = r.array('valencies', true).map((v, i) => readValency(r.nested(v, `valencies[${i}]`)));
   checkValencies(valencies, r);
-  const examples = r.array('examples', true).map((e, i) => readExample(r.nested(e, `examples[${i}]`)));
+  const examples = r
+    .array('examples', true)
+    .map((e, i) => readExample(r.nested(e, `examples[${i}]`), attributes?.kind === 'noun' ? attributes.data : undefined));
 
   const ipa = r.string('ipa', { max: 200, optional: true });
   const rank = r.raw('frequency_rank');
@@ -333,11 +358,119 @@ function readTranslation(value: unknown, r: Reader, i: number): SeedTranslation 
   return { text, senseNote: note };
 }
 
-function readExample(r: Reader | null): SeedExample {
+/** @param noun a szó főnévi adatai – csak ilyenkor adható meg a példamondat névelője */
+function readExample(r: Reader | null, noun?: NounData): SeedExample {
   if (!r) return { sentence: '', translation: '' };
-  const example = { sentence: r.string('sentence', { max: 1000 }) ?? '', translation: r.string('translation', { max: 1000 }) ?? '' };
+  const example: SeedExample = {
+    sentence: r.string('sentence', { max: 1000 }) ?? '',
+    translation: r.string('translation', { max: 1000 }) ?? '',
+  };
+  if (r.has('article')) {
+    if (!noun) r.fail('„article” csak főnév saját példamondatánál adható meg');
+    const article = readArticle(r.nested(r.raw('article'), 'article'), example.sentence, noun);
+    if (article && noun) example.article = article;
+  }
   r.done();
   return example;
+}
+
+type NounData = Extract<SeedAttributes, { kind: 'noun' }>['data'];
+
+function readArticle(r: Reader | null, sentence: string, noun: NounData | undefined): SeedArticle | null {
+  if (!r) return null;
+  const grammaticalCase = r.enumValue('case', GrammaticalCase);
+  const type = r.enumValue('type', ArticleType);
+  const number = r.enumValue('number', GrammaticalNumber);
+  const form = r.string('form', { max: 30 });
+  r.done();
+  if (!grammaticalCase || !type || !number || !form || !noun) return null;
+  const article: SeedArticle = { case: grammaticalCase, type, number, form };
+  const problem = checkArticle(article, sentence, noun);
+  if (problem) r.fail(problem);
+  return article;
+}
+
+// ---------------------------------------------------------------------------
+// Névelőragozás (a névelőtáblázat és az ellenőrzés közös alapja)
+// ---------------------------------------------------------------------------
+
+const CASE_ORDER = [GrammaticalCase.NOMINATIVE, GrammaticalCase.ACCUSATIVE, GrammaticalCase.DATIVE, GrammaticalCase.GENITIVE];
+type Column = 'MASCULINE' | 'FEMININE' | 'NEUTER' | 'PLURAL';
+const DEFINITE: Record<Column, string[]> = {
+  MASCULINE: ['der', 'den', 'dem', 'des'],
+  FEMININE: ['die', 'die', 'der', 'der'],
+  NEUTER: ['das', 'das', 'dem', 'des'],
+  PLURAL: ['die', 'die', 'den', 'der'],
+};
+/** Az ein/kein/mein … végződései; a határozatlan névelőnek nincs többes száma. */
+const EIN_ENDINGS: Record<Column, string[]> = {
+  MASCULINE: ['', 'en', 'em', 'es'],
+  FEMININE: ['e', 'e', 'er', 'er'],
+  NEUTER: ['', '', 'em', 'es'],
+  PLURAL: ['e', 'e', 'en', 'er'],
+};
+const POSSESSIVE_STEMS = ['mein', 'dein', 'sein', 'ihr', 'unser', 'euer'];
+/** Elöljáró + határozott névelő összevonások: a táblázatban a benne rejlő névelő cellája világít. */
+export const CONTRACTIONS: Record<string, string> = {
+  zum: 'dem',
+  zur: 'der',
+  im: 'dem',
+  am: 'dem',
+  vom: 'dem',
+  beim: 'dem',
+  ins: 'das',
+  ans: 'das',
+  aufs: 'das',
+  durchs: 'das',
+  fürs: 'das',
+  ums: 'das',
+  hinterm: 'dem',
+  überm: 'dem',
+  unterm: 'dem',
+  vorm: 'dem',
+};
+
+/** A táblázat cellájának névelője (kisbetűvel), pl. (ACCUSATIVE, INDEFINITE, MASCULINE) → „einen”; null, ha nincs ilyen alak. */
+export function articleCell(c: GrammaticalCase, type: ArticleType, column: Column, stem = 'mein'): string | null {
+  const i = CASE_ORDER.indexOf(c);
+  if (type === ArticleType.DEFINITE) return DEFINITE[column][i]!;
+  if (type === ArticleType.INDEFINITE && column === 'PLURAL') return null;
+  const base = type === ArticleType.INDEFINITE ? 'ein' : type === ArticleType.NEGATIVE ? 'kein' : stem;
+  const ending = EIN_ENDINGS[column][i]!;
+  // euer + e → eure (a hangsúlytalan e kiesik)
+  return base === 'euer' && ending !== '' ? `eur${ending}` : base + ending;
+}
+
+/** Hibaüzenet, ha a névelő nem illik a főnévhez vagy nem szerepel a mondatban; különben null. */
+function checkArticle(a: SeedArticle, sentence: string, noun: NounData): string | null {
+  const numberType = noun.numberType ?? NumberType.REGULAR;
+  if (a.number === GrammaticalNumber.PLURAL && numberType === NumberType.SINGULAR_ONLY) {
+    return '„article”: csak egyes számú főnévnél nem lehet többes számú a névelő';
+  }
+  if (a.number === GrammaticalNumber.SINGULAR && (numberType === NumberType.PLURAL_ONLY || !noun.gender)) {
+    return '„article”: csak többes számú főnévnél nem lehet egyes számú a névelő';
+  }
+  if (a.type === ArticleType.INDEFINITE && a.number === GrammaticalNumber.PLURAL) {
+    return '„article”: a határozatlan névelőnek nincs többes száma';
+  }
+  const column: Column = a.number === GrammaticalNumber.PLURAL ? 'PLURAL' : (noun.gender as Column);
+  const form = a.form.toLowerCase();
+  const contracted = CONTRACTIONS[form];
+  let ok: boolean;
+  if (contracted !== undefined) {
+    ok = a.type === ArticleType.DEFINITE && articleCell(a.case, a.type, column) === contracted;
+  } else if (a.type === ArticleType.POSSESSIVE) {
+    ok = POSSESSIVE_STEMS.some((stem) => articleCell(a.case, a.type, column, stem) === form);
+  } else {
+    ok = articleCell(a.case, a.type, column) === form;
+  }
+  if (!ok) {
+    const expected = articleCell(a.case, a.type, column, 'mein');
+    return `„article”: a(z) „${a.form}” nem ${a.case.toLowerCase()} ${a.type.toLowerCase()} ${column.toLowerCase()} alak (várt: ${expected ?? 'nincs ilyen alak'})`;
+  }
+  const words = sentence.split(/[^\p{L}-]+/u);
+  if (!words.includes(a.form)) return `„article”: a(z) „${a.form}” nem szerepel a mondatban`;
+  return null;
 }
 
 function readValency(r: Reader | null): SeedValency {
@@ -549,7 +682,12 @@ export function loadVocabulary(dir = VOCABULARY_DIR): Vocabulary {
 const lower = (v: string): string => v.toLowerCase();
 
 function exampleEntry(e: SeedExample): ExampleEntry {
-  return { sentence: e.sentence, translation: e.translation };
+  const a = e.article;
+  return {
+    sentence: e.sentence,
+    translation: e.translation,
+    ...(a ? { article: { case: lower(a.case), type: lower(a.type), number: lower(a.number), form: a.form } } : {}),
+  };
 }
 
 /** Egy szó a JSON formátumban. A szintet és a nyelvet a fájl adja, ezért itt nem szerepel. */

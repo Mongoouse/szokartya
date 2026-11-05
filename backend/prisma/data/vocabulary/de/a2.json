@@ -8,7 +8,13 @@
       "translations": ["tó"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Seen", "genitive": "Sees" },
-      "examples": [{ "sentence": "Im Sommer schwimmen wir im See.", "translation": "Nyáron a tóban úszunk." }],
+      "examples": [
+        {
+          "sentence": "Im Sommer schwimmen wir im See.",
+          "translation": "Nyáron a tóban úszunk.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "im" }
+        }
+      ],
       "ipa": "zeː",
       "is_active": true
     },
@@ -71,7 +77,8 @@
       "examples": [
         {
           "sentence": "Mein Kollege hilft mir oft bei der Arbeit.",
-          "translation": "A kollégám gyakran segít a munkában."
+          "translation": "A kollégám gyakran segít a munkában.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Mein" }
         }
       ],
       "is_active": true
@@ -82,7 +89,13 @@
       "translations": ["szomszéd"],
       "categories": ["menschen"],
       "noun": { "gender": "masculine", "plural": "Nachbarn", "n_declension": true },
-      "examples": [{ "sentence": "Unser Nachbar hat einen großen Hund.", "translation": "A szomszédunknak nagy kutyája van." }],
+      "examples": [
+        {
+          "sentence": "Unser Nachbar hat einen großen Hund.",
+          "translation": "A szomszédunknak nagy kutyája van.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Unser" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -94,7 +107,8 @@
       "examples": [
         {
           "sentence": "Meine Großmutter backt den besten Kuchen.",
-          "translation": "A nagymamám süti a legjobb süteményt."
+          "translation": "A nagymamám süti a legjobb süteményt.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Meine" }
         }
       ],
       "is_active": true
@@ -108,7 +122,8 @@
       "examples": [
         {
           "sentence": "Mein Großvater erzählt gern Geschichten.",
-          "translation": "A nagyapám szívesen mesél történeteket."
+          "translation": "A nagyapám szívesen mesél történeteket.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Mein" }
         }
       ],
       "is_active": true
@@ -119,7 +134,13 @@
       "translations": ["nagybácsi"],
       "categories": ["familie"],
       "noun": { "gender": "masculine", "plural": "Onkel" },
-      "examples": [{ "sentence": "Mein Onkel wohnt in Deutschland.", "translation": "A nagybátyám Németországban lakik." }],
+      "examples": [
+        {
+          "sentence": "Mein Onkel wohnt in Deutschland.",
+          "translation": "A nagybátyám Németországban lakik.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Mein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -131,7 +152,8 @@
       "examples": [
         {
           "sentence": "Am Wochenende besuchen wir meine Tante.",
-          "translation": "Hétvégén meglátogatjuk a nagynénémet."
+          "translation": "Hétvégén meglátogatjuk a nagynénémet.",
+          "article": { "case": "accusative", "type": "possessive", "number": "singular", "form": "meine" }
         }
       ],
       "is_active": true
@@ -142,7 +164,13 @@
       "translations": ["láb"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Beine" },
-      "examples": [{ "sentence": "Er hat sich das Bein gebrochen.", "translation": "Eltörte a lábát." }],
+      "examples": [
+        {
+          "sentence": "Er hat sich das Bein gebrochen.",
+          "translation": "Eltörte a lábát.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -151,7 +179,13 @@
       "translations": ["kar"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Arme" },
-      "examples": [{ "sentence": "Das Kind schläft in meinem Arm.", "translation": "A gyerek a karomban alszik." }],
+      "examples": [
+        {
+          "sentence": "Das Kind schläft in meinem Arm.",
+          "translation": "A gyerek a karomban alszik.",
+          "article": { "case": "dative", "type": "possessive", "number": "singular", "form": "meinem" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -169,7 +203,13 @@
       "translations": ["hát"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Rücken" },
-      "examples": [{ "sentence": "Nach der Arbeit tut mir der Rücken weh.", "translation": "Munka után fáj a hátam." }],
+      "examples": [
+        {
+          "sentence": "Nach der Arbeit tut mir der Rücken weh.",
+          "translation": "Munka után fáj a hátam.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -178,7 +218,13 @@
       "translations": ["fül"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Ohren" },
-      "examples": [{ "sentence": "Mein linkes Ohr tut weh.", "translation": "Fáj a bal fülem." }],
+      "examples": [
+        {
+          "sentence": "Mein linkes Ohr tut weh.",
+          "translation": "Fáj a bal fülem.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Mein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -187,7 +233,13 @@
       "translations": ["orr"],
       "categories": ["koerper"],
       "noun": { "gender": "feminine", "plural": "Nasen" },
-      "examples": [{ "sentence": "Meine Nase läuft.", "translation": "Folyik az orrom." }],
+      "examples": [
+        {
+          "sentence": "Meine Nase läuft.",
+          "translation": "Folyik az orrom.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Meine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -196,7 +248,13 @@
       "translations": ["száj"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Münder" },
-      "examples": [{ "sentence": "Mach bitte den Mund auf.", "translation": "Nyisd ki, kérlek, a szádat." }],
+      "examples": [
+        {
+          "sentence": "Mach bitte den Mund auf.",
+          "translation": "Nyisd ki, kérlek, a szádat.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "den" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -205,7 +263,13 @@
       "translations": ["fog"],
       "categories": ["koerper"],
       "noun": { "gender": "masculine", "plural": "Zähne" },
-      "examples": [{ "sentence": "Ich putze mir zweimal am Tag die Zähne.", "translation": "Naponta kétszer mosok fogat." }],
+      "examples": [
+        {
+          "sentence": "Ich putze mir zweimal am Tag die Zähne.",
+          "translation": "Naponta kétszer mosok fogat.",
+          "article": { "case": "accusative", "type": "definite", "number": "plural", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -214,7 +278,13 @@
       "translations": ["szív"],
       "categories": ["koerper"],
       "noun": { "gender": "neuter", "plural": "Herzen" },
-      "examples": [{ "sentence": "Sein Herz schlägt sehr schnell.", "translation": "Nagyon gyorsan ver a szíve." }],
+      "examples": [
+        {
+          "sentence": "Sein Herz schlägt sehr schnell.",
+          "translation": "Nagyon gyorsan ver a szíve.",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "Sein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -223,7 +293,13 @@
       "translations": ["orvosnő"],
       "categories": ["gesundheit", "arbeit"],
       "noun": { "gender": "feminine", "plural": "Ärztinnen" },
-      "examples": [{ "sentence": "Die Ärztin untersucht das Kind.", "translation": "Az orvosnő megvizsgálja a gyereket." }],
+      "examples": [
+        {
+          "sentence": "Die Ärztin untersucht das Kind.",
+          "translation": "Az orvosnő megvizsgálja a gyereket.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -232,7 +308,13 @@
       "translations": ["kórház"],
       "categories": ["gesundheit"],
       "noun": { "gender": "neuter", "plural": "Krankenhäuser" },
-      "examples": [{ "sentence": "Er liegt seit drei Tagen im Krankenhaus.", "translation": "Három napja fekszik kórházban." }],
+      "examples": [
+        {
+          "sentence": "Er liegt seit drei Tagen im Krankenhaus.",
+          "translation": "Három napja fekszik kórházban.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -241,7 +323,13 @@
       "translations": ["gyógyszertár"],
       "categories": ["gesundheit"],
       "noun": { "gender": "feminine", "plural": "Apotheken" },
-      "examples": [{ "sentence": "Die Apotheke ist am Sonntag geschlossen.", "translation": "A gyógyszertár vasárnap zárva van." }],
+      "examples": [
+        {
+          "sentence": "Die Apotheke ist am Sonntag geschlossen.",
+          "translation": "A gyógyszertár vasárnap zárva van.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -253,7 +341,8 @@
       "examples": [
         {
           "sentence": "Nehmen Sie das Medikament dreimal täglich.",
-          "translation": "Naponta háromszor vegye be a gyógyszert."
+          "translation": "Naponta háromszor vegye be a gyógyszert.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "das" }
         }
       ],
       "is_active": true
@@ -273,7 +362,13 @@
       "translations": ["egészség"],
       "categories": ["gesundheit"],
       "noun": { "gender": "feminine", "number": "singular_only" },
-      "examples": [{ "sentence": "Sport ist gut für die Gesundheit.", "translation": "A sport jót tesz az egészségnek." }],
+      "examples": [
+        {
+          "sentence": "Sport ist gut für die Gesundheit.",
+          "translation": "A sport jót tesz az egészségnek.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -291,7 +386,13 @@
       "translations": ["paradicsom"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "feminine", "plural": "Tomaten" },
-      "examples": [{ "sentence": "Ich schneide die Tomaten für den Salat.", "translation": "Felvágom a paradicsomot a salátához." }],
+      "examples": [
+        {
+          "sentence": "Ich schneide die Tomaten für den Salat.",
+          "translation": "Felvágom a paradicsomot a salátához.",
+          "article": { "case": "accusative", "type": "definite", "number": "plural", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -300,7 +401,13 @@
       "translations": ["leves"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "feminine", "plural": "Suppen" },
-      "examples": [{ "sentence": "Die Suppe ist noch zu heiß.", "translation": "A leves még túl forró." }],
+      "examples": [
+        {
+          "sentence": "Die Suppe ist noch zu heiß.",
+          "translation": "A leves még túl forró.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -309,7 +416,13 @@
       "translations": ["sütemény, torta"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "masculine", "plural": "Kuchen" },
-      "examples": [{ "sentence": "Zum Geburtstag backe ich einen Kuchen.", "translation": "A születésnapra sütök egy tortát." }],
+      "examples": [
+        {
+          "sentence": "Zum Geburtstag backe ich einen Kuchen.",
+          "translation": "A születésnapra sütök egy tortát.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "einen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -318,7 +431,13 @@
       "translations": ["reggeli"],
       "categories": ["lebensmittel", "zeit"],
       "noun": { "gender": "neuter", "plural": "Frühstücke" },
-      "examples": [{ "sentence": "Das Frühstück ist um sieben Uhr fertig.", "translation": "A reggeli hétkor van kész." }],
+      "examples": [
+        {
+          "sentence": "Das Frühstück ist um sieben Uhr fertig.",
+          "translation": "A reggeli hétkor van kész.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -327,7 +446,13 @@
       "translations": ["ebéd"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "neuter", "plural": "Mittagessen" },
-      "examples": [{ "sentence": "Zum Mittagessen gibt es Nudeln.", "translation": "Ebédre tészta van." }],
+      "examples": [
+        {
+          "sentence": "Zum Mittagessen gibt es Nudeln.",
+          "translation": "Ebédre tészta van.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Zum" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -336,7 +461,13 @@
       "translations": ["vacsora"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "neuter", "plural": "Abendessen" },
-      "examples": [{ "sentence": "Das Abendessen ist um sieben Uhr fertig.", "translation": "A vacsora hétkor van kész." }],
+      "examples": [
+        {
+          "sentence": "Das Abendessen ist um sieben Uhr fertig.",
+          "translation": "A vacsora hétkor van kész.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -348,7 +479,8 @@
       "examples": [
         {
           "sentence": "Wir gehen heute in ein italienisches Restaurant.",
-          "translation": "Ma egy olasz étterembe megyünk."
+          "translation": "Ma egy olasz étterembe megyünk.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "ein" }
         }
       ],
       "is_active": true
@@ -359,7 +491,13 @@
       "translations": ["számla"],
       "categories": ["lebensmittel"],
       "noun": { "gender": "feminine", "plural": "Rechnungen" },
-      "examples": [{ "sentence": "Die Rechnung, bitte!", "translation": "A számlát, kérem!" }],
+      "examples": [
+        {
+          "sentence": "Die Rechnung, bitte!",
+          "translation": "A számlát, kérem!",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -402,7 +540,13 @@
       "translations": ["szekrény"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Schränke" },
-      "examples": [{ "sentence": "Die Kleider hängen im Schrank.", "translation": "A ruhák a szekrényben lógnak." }],
+      "examples": [
+        {
+          "sentence": "Die Kleider hängen im Schrank.",
+          "translation": "A ruhák a szekrényben lógnak.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -411,7 +555,13 @@
       "translations": ["kanapé"],
       "categories": ["haushalt"],
       "noun": { "gender": "neuter", "plural": "Sofas" },
-      "examples": [{ "sentence": "Wir sitzen auf dem Sofa und sehen fern.", "translation": "A kanapén ülünk és tévét nézünk." }],
+      "examples": [
+        {
+          "sentence": "Wir sitzen auf dem Sofa und sehen fern.",
+          "translation": "A kanapén ülünk és tévét nézünk.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "dem" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -420,7 +570,13 @@
       "translations": ["lámpa"],
       "categories": ["haushalt"],
       "noun": { "gender": "feminine", "plural": "Lampen" },
-      "examples": [{ "sentence": "Die Lampe über dem Tisch ist kaputt.", "translation": "Az asztal fölötti lámpa elromlott." }],
+      "examples": [
+        {
+          "sentence": "Die Lampe über dem Tisch ist kaputt.",
+          "translation": "Az asztal fölötti lámpa elromlott.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -429,7 +585,13 @@
       "translations": ["kulcs"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Schlüssel" },
-      "examples": [{ "sentence": "Ich habe meinen Schlüssel vergessen.", "translation": "Elfelejtettem a kulcsomat." }],
+      "examples": [
+        {
+          "sentence": "Ich habe meinen Schlüssel vergessen.",
+          "translation": "Elfelejtettem a kulcsomat.",
+          "article": { "case": "accusative", "type": "possessive", "number": "singular", "form": "meinen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -438,7 +600,13 @@
       "translations": ["kert"],
       "categories": ["haushalt", "natur"],
       "noun": { "gender": "masculine", "plural": "Gärten" },
-      "examples": [{ "sentence": "Im Garten wachsen viele Blumen.", "translation": "A kertben sok virág nő." }],
+      "examples": [
+        {
+          "sentence": "Im Garten wachsen viele Blumen.",
+          "translation": "A kertben sok virág nő.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -447,7 +615,13 @@
       "translations": ["hűtőszekrény"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Kühlschränke" },
-      "examples": [{ "sentence": "Stell die Milch in den Kühlschrank.", "translation": "Tedd a tejet a hűtőbe." }],
+      "examples": [
+        {
+          "sentence": "Stell die Milch in den Kühlschrank.",
+          "translation": "Tedd a tejet a hűtőbe.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "den" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -456,7 +630,13 @@
       "translations": ["lakbér"],
       "categories": ["haushalt"],
       "noun": { "gender": "feminine", "plural": "Mieten" },
-      "examples": [{ "sentence": "Die Miete ist sehr hoch.", "translation": "A lakbér nagyon magas." }],
+      "examples": [
+        {
+          "sentence": "Die Miete ist sehr hoch.",
+          "translation": "A lakbér nagyon magas.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -573,7 +753,13 @@
       "translations": ["metró"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "U-Bahnen" },
-      "examples": [{ "sentence": "Mit der U-Bahn bin ich schneller.", "translation": "Metróval gyorsabban odaérek." }],
+      "examples": [
+        {
+          "sentence": "Mit der U-Bahn bin ich schneller.",
+          "translation": "Metróval gyorsabban odaérek.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -582,7 +768,13 @@
       "translations": ["közlekedési lámpa"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "Ampeln" },
-      "examples": [{ "sentence": "Die Ampel ist rot, wir müssen warten.", "translation": "Piros a lámpa, várnunk kell." }],
+      "examples": [
+        {
+          "sentence": "Die Ampel ist rot, wir müssen warten.",
+          "translation": "Piros a lámpa, várnunk kell.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -591,7 +783,13 @@
       "translations": ["kereszteződés"],
       "categories": ["verkehr"],
       "noun": { "gender": "feminine", "plural": "Kreuzungen" },
-      "examples": [{ "sentence": "An der Kreuzung biegen Sie links ab.", "translation": "A kereszteződésnél forduljon balra." }],
+      "examples": [
+        {
+          "sentence": "An der Kreuzung biegen Sie links ab.",
+          "translation": "A kereszteződésnél forduljon balra.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -618,7 +816,13 @@
       "translations": ["templom"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Kirchen" },
-      "examples": [{ "sentence": "Die Kirche ist über 500 Jahre alt.", "translation": "A templom több mint 500 éves." }],
+      "examples": [
+        {
+          "sentence": "Die Kirche ist über 500 Jahre alt.",
+          "translation": "A templom több mint 500 éves.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -627,7 +831,13 @@
       "translations": ["múzeum"],
       "categories": ["stadt", "freizeit"],
       "noun": { "gender": "neuter", "plural": "Museen" },
-      "examples": [{ "sentence": "Am Sonntag ist das Museum kostenlos.", "translation": "Vasárnap ingyenes a múzeum." }],
+      "examples": [
+        {
+          "sentence": "Am Sonntag ist das Museum kostenlos.",
+          "translation": "Vasárnap ingyenes a múzeum.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -636,7 +846,13 @@
       "translations": ["tér", "hely"],
       "categories": ["stadt"],
       "noun": { "gender": "masculine", "plural": "Plätze" },
-      "examples": [{ "sentence": "Auf dem Platz gibt es einen Markt.", "translation": "A téren piac van." }],
+      "examples": [
+        {
+          "sentence": "Auf dem Platz gibt es einen Markt.",
+          "translation": "A téren piac van.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "dem" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -645,7 +861,13 @@
       "translations": ["híd"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Brücken" },
-      "examples": [{ "sentence": "Wir gehen über die Brücke.", "translation": "Átmegyünk a hídon." }],
+      "examples": [
+        {
+          "sentence": "Wir gehen über die Brücke.",
+          "translation": "Átmegyünk a hídon.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -712,7 +934,8 @@
       "examples": [
         {
           "sentence": "Die Reise nach Italien war wunderschön.",
-          "translation": "Az olaszországi utazás csodaszép volt."
+          "translation": "Az olaszországi utazás csodaszép volt.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
         }
       ],
       "is_active": true
@@ -723,7 +946,13 @@
       "translations": ["útlevél"],
       "categories": ["reisen"],
       "noun": { "gender": "masculine", "plural": "Pässe" },
-      "examples": [{ "sentence": "Vergiss deinen Pass nicht!", "translation": "Ne felejtsd el az útleveledet!" }],
+      "examples": [
+        {
+          "sentence": "Vergiss deinen Pass nicht!",
+          "translation": "Ne felejtsd el az útleveledet!",
+          "article": { "case": "accusative", "type": "possessive", "number": "singular", "form": "deinen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -732,7 +961,13 @@
       "translations": ["külföld"],
       "categories": ["reisen"],
       "noun": { "gender": "neuter", "number": "singular_only" },
-      "examples": [{ "sentence": "Sie arbeitet seit zwei Jahren im Ausland.", "translation": "Két éve dolgozik külföldön." }],
+      "examples": [
+        {
+          "sentence": "Sie arbeitet seit zwei Jahren im Ausland.",
+          "translation": "Két éve dolgozik külföldön.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -741,7 +976,13 @@
       "translations": ["tenger"],
       "categories": ["reisen", "natur"],
       "noun": { "gender": "neuter", "plural": "Meere" },
-      "examples": [{ "sentence": "Im Sommer fahren wir ans Meer.", "translation": "Nyáron a tengerhez utazunk." }],
+      "examples": [
+        {
+          "sentence": "Im Sommer fahren wir ans Meer.",
+          "translation": "Nyáron a tengerhez utazunk.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "ans" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -750,7 +991,13 @@
       "translations": ["strand"],
       "categories": ["reisen", "natur"],
       "noun": { "gender": "masculine", "plural": "Strände" },
-      "examples": [{ "sentence": "Die Kinder spielen am Strand.", "translation": "A gyerekek a strandon játszanak." }],
+      "examples": [
+        {
+          "sentence": "Die Kinder spielen am Strand.",
+          "translation": "A gyerekek a strandon játszanak.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "am" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -804,7 +1051,13 @@
       "translations": ["időpont, megbeszélt időpont"],
       "categories": ["zeit", "arbeit"],
       "noun": { "gender": "masculine", "plural": "Termine" },
-      "examples": [{ "sentence": "Ich habe morgen einen Termin beim Arzt.", "translation": "Holnap orvosi időpontom van." }],
+      "examples": [
+        {
+          "sentence": "Ich habe morgen einen Termin beim Arzt.",
+          "translation": "Holnap orvosi időpontom van.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "einen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -822,7 +1075,13 @@
       "translations": ["tavasz"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Frühlinge" },
-      "examples": [{ "sentence": "Im Frühling blühen die Bäume.", "translation": "Tavasszal virágoznak a fák." }],
+      "examples": [
+        {
+          "sentence": "Im Frühling blühen die Bäume.",
+          "translation": "Tavasszal virágoznak a fák.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -831,7 +1090,13 @@
       "translations": ["nyár"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Sommer" },
-      "examples": [{ "sentence": "Der Sommer war dieses Jahr sehr heiß.", "translation": "Idén nagyon forró volt a nyár." }],
+      "examples": [
+        {
+          "sentence": "Der Sommer war dieses Jahr sehr heiß.",
+          "translation": "Idén nagyon forró volt a nyár.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -840,7 +1105,13 @@
       "translations": ["ősz"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Herbste" },
-      "examples": [{ "sentence": "Im Herbst fallen die Blätter.", "translation": "Ősszel hullanak a levelek." }],
+      "examples": [
+        {
+          "sentence": "Im Herbst fallen die Blätter.",
+          "translation": "Ősszel hullanak a levelek.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -849,7 +1120,13 @@
       "translations": ["tél"],
       "categories": ["zeit", "wetter"],
       "noun": { "gender": "masculine", "plural": "Winter" },
-      "examples": [{ "sentence": "Im Winter fahren wir Ski.", "translation": "Télen síelni megyünk." }],
+      "examples": [
+        {
+          "sentence": "Im Winter fahren wir Ski.",
+          "translation": "Télen síelni megyünk.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -879,7 +1156,13 @@
       "translations": ["egyetem"],
       "categories": ["bildung"],
       "noun": { "gender": "feminine", "plural": "Universitäten" },
-      "examples": [{ "sentence": "Meine Schwester studiert an der Universität.", "translation": "A nővérem az egyetemen tanul." }],
+      "examples": [
+        {
+          "sentence": "Meine Schwester studiert an der Universität.",
+          "translation": "A nővérem az egyetemen tanul.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -888,7 +1171,13 @@
       "translations": ["vizsga"],
       "categories": ["bildung"],
       "noun": { "gender": "feminine", "plural": "Prüfungen" },
-      "examples": [{ "sentence": "Morgen habe ich eine Prüfung.", "translation": "Holnap vizsgám van." }],
+      "examples": [
+        {
+          "sentence": "Morgen habe ich eine Prüfung.",
+          "translation": "Holnap vizsgám van.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "eine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -911,7 +1200,13 @@
       "translations": ["cég"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Firmen" },
-      "examples": [{ "sentence": "Er arbeitet bei einer großen Firma.", "translation": "Egy nagy cégnél dolgozik." }],
+      "examples": [
+        {
+          "sentence": "Er arbeitet bei einer großen Firma.",
+          "translation": "Egy nagy cégnél dolgozik.",
+          "article": { "case": "dative", "type": "indefinite", "number": "singular", "form": "einer" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -920,7 +1215,13 @@
       "translations": ["főnök"],
       "categories": ["arbeit"],
       "noun": { "gender": "masculine", "plural": "Chefs" },
-      "examples": [{ "sentence": "Der Chef ist heute nicht im Büro.", "translation": "A főnök ma nincs az irodában." }],
+      "examples": [
+        {
+          "sentence": "Der Chef ist heute nicht im Büro.",
+          "translation": "A főnök ma nincs az irodában.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -929,7 +1230,13 @@
       "translations": ["fizetés"],
       "categories": ["arbeit"],
       "noun": { "gender": "neuter", "plural": "Gehälter" },
-      "examples": [{ "sentence": "Sie bekommt ein gutes Gehalt.", "translation": "Jó fizetést kap." }],
+      "examples": [
+        {
+          "sentence": "Sie bekommt ein gutes Gehalt.",
+          "translation": "Jó fizetést kap.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -938,7 +1245,13 @@
       "translations": ["megbeszélés"],
       "categories": ["arbeit"],
       "noun": { "gender": "feminine", "plural": "Besprechungen" },
-      "examples": [{ "sentence": "Die Besprechung dauert bis elf Uhr.", "translation": "A megbeszélés tizenegyig tart." }],
+      "examples": [
+        {
+          "sentence": "Die Besprechung dauert bis elf Uhr.",
+          "translation": "A megbeszélés tizenegyig tart.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1063,7 +1376,13 @@
       "translations": ["mozi"],
       "categories": ["freizeit", "stadt"],
       "noun": { "gender": "neuter", "plural": "Kinos" },
-      "examples": [{ "sentence": "Gehen wir heute Abend ins Kino?", "translation": "Elmegyünk ma este moziba?" }],
+      "examples": [
+        {
+          "sentence": "Gehen wir heute Abend ins Kino?",
+          "translation": "Elmegyünk ma este moziba?",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "ins" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1072,7 +1391,13 @@
       "translations": ["színház"],
       "categories": ["freizeit", "stadt"],
       "noun": { "gender": "neuter", "plural": "Theater" },
-      "examples": [{ "sentence": "Im Theater läuft ein neues Stück.", "translation": "A színházban új darabot játszanak." }],
+      "examples": [
+        {
+          "sentence": "Im Theater läuft ein neues Stück.",
+          "translation": "A színházban új darabot játszanak.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "Im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1081,7 +1406,13 @@
       "translations": ["koncert"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Konzerte" },
-      "examples": [{ "sentence": "Das Konzert beginnt um acht Uhr.", "translation": "A koncert nyolckor kezdődik." }],
+      "examples": [
+        {
+          "sentence": "Das Konzert beginnt um acht Uhr.",
+          "translation": "A koncert nyolckor kezdődik.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1090,7 +1421,13 @@
       "translations": ["játék", "mérkőzés"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Spiele" },
-      "examples": [{ "sentence": "Das Spiel endet unentschieden.", "translation": "A meccs döntetlenre végződik." }],
+      "examples": [
+        {
+          "sentence": "Das Spiel endet unentschieden.",
+          "translation": "A meccs döntetlenre végződik.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1099,7 +1436,13 @@
       "translations": ["buli"],
       "categories": ["freizeit"],
       "noun": { "gender": "feminine", "plural": "Partys" },
-      "examples": [{ "sentence": "Am Samstag mache ich eine Party.", "translation": "Szombaton bulit tartok." }],
+      "examples": [
+        {
+          "sentence": "Am Samstag mache ich eine Party.",
+          "translation": "Szombaton bulit tartok.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "eine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1108,7 +1451,13 @@
       "translations": ["dal"],
       "categories": ["freizeit"],
       "noun": { "gender": "neuter", "plural": "Lieder" },
-      "examples": [{ "sentence": "Das Lied höre ich sehr gern.", "translation": "Ezt a dalt nagyon szeretem hallgatni." }],
+      "examples": [
+        {
+          "sentence": "Das Lied höre ich sehr gern.",
+          "translation": "Ezt a dalt nagyon szeretem hallgatni.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1208,7 +1557,13 @@
       "translations": ["kabát"],
       "categories": ["kleidung"],
       "noun": { "gender": "masculine", "plural": "Mäntel" },
-      "examples": [{ "sentence": "Zieh deinen Mantel an, es ist kalt.", "translation": "Vedd fel a kabátodat, hideg van." }],
+      "examples": [
+        {
+          "sentence": "Zieh deinen Mantel an, es ist kalt.",
+          "translation": "Vedd fel a kabátodat, hideg van.",
+          "article": { "case": "accusative", "type": "possessive", "number": "singular", "form": "deinen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1217,7 +1572,13 @@
       "translations": ["pulóver"],
       "categories": ["kleidung"],
       "noun": { "gender": "masculine", "plural": "Pullover" },
-      "examples": [{ "sentence": "Der Pullover ist aus Wolle.", "translation": "A pulóver gyapjúból van." }],
+      "examples": [
+        {
+          "sentence": "Der Pullover ist aus Wolle.",
+          "translation": "A pulóver gyapjúból van.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1235,7 +1596,13 @@
       "translations": ["üzlet"],
       "categories": ["stadt"],
       "noun": { "gender": "neuter", "plural": "Geschäfte" },
-      "examples": [{ "sentence": "Das Geschäft schließt um sechs Uhr.", "translation": "Az üzlet hatkor zár." }],
+      "examples": [
+        {
+          "sentence": "Das Geschäft schließt um sechs Uhr.",
+          "translation": "Az üzlet hatkor zár.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1244,7 +1611,13 @@
       "translations": ["pénztár"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Kassen" },
-      "examples": [{ "sentence": "Bitte zahlen Sie an der Kasse.", "translation": "Kérem, a pénztárnál fizessen." }],
+      "examples": [
+        {
+          "sentence": "Bitte zahlen Sie an der Kasse.",
+          "translation": "Kérem, a pénztárnál fizessen.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1334,7 +1707,13 @@
       "translations": ["szél"],
       "categories": ["wetter"],
       "noun": { "gender": "masculine", "plural": "Winde" },
-      "examples": [{ "sentence": "Heute weht ein starker Wind.", "translation": "Ma erős szél fúj." }],
+      "examples": [
+        {
+          "sentence": "Heute weht ein starker Wind.",
+          "translation": "Ma erős szél fúj.",
+          "article": { "case": "nominative", "type": "indefinite", "number": "singular", "form": "ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1343,7 +1722,13 @@
       "translations": ["felhő"],
       "categories": ["wetter"],
       "noun": { "gender": "feminine", "plural": "Wolken" },
-      "examples": [{ "sentence": "Am Himmel ist keine Wolke.", "translation": "Egy felhő sincs az égen." }],
+      "examples": [
+        {
+          "sentence": "Am Himmel ist keine Wolke.",
+          "translation": "Egy felhő sincs az égen.",
+          "article": { "case": "nominative", "type": "negative", "number": "singular", "form": "keine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1352,7 +1737,13 @@
       "translations": ["zivatar"],
       "categories": ["wetter"],
       "noun": { "gender": "neuter", "plural": "Gewitter" },
-      "examples": [{ "sentence": "Am Abend gibt es ein Gewitter.", "translation": "Este zivatar lesz." }],
+      "examples": [
+        {
+          "sentence": "Am Abend gibt es ein Gewitter.",
+          "translation": "Este zivatar lesz.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1361,7 +1752,13 @@
       "translations": ["hőmérséklet"],
       "categories": ["wetter"],
       "noun": { "gender": "feminine", "plural": "Temperaturen" },
-      "examples": [{ "sentence": "Die Temperatur liegt bei zwanzig Grad.", "translation": "A hőmérséklet húsz fok körül van." }],
+      "examples": [
+        {
+          "sentence": "Die Temperatur liegt bei zwanzig Grad.",
+          "translation": "A hőmérséklet húsz fok körül van.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1370,7 +1767,13 @@
       "translations": ["madár"],
       "categories": ["tiere"],
       "noun": { "gender": "masculine", "plural": "Vögel" },
-      "examples": [{ "sentence": "Ein Vogel sitzt auf dem Dach.", "translation": "Egy madár ül a tetőn." }],
+      "examples": [
+        {
+          "sentence": "Ein Vogel sitzt auf dem Dach.",
+          "translation": "Egy madár ül a tetőn.",
+          "article": { "case": "nominative", "type": "indefinite", "number": "singular", "form": "Ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1379,7 +1782,13 @@
       "translations": ["ló"],
       "categories": ["tiere"],
       "noun": { "gender": "neuter", "plural": "Pferde" },
-      "examples": [{ "sentence": "Das Mädchen reitet auf einem Pferd.", "translation": "A lány lovon lovagol." }],
+      "examples": [
+        {
+          "sentence": "Das Mädchen reitet auf einem Pferd.",
+          "translation": "A lány lovon lovagol.",
+          "article": { "case": "dative", "type": "indefinite", "number": "singular", "form": "einem" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1388,7 +1797,13 @@
       "translations": ["tehén"],
       "categories": ["tiere"],
       "noun": { "gender": "feminine", "plural": "Kühe" },
-      "examples": [{ "sentence": "Die Kuh steht auf der Wiese.", "translation": "A tehén a réten áll." }],
+      "examples": [
+        {
+          "sentence": "Die Kuh steht auf der Wiese.",
+          "translation": "A tehén a réten áll.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1397,7 +1812,13 @@
       "translations": ["fa"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Bäume" },
-      "examples": [{ "sentence": "Vor dem Haus steht ein alter Baum.", "translation": "A ház előtt egy öreg fa áll." }],
+      "examples": [
+        {
+          "sentence": "Vor dem Haus steht ein alter Baum.",
+          "translation": "A ház előtt egy öreg fa áll.",
+          "article": { "case": "nominative", "type": "indefinite", "number": "singular", "form": "ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1415,7 +1836,13 @@
       "translations": ["erdő"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Wälder" },
-      "examples": [{ "sentence": "Wir gehen im Wald spazieren.", "translation": "Az erdőben sétálunk." }],
+      "examples": [
+        {
+          "sentence": "Wir gehen im Wald spazieren.",
+          "translation": "Az erdőben sétálunk.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "im" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1424,7 +1851,13 @@
       "translations": ["hegy"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Berge" },
-      "examples": [{ "sentence": "Der Berg ist über 2000 Meter hoch.", "translation": "A hegy több mint 2000 méter magas." }],
+      "examples": [
+        {
+          "sentence": "Der Berg ist über 2000 Meter hoch.",
+          "translation": "A hegy több mint 2000 méter magas.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1433,7 +1866,13 @@
       "translations": ["folyó"],
       "categories": ["natur"],
       "noun": { "gender": "masculine", "plural": "Flüsse" },
-      "examples": [{ "sentence": "Die Donau ist ein langer Fluss.", "translation": "A Duna hosszú folyó." }],
+      "examples": [
+        {
+          "sentence": "Die Donau ist ein langer Fluss.",
+          "translation": "A Duna hosszú folyó.",
+          "article": { "case": "nominative", "type": "indefinite", "number": "singular", "form": "ein" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1499,7 +1938,13 @@
       "translations": ["cím"],
       "categories": ["kommunikation"],
       "noun": { "gender": "feminine", "plural": "Adressen" },
-      "examples": [{ "sentence": "Wie ist deine Adresse?", "translation": "Mi a címed?" }],
+      "examples": [
+        {
+          "sentence": "Wie ist deine Adresse?",
+          "translation": "Mi a címed?",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "deine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1508,7 +1953,13 @@
       "translations": ["beszélgetés"],
       "categories": ["kommunikation"],
       "noun": { "gender": "neuter", "plural": "Gespräche" },
-      "examples": [{ "sentence": "Das Gespräch war sehr angenehm.", "translation": "A beszélgetés nagyon kellemes volt." }],
+      "examples": [
+        {
+          "sentence": "Das Gespräch war sehr angenehm.",
+          "translation": "A beszélgetés nagyon kellemes volt.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Das" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1517,7 +1968,13 @@
       "translations": ["vélemény"],
       "categories": ["kommunikation"],
       "noun": { "gender": "feminine", "plural": "Meinungen" },
-      "examples": [{ "sentence": "Was ist deine Meinung?", "translation": "Mi a véleményed?" }],
+      "examples": [
+        {
+          "sentence": "Was ist deine Meinung?",
+          "translation": "Mi a véleményed?",
+          "article": { "case": "nominative", "type": "possessive", "number": "singular", "form": "deine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -1582,7 +2039,13 @@
       "translations": ["szerelem, szeretet"],
       "categories": ["gefuehle"],
       "noun": { "gender": "feminine", "number": "singular_only" },
-      "examples": [{ "sentence": "Die Liebe zur Musik verbindet uns.", "translation": "A zene szeretete összeköt minket." }],
+      "examples": [
+        {
+          "sentence": "Die Liebe zur Musik verbindet uns.",
+          "translation": "A zene szeretete összeköt minket.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {

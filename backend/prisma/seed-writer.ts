@@ -6,7 +6,16 @@
  * Egy szó összes rekordja egyetlen tranzakcióban íródik.
  */
 import { createHash } from 'node:crypto';
-import { CefrLevel, GrammaticalCase, PartOfSpeech, Prisma, PrismaClient, WordReviewStatus } from '@prisma/client';
+import {
+  ArticleType,
+  CefrLevel,
+  GrammaticalCase,
+  GrammaticalNumber,
+  PartOfSpeech,
+  Prisma,
+  PrismaClient,
+  WordReviewStatus,
+} from '@prisma/client';
 
 /** Rögzített névtér a seed-azonosítókhoz (RFC 4122 UUID v5). */
 const SEED_NAMESPACE = 'b7c2a4f0-6a51-4f3e-9d0e-2c1f5e8a9b10';
@@ -43,6 +52,16 @@ export interface SeedValency {
 export interface SeedExample {
   sentence: string;
   translation: string;
+  /** Főnévi példamondatnál: a főnév előtti névelő a mondatban (a névelőtáblázathoz). */
+  article?: SeedArticle;
+}
+
+export interface SeedArticle {
+  case: GrammaticalCase;
+  type: ArticleType;
+  number: GrammaticalNumber;
+  /** A pontos mondatbeli alak (pl. „einen”, „Die”, „zum”). */
+  form: string;
 }
 
 export type SeedAttributes =
@@ -124,7 +143,18 @@ async function seedExamples(
 ): Promise<void> {
   for (const [i, ex] of examples.entries()) {
     const id = seedId(`${keyPrefix}:example:${i}`);
-    const data = { wordId, valencyId, sentence: ex.sentence, translation: ex.translation, sortOrder: i };
+    const a = ex.article;
+    const data = {
+      wordId,
+      valencyId,
+      sentence: ex.sentence,
+      translation: ex.translation,
+      sortOrder: i,
+      articleCase: a?.case ?? null,
+      articleType: a?.type ?? null,
+      articleNumber: a?.number ?? null,
+      articleForm: a?.form ?? null,
+    };
     await tx.exampleSentence.upsert({ where: { id }, create: { id, ...data }, update: data });
   }
 }

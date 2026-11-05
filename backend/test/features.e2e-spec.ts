@@ -75,6 +75,19 @@ describe('Továbbfejlesztett funkciók (integráció)', () => {
   });
 
   // ---------------------------------------------------------------------------
+  describe('névelőtáblázat', () => {
+    it('a katalógus főnevének példamondata hozza a névelő esetét, fajtáját, számát és alakját', async () => {
+      const id = await wordId(t.prisma, 'Tisch');
+      const res = await t.http.get(`${API}/words/${id}`).set(user.auth).expect(200);
+      expect(res.body.examples[0]).toEqual({
+        sentence: 'Das Buch liegt auf dem Tisch.',
+        translation: 'A könyv az asztalon fekszik.',
+        article: { case: 'DATIVE', type: 'DEFINITE', number: 'SINGULAR', form: 'dem' },
+      });
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   describe('saját szavak', () => {
     const schreibtisch = {
       lemma: 'Schreibtisch',
@@ -93,7 +106,7 @@ describe('Továbbfejlesztett funkciók (integráció)', () => {
         isCustom: true,
         noun: { article: 'der', numberType: 'REGULAR', pluralForm: 'Schreibtische' },
         translations: [{ text: 'íróasztal', isPrimary: true }],
-        examples: [{ sentence: 'Der Schreibtisch ist groß.' }],
+        examples: [{ sentence: 'Der Schreibtisch ist groß.', article: null }],
       });
       const id = res.body.id as string;
 

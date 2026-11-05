@@ -9,7 +9,13 @@
       "translations": ["tenger"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "number": "singular_only", "genitive": "See" },
-      "examples": [{ "sentence": "Die Fischer fahren auf die See hinaus.", "translation": "A halászok kihajóznak a tengerre." }],
+      "examples": [
+        {
+          "sentence": "Die Fischer fahren auf die See hinaus.",
+          "translation": "A halászok kihajóznak a tengerre.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "die" }
+        }
+      ],
       "ipa": "zeː",
       "is_active": true
     },
@@ -60,7 +66,13 @@
       "translations": ["esküvő"],
       "categories": ["familie"],
       "noun": { "gender": "feminine", "plural": "Hochzeiten" },
-      "examples": [{ "sentence": "Die Hochzeit findet im Juni statt.", "translation": "Az esküvő júniusban lesz." }],
+      "examples": [
+        {
+          "sentence": "Die Hochzeit findet im Juni statt.",
+          "translation": "Az esküvő júniusban lesz.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -69,7 +81,13 @@
       "translations": ["kapcsolat"],
       "categories": ["menschen"],
       "noun": { "gender": "feminine", "plural": "Beziehungen" },
-      "examples": [{ "sentence": "Die beiden haben eine gute Beziehung.", "translation": "Jó a kapcsolatuk." }],
+      "examples": [
+        {
+          "sentence": "Die beiden haben eine gute Beziehung.",
+          "translation": "Jó a kapcsolatuk.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "eine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -90,7 +108,8 @@
       "examples": [
         {
           "sentence": "Die Krankheit ist zum Glück nicht gefährlich.",
-          "translation": "A betegség szerencsére nem veszélyes."
+          "translation": "A betegség szerencsére nem veszélyes.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
         }
       ],
       "is_active": true
@@ -101,7 +120,13 @@
       "translations": ["bérbeadó"],
       "categories": ["haushalt"],
       "noun": { "gender": "masculine", "plural": "Vermieter" },
-      "examples": [{ "sentence": "Der Vermieter will die Miete erhöhen.", "translation": "A bérbeadó emelni akarja a lakbért." }],
+      "examples": [
+        {
+          "sentence": "Der Vermieter will die Miete erhöhen.",
+          "translation": "A bérbeadó emelni akarja a lakbért.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -126,7 +151,13 @@
       "translations": ["környék"],
       "categories": ["stadt"],
       "noun": { "gender": "feminine", "plural": "Umgebungen" },
-      "examples": [{ "sentence": "In der Umgebung gibt es viele Seen.", "translation": "A környéken sok tó van." }],
+      "examples": [
+        {
+          "sentence": "In der Umgebung gibt es viele Seen.",
+          "translation": "A környéken sok tó van.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -135,7 +166,13 @@
       "translations": ["szállás"],
       "categories": ["reisen"],
       "noun": { "gender": "feminine", "plural": "Unterkünfte" },
-      "examples": [{ "sentence": "Wir suchen eine günstige Unterkunft.", "translation": "Olcsó szállást keresünk." }],
+      "examples": [
+        {
+          "sentence": "Wir suchen eine günstige Unterkunft.",
+          "translation": "Olcsó szállást keresünk.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "eine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -147,7 +184,8 @@
       "examples": [
         {
           "sentence": "Das Schloss ist die wichtigste Sehenswürdigkeit der Stadt.",
-          "translation": "A kastély a város legfontosabb látványossága."
+          "translation": "A kastély a város legfontosabb látványossága.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "die" }
         }
       ],
       "is_active": true
@@ -176,7 +214,8 @@
       "examples": [
         {
           "sentence": "In der Zukunft möchte ich im Ausland leben.",
-          "translation": "A jövőben külföldön szeretnék élni."
+          "translation": "A jövőben külföldön szeretnék élni.",
+          "article": { "case": "dative", "type": "definite", "number": "singular", "form": "der" }
         }
       ],
       "is_active": true
@@ -187,7 +226,13 @@
       "translations": ["múlt"],
       "categories": ["zeit"],
       "noun": { "gender": "feminine", "number": "singular_only" },
-      "examples": [{ "sentence": "Über die Vergangenheit spricht er nicht gern.", "translation": "Nem szívesen beszél a múltról." }],
+      "examples": [
+        {
+          "sentence": "Über die Vergangenheit spricht er nicht gern.",
+          "translation": "Nem szívesen beszél a múltról.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -212,7 +257,8 @@
       "examples": [
         {
           "sentence": "Ich schicke meine Bewerbung per E-Mail.",
-          "translation": "E-mailben küldöm el a jelentkezésemet."
+          "translation": "E-mailben küldöm el a jelentkezésemet.",
+          "article": { "case": "accusative", "type": "possessive", "number": "singular", "form": "meine" }
         }
       ],
       "is_active": true
@@ -232,7 +278,13 @@
       "translations": ["szakképzés"],
       "categories": ["bildung", "arbeit"],
       "noun": { "gender": "feminine", "plural": "Ausbildungen" },
-      "examples": [{ "sentence": "Er macht eine Ausbildung zum Koch.", "translation": "Szakácsnak tanul." }],
+      "examples": [
+        {
+          "sentence": "Er macht eine Ausbildung zum Koch.",
+          "translation": "Szakácsnak tanul.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "eine" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -241,7 +293,13 @@
       "translations": ["szerződés"],
       "categories": ["arbeit"],
       "noun": { "gender": "masculine", "plural": "Verträge" },
-      "examples": [{ "sentence": "Bitte unterschreiben Sie den Vertrag.", "translation": "Kérem, írja alá a szerződést." }],
+      "examples": [
+        {
+          "sentence": "Bitte unterschreiben Sie den Vertrag.",
+          "translation": "Kérem, írja alá a szerződést.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "den" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -307,7 +365,13 @@
       "translations": ["kiállítás"],
       "categories": ["freizeit"],
       "noun": { "gender": "feminine", "plural": "Ausstellungen" },
-      "examples": [{ "sentence": "Die Ausstellung zeigt Bilder von Klimt.", "translation": "A kiállítás Klimt képeit mutatja be." }],
+      "examples": [
+        {
+          "sentence": "Die Ausstellung zeigt Bilder von Klimt.",
+          "translation": "A kiállítás Klimt képeit mutatja be.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -342,7 +406,13 @@
       "translations": ["környezet"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "number": "singular_only" },
-      "examples": [{ "sentence": "Wir müssen die Umwelt schützen.", "translation": "Védenünk kell a környezetet." }],
+      "examples": [
+        {
+          "sentence": "Wir müssen die Umwelt schützen.",
+          "translation": "Védenünk kell a környezetet.",
+          "article": { "case": "accusative", "type": "definite", "number": "singular", "form": "die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -351,7 +421,13 @@
       "translations": ["táj"],
       "categories": ["natur"],
       "noun": { "gender": "feminine", "plural": "Landschaften" },
-      "examples": [{ "sentence": "Die Landschaft hier ist wunderschön.", "translation": "Itt csodaszép a táj." }],
+      "examples": [
+        {
+          "sentence": "Die Landschaft hier ist wunderschön.",
+          "translation": "Itt csodaszép a táj.",
+          "article": { "case": "nominative", "type": "definite", "number": "singular", "form": "Die" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -369,7 +445,13 @@
       "translations": ["javaslat"],
       "categories": ["kommunikation"],
       "noun": { "gender": "masculine", "plural": "Vorschläge" },
-      "examples": [{ "sentence": "Ich habe einen Vorschlag für das Wochenende.", "translation": "Van egy javaslatom a hétvégére." }],
+      "examples": [
+        {
+          "sentence": "Ich habe einen Vorschlag für das Wochenende.",
+          "translation": "Van egy javaslatom a hétvégére.",
+          "article": { "case": "accusative", "type": "indefinite", "number": "singular", "form": "einen" }
+        }
+      ],
       "is_active": true
     },
     {
@@ -477,7 +559,13 @@
       "translations": ["aggodalom"],
       "categories": ["gefuehle"],
       "noun": { "gender": "feminine", "plural": "Sorgen" },
-      "examples": [{ "sentence": "Mach dir keine Sorgen!", "translation": "Ne aggódj!" }],
+      "examples": [
+        {
+          "sentence": "Mach dir keine Sorgen!",
+          "translation": "Ne aggódj!",
+          "article": { "case": "accusative", "type": "negative", "number": "plural", "form": "keine" }
+        }
+      ],
       "is_active": true
     },
     {
