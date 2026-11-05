@@ -51,6 +51,24 @@ flutter build web --release --dart-define=API_BASE_URL=https://api.example.hu/ap
   helyi módosítások vesznek el; belépés után a szinkron visszahozza a szerveren lévő haladást.
 - Kiejtés: a böngésző beépített felolvasója (Web Speech API); adatexport: megosztás vagy letöltés.
 
+## Szintfelmérő
+
+Új felhasználónál (első belépés, még nincs felvett szó) a kezdőképernyő előtt egy rövid
+szókincsteszt jön, amely megmondja, melyik szinten (A1–C1) érdemes kezdeni. Kihagyható, és
+később a menüből (*Szintfelmérő*) bármikor újra kitölthető.
+
+- **Menete:** a szinteket alulról felfelé járja végig. Egy kérdés: német szó → 4 magyar jelentés
+  vagy „Nem tudom”. Egy szinten legfeljebb 6 kérdés jön: 4 helyes válasz → teljesítve, a következő
+  szint jön; 3 hiba → a felmérés véget ér, ez az ajánlott kezdőszint. Legfeljebb 30 kérdés,
+  jellemzően 2–3 perc. Tippeléssel egy szint teljesítésének esélye ≈ 3,8%.
+- **Eredmény:** helyben tárolódik (offline is kitölthető), a kezdőképernyő az ajánlott szint
+  leckéjét kínálja, és a szintgombok közül azt kiemeli.
+- **Itemkészlet:** `lib/domain/placement_bank.dart`, szintenként 16 szó a szókincs JSON
+  fájljaiból, a nemzetközi és többértelmű szavak kiszűrésével. Generált fájl; a szókincs
+  változása után: `python3 tool/generate_placement_bank.py`.
+- **Kód:** `lib/domain/placement_test.dart` (logika), `lib/data/repositories/placement_repository.dart`
+  (tárolás), `lib/features/placement/placement_screen.dart` (képernyő), indítási kapu: `lib/app.dart`.
+
 ## Ellenőrzés
 
 ```sh
