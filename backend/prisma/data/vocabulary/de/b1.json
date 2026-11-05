@@ -1,0 +1,730 @@
+{
+  "language": "de",
+  "level": "B1",
+  "words": [
+    {
+      "lemma": "See",
+      "pos": "noun",
+      "homograph": 2,
+      "translations": ["tenger"],
+      "categories": ["natur"],
+      "noun": { "gender": "feminine", "number": "singular_only", "genitive": "See" },
+      "examples": [{ "sentence": "Die Fischer fahren auf die See hinaus.", "translation": "A halászok kihajóznak a tengerre." }],
+      "ipa": "zeː",
+      "is_active": true
+    },
+    {
+      "lemma": "abhängen",
+      "pos": "verb",
+      "translations": ["függ (valamitől)"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "hängt ab",
+        "preterite_3sg": "hing ab",
+        "past_participle": "abgehangen",
+        "separable_prefix": "ab"
+      },
+      "valencies": [
+        {
+          "preposition": "von",
+          "case": "dative",
+          "pattern": "abhängen von + Dat.",
+          "meaning": "függ valamitől/valakitől",
+          "examples": [{ "sentence": "Das hängt vom Wetter ab.", "translation": "Ez az időjárástól függ." }]
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "stolz",
+      "pos": "adjective",
+      "translations": ["büszke"],
+      "categories": ["gefuehle"],
+      "adjective": { "comparative": "stolzer", "superlative": "am stolzesten" },
+      "valencies": [
+        {
+          "preposition": "auf",
+          "case": "accusative",
+          "pattern": "stolz auf + Akk.",
+          "meaning": "büszke valamire/valakire",
+          "examples": [{ "sentence": "Die Eltern sind stolz auf ihre Tochter.", "translation": "A szülők büszkék a lányukra." }]
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "Hochzeit",
+      "pos": "noun",
+      "translations": ["esküvő"],
+      "categories": ["familie"],
+      "noun": { "gender": "feminine", "plural": "Hochzeiten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Beziehung",
+      "pos": "noun",
+      "translations": ["kapcsolat"],
+      "categories": ["menschen"],
+      "noun": { "gender": "feminine", "plural": "Beziehungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Schmerz",
+      "pos": "noun",
+      "translations": ["fájdalom"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "masculine", "plural": "Schmerzen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Krankheit",
+      "pos": "noun",
+      "translations": ["betegség"],
+      "categories": ["gesundheit"],
+      "noun": { "gender": "feminine", "plural": "Krankheiten" },
+      "is_active": true
+    },
+    {
+      "lemma": "Vermieter",
+      "pos": "noun",
+      "translations": ["bérbeadó"],
+      "categories": ["haushalt"],
+      "noun": { "gender": "masculine", "plural": "Vermieter" },
+      "is_active": true
+    },
+    {
+      "lemma": "umziehen",
+      "pos": "verb",
+      "translations": ["elköltözik"],
+      "categories": ["haushalt"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "sein",
+        "present_3sg": "zieht um",
+        "preterite_3sg": "zog um",
+        "past_participle": "umgezogen",
+        "separable_prefix": "um"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "Umgebung",
+      "pos": "noun",
+      "translations": ["környék"],
+      "categories": ["stadt"],
+      "noun": { "gender": "feminine", "plural": "Umgebungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Unterkunft",
+      "pos": "noun",
+      "translations": ["szállás"],
+      "categories": ["reisen"],
+      "noun": { "gender": "feminine", "plural": "Unterkünfte" },
+      "is_active": true
+    },
+    {
+      "lemma": "Sehenswürdigkeit",
+      "pos": "noun",
+      "translations": ["látványosság"],
+      "categories": ["reisen"],
+      "noun": { "gender": "feminine", "plural": "Sehenswürdigkeiten" },
+      "is_active": true
+    },
+    {
+      "lemma": "besichtigen",
+      "pos": "verb",
+      "translations": ["megtekint"],
+      "categories": ["reisen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "besichtigt",
+        "preterite_3sg": "besichtigte",
+        "past_participle": "besichtigt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "Zukunft",
+      "pos": "noun",
+      "translations": ["jövő"],
+      "categories": ["zeit"],
+      "noun": { "gender": "feminine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Vergangenheit",
+      "pos": "noun",
+      "translations": ["múlt"],
+      "categories": ["zeit"],
+      "noun": { "gender": "feminine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "inzwischen",
+      "pos": "adverb",
+      "translations": ["közben, időközben"],
+      "categories": ["zeit"],
+      "is_active": true
+    },
+    {
+      "lemma": "Bewerbung",
+      "pos": "noun",
+      "translations": ["pályázat, jelentkezés"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "feminine", "plural": "Bewerbungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Erfahrung",
+      "pos": "noun",
+      "translations": ["tapasztalat"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "feminine", "plural": "Erfahrungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ausbildung",
+      "pos": "noun",
+      "translations": ["szakképzés"],
+      "categories": ["bildung", "arbeit"],
+      "noun": { "gender": "feminine", "plural": "Ausbildungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Vertrag",
+      "pos": "noun",
+      "translations": ["szerződés"],
+      "categories": ["arbeit"],
+      "noun": { "gender": "masculine", "plural": "Verträge" },
+      "is_active": true
+    },
+    {
+      "lemma": "bewerben",
+      "pos": "verb",
+      "translations": ["pályázik, jelentkezik"],
+      "categories": ["arbeit"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "bewirbt sich",
+        "preterite_3sg": "bewarb sich",
+        "past_participle": "beworben",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "um",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich bewerben um + Akk.",
+          "meaning": "pályázik valamire"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "verdienen",
+      "pos": "verb",
+      "translations": ["keres (pénzt)"],
+      "categories": ["arbeit"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "verdient",
+        "preterite_3sg": "verdiente",
+        "past_participle": "verdient"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "teilnehmen",
+      "pos": "verb",
+      "translations": ["részt vesz"],
+      "categories": ["bildung", "arbeit"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "nimmt teil",
+        "preterite_3sg": "nahm teil",
+        "past_participle": "teilgenommen",
+        "separable_prefix": "teil"
+      },
+      "valencies": [{ "preposition": "an", "case": "dative", "pattern": "teilnehmen an + Dat.", "meaning": "részt vesz valamin" }],
+      "is_active": true
+    },
+    {
+      "lemma": "Ausstellung",
+      "pos": "noun",
+      "translations": ["kiállítás"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "feminine", "plural": "Ausstellungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Verein",
+      "pos": "noun",
+      "translations": ["egyesület, klub"],
+      "categories": ["freizeit"],
+      "noun": { "gender": "masculine", "plural": "Vereine" },
+      "is_active": true
+    },
+    {
+      "lemma": "ausruhen",
+      "pos": "verb",
+      "translations": ["kipiheni magát"],
+      "categories": ["freizeit"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "ruht sich aus",
+        "preterite_3sg": "ruhte sich aus",
+        "past_participle": "ausgeruht",
+        "separable_prefix": "aus",
+        "reflexive": "accusative"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "Umwelt",
+      "pos": "noun",
+      "translations": ["környezet"],
+      "categories": ["natur"],
+      "noun": { "gender": "feminine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "Landschaft",
+      "pos": "noun",
+      "translations": ["táj"],
+      "categories": ["natur"],
+      "noun": { "gender": "feminine", "plural": "Landschaften" },
+      "is_active": true
+    },
+    {
+      "lemma": "Entschuldigung",
+      "pos": "noun",
+      "translations": ["bocsánatkérés"],
+      "categories": ["kommunikation"],
+      "noun": { "gender": "feminine", "plural": "Entschuldigungen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Vorschlag",
+      "pos": "noun",
+      "translations": ["javaslat"],
+      "categories": ["kommunikation"],
+      "noun": { "gender": "masculine", "plural": "Vorschläge" },
+      "is_active": true
+    },
+    {
+      "lemma": "beschweren",
+      "pos": "verb",
+      "translations": ["panaszt tesz"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "beschwert sich",
+        "preterite_3sg": "beschwerte sich",
+        "past_participle": "beschwert",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "über",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich beschweren über + Akk.",
+          "meaning": "panaszkodik valamire"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "überzeugen",
+      "pos": "verb",
+      "translations": ["meggyőz"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "überzeugt",
+        "preterite_3sg": "überzeugte",
+        "past_participle": "überzeugt"
+      },
+      "valencies": [{ "preposition": "von", "case": "dative", "pattern": "überzeugen von + Dat.", "meaning": "meggyőz valamiről" }],
+      "is_active": true
+    },
+    {
+      "lemma": "diskutieren",
+      "pos": "verb",
+      "translations": ["vitatkozik, megvitat"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "diskutiert",
+        "preterite_3sg": "diskutierte",
+        "past_participle": "diskutiert"
+      },
+      "valencies": [
+        {
+          "preposition": "über",
+          "case": "accusative",
+          "pattern": "diskutieren über + Akk.",
+          "meaning": "megvitat valamit"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "erinnern",
+      "pos": "verb",
+      "translations": ["emlékszik"],
+      "categories": ["kommunikation", "gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "erinnert sich",
+        "preterite_3sg": "erinnerte sich",
+        "past_participle": "erinnert",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "an",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich erinnern an + Akk.",
+          "meaning": "emlékszik valamire"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "Sorge",
+      "pos": "noun",
+      "translations": ["aggodalom"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "feminine", "plural": "Sorgen" },
+      "is_active": true
+    },
+    {
+      "lemma": "Ärger",
+      "pos": "noun",
+      "translations": ["bosszúság"],
+      "categories": ["gefuehle"],
+      "noun": { "gender": "masculine", "number": "singular_only" },
+      "is_active": true
+    },
+    {
+      "lemma": "ärgern",
+      "pos": "verb",
+      "translations": ["bosszankodik"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "ärgert sich",
+        "preterite_3sg": "ärgerte sich",
+        "past_participle": "geärgert",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "über",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich ärgern über + Akk.",
+          "meaning": "bosszankodik valamin"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "sorgen",
+      "pos": "verb",
+      "translations": ["aggódik"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "sorgt sich",
+        "preterite_3sg": "sorgte sich",
+        "past_participle": "gesorgt",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "um",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich sorgen um + Akk.",
+          "meaning": "aggódik valakiért"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "fürchten",
+      "pos": "verb",
+      "translations": ["fél"],
+      "categories": ["gefuehle"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "fürchtet sich",
+        "preterite_3sg": "fürchtete sich",
+        "past_participle": "gefürchtet",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "vor",
+          "case": "dative",
+          "reflexive": true,
+          "pattern": "sich fürchten vor + Dat.",
+          "meaning": "fél valamitől"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "enttäuscht",
+      "pos": "adjective",
+      "translations": ["csalódott"],
+      "categories": ["gefuehle"],
+      "adjective": { "comparative": "enttäuschter", "superlative": "am enttäuschtesten" },
+      "is_active": true
+    },
+    {
+      "lemma": "neugierig",
+      "pos": "adjective",
+      "translations": ["kíváncsi"],
+      "categories": ["gefuehle"],
+      "adjective": { "comparative": "neugieriger", "superlative": "am neugierigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "schuld",
+      "pos": "adjective",
+      "translations": ["hibás"],
+      "categories": ["gefuehle"],
+      "adjective": { "predicative_only": true },
+      "is_active": true
+    },
+    {
+      "lemma": "kümmern",
+      "pos": "verb",
+      "translations": ["gondoskodik"],
+      "categories": ["menschen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "kümmert sich",
+        "preterite_3sg": "kümmerte sich",
+        "past_participle": "gekümmert",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "um",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich kümmern um + Akk.",
+          "meaning": "gondoskodik valakiről"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "gewöhnen",
+      "pos": "verb",
+      "translations": ["hozzászokik"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "gewöhnt sich",
+        "preterite_3sg": "gewöhnte sich",
+        "past_participle": "gewöhnt",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "an",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich gewöhnen an + Akk.",
+          "meaning": "hozzászokik valamihez"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "vorstellen",
+      "pos": "verb",
+      "translations": ["bemutatkozik"],
+      "categories": ["kommunikation"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "stellt sich vor",
+        "preterite_3sg": "stellte sich vor",
+        "past_participle": "vorgestellt",
+        "separable_prefix": "vor",
+        "reflexive": "accusative"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "vorstellen",
+      "pos": "verb",
+      "homograph": 2,
+      "translations": ["elképzel"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "stellt sich vor",
+        "preterite_3sg": "stellte sich vor",
+        "past_participle": "vorgestellt",
+        "separable_prefix": "vor",
+        "reflexive": "dative"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "verlassen",
+      "pos": "verb",
+      "translations": ["támaszkodik, megbízik"],
+      "categories": ["menschen"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "verlässt sich",
+        "preterite_3sg": "verließ sich",
+        "past_participle": "verlassen",
+        "reflexive": "accusative"
+      },
+      "valencies": [
+        {
+          "preposition": "auf",
+          "case": "accusative",
+          "reflexive": true,
+          "pattern": "sich verlassen auf + Akk.",
+          "meaning": "számít valakire"
+        }
+      ],
+      "is_active": true
+    },
+    {
+      "lemma": "bestehen",
+      "pos": "verb",
+      "translations": ["áll valamiből", "letesz (vizsgát)"],
+      "categories": ["bildung"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "besteht",
+        "preterite_3sg": "bestand",
+        "past_participle": "bestanden"
+      },
+      "valencies": [{ "preposition": "aus", "case": "dative", "pattern": "bestehen aus + Dat.", "meaning": "áll valamiből" }],
+      "is_active": true
+    },
+    {
+      "lemma": "erreichen",
+      "pos": "verb",
+      "translations": ["elér"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "erreicht",
+        "preterite_3sg": "erreichte",
+        "past_participle": "erreicht"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "vermeiden",
+      "pos": "verb",
+      "translations": ["elkerül"],
+      "categories": ["grundwortschatz"],
+      "verb": {
+        "conjugation": "irregular",
+        "auxiliary": "haben",
+        "present_3sg": "vermeidet",
+        "preterite_3sg": "vermied",
+        "past_participle": "vermieden"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "unterstützen",
+      "pos": "verb",
+      "translations": ["támogat"],
+      "categories": ["menschen"],
+      "verb": {
+        "conjugation": "regular",
+        "auxiliary": "haben",
+        "present_3sg": "unterstützt",
+        "preterite_3sg": "unterstützte",
+        "past_participle": "unterstützt"
+      },
+      "is_active": true
+    },
+    {
+      "lemma": "abhängig",
+      "pos": "adjective",
+      "translations": ["függő"],
+      "categories": ["grundwortschatz"],
+      "adjective": { "comparative": "abhängiger", "superlative": "am abhängigsten" },
+      "valencies": [{ "preposition": "von", "case": "dative", "pattern": "abhängig von + Dat.", "meaning": "függ valamitől" }],
+      "is_active": true
+    },
+    {
+      "lemma": "zuverlässig",
+      "pos": "adjective",
+      "translations": ["megbízható"],
+      "categories": ["menschen"],
+      "adjective": { "comparative": "zuverlässiger", "superlative": "am zuverlässigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "selbstständig",
+      "pos": "adjective",
+      "translations": ["önálló"],
+      "categories": ["arbeit"],
+      "adjective": { "comparative": "selbstständiger", "superlative": "am selbstständigsten" },
+      "is_active": true
+    },
+    {
+      "lemma": "tot",
+      "pos": "adjective",
+      "translations": ["halott"],
+      "categories": ["menschen"],
+      "adjective": {  },
+      "is_active": true
+    },
+    {
+      "lemma": "damit",
+      "pos": "conjunction",
+      "translations": ["azért, hogy"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    },
+    {
+      "lemma": "trotzdem",
+      "pos": "adverb",
+      "translations": ["mégis, ennek ellenére"],
+      "categories": ["grundwortschatz"],
+      "is_active": true
+    }
+  ]
+}

@@ -104,7 +104,7 @@ class CustomWordInput {
       'valencies': const <Json>[],
       'examples': push['example'] == null ? const <Json>[] : [push['example']],
       'categories': const <Json>[],
-      'deletedAt': null,
+      'isActive': true,
     };
   }
 }

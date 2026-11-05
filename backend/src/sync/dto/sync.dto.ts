@@ -64,8 +64,8 @@ export class ProgressSyncDto {
   @ApiProperty() version!: number;
   @ApiProperty() createdAt!: Date;
   @ApiProperty() updatedAt!: Date;
-  @ApiPropertyOptional({ nullable: true, type: Date, description: 'Nem null = törölt (tombstone)' })
-  deletedAt!: Date | null;
+  @ApiProperty({ description: 'false = törölt (tombstone)' })
+  isActive!: boolean;
 
   static fromEntity(p: UserProgress): ProgressSyncDto {
     return {
@@ -88,7 +88,7 @@ export class ProgressSyncDto {
       version: p.version,
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
-      deletedAt: p.deletedAt,
+      isActive: p.isActive,
     };
   }
 }
@@ -96,14 +96,14 @@ export class ProgressSyncDto {
 export class WordSyncDto extends WordDto {
   @ApiProperty() version!: number;
   @ApiProperty() updatedAt!: Date;
-  @ApiPropertyOptional({ nullable: true, type: Date, description: 'Nem null = törölt (tombstone)' })
-  deletedAt!: Date | null;
+  @ApiProperty({ description: 'false = törölt (tombstone)' })
+  isActive!: boolean;
 
   static fromWord(w: WordWithDetails): WordSyncDto {
     // Az admin által elutasított központi szó a kliensen törlődik (a kártyái is
     // kikerülnek a tanulásból); ha később mégis jóváhagyják, a következő verzió visszahozza.
-    const deletedAt = w.deletedAt ?? (isRejectedCentralWord(w) ? (w.reviewedAt ?? w.updatedAt) : null);
-    return { ...WordDto.fromEntity(w), version: w.version, updatedAt: w.updatedAt, deletedAt };
+    const isActive = w.isActive && !isRejectedCentralWord(w);
+    return { ...WordDto.fromEntity(w), version: w.version, updatedAt: w.updatedAt, isActive };
   }
 }
 

@@ -26,7 +26,8 @@ class Word {
 
   /// A felhasználó saját (nem a központi szótárból származó) szava.
   bool get isCustom => _json['isCustom'] == true;
-  bool get isDeleted => _json['deletedAt'] != null;
+  /// false = a szót törölték (tombstone). A mező hiánya (régebbi mentés) aktívat jelent.
+  bool get isActive => _json['isActive'] != false;
 
   /// Központi szónál az emberi ellenőrzöttség (UNREVIEWED / VERIFIED / REJECTED); saját szónál null.
   String? get reviewStatus => _json['reviewStatus'] as String?;

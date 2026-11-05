@@ -93,7 +93,7 @@ Json wordJson({
       'categories': [for (final c in categories) {'slug': c.slug, 'nameHu': c.nameHu}],
       'version': version ?? ++_wordVersion,
       'updatedAt': DateTime.utc(2026).toIso8601String(),
-      'deletedAt': deleted ? DateTime.utc(2026).toIso8601String() : null,
+      'isActive': !deleted,
     };
 
 /// A szerver `ProgressSyncDto`-jának megfelelő JSON.
@@ -129,5 +129,5 @@ Json progressJson({
       'version': version,
       'createdAt': DateTime.utc(2026).toIso8601String(),
       'updatedAt': DateTime.utc(2026).toIso8601String(),
-      'deletedAt': deleted ? DateTime.utc(2026).toIso8601String() : null,
+      'isActive': !deleted,
     };

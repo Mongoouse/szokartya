@@ -17,7 +17,7 @@ async function main(): Promise<void> {
   }
   const prisma = new PrismaClient();
   try {
-    const { count } = await prisma.user.updateMany({ where: { email, deletedAt: null }, data: { role } });
+    const { count } = await prisma.user.updateMany({ where: { email, isActive: true }, data: { role } });
     if (count === 0) {
       console.error(`Nincs ilyen felhasználó: ${email} (előbb regisztráljon az appban).`);
       process.exit(1);

@@ -51,12 +51,17 @@ export type SeedAttributes =
   | { kind: 'adjective'; data: Omit<Prisma.AdjectiveAttributesUncheckedCreateInput, 'wordId' | 'partOfSpeech'> };
 
 export interface SeedWord {
+  /** Forrásnyelv (ISO 639-1); alapértelmezés: de. */
+  language?: string;
   lemma: string;
   partOfSpeech: PartOfSpeech;
   homographNo?: number;
   cefrLevel: CefrLevel;
   ipa?: string;
   frequencyRank?: number;
+  audioUrl?: string;
+  /** false = logikailag törölt (a felhasználóknak nem jelenik meg); alapértelmezés: true. */
+  isActive?: boolean;
   categories: string[];
   /** Az első elem az elsődleges fordítás. */
   translations: [SeedTranslation, ...SeedTranslation[]];
@@ -76,8 +81,8 @@ export interface SeedCategory {
 // Írás
 // ---------------------------------------------------------------------------
 
-export function wordKey(w: Pick<SeedWord, 'partOfSpeech' | 'lemma' | 'homographNo'>): string {
-  return `word:de:${w.partOfSpeech}:${w.lemma}:${w.homographNo ?? 1}`;
+export function wordKey(w: Pick<SeedWord, 'language' | 'partOfSpeech' | 'lemma' | 'homographNo'>): string {
+  return `word:${w.language ?? 'de'}:${w.partOfSpeech}:${w.lemma}:${w.homographNo ?? 1}`;
 }
 
 /** Kategóriák írása (szülők a gyermekeik előtt). @returns slug → azonosító. */
@@ -141,13 +146,15 @@ export async function seedWord(prisma: PrismaClient, w: SeedWord, categoryIds: M
 
   await prisma.$transaction(async (tx) => {
     const wordData = {
-      language: 'de',
+      language: w.language ?? 'de',
       lemma: w.lemma,
       partOfSpeech: w.partOfSpeech,
       homographNo: w.homographNo ?? 1,
       cefrLevel: w.cefrLevel,
       ipa: w.ipa ?? null,
       frequencyRank: w.frequencyRank ?? null,
+      audioUrl: w.audioUrl ?? null,
+      isActive: w.isActive ?? true,
     };
     await tx.word.upsert({ where: { id: wordId }, create: { id: wordId, ...wordData }, update: wordData });
 

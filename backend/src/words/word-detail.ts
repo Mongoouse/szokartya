@@ -8,9 +8,9 @@ export const WORD_DETAIL_INCLUDE = {
   nounAttributes: true,
   verbAttributes: true,
   adjectiveAttributes: true,
-  translations: { where: { deletedAt: null }, orderBy: [{ sortOrder: 'asc' }, { text: 'asc' }] },
-  valencies: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } },
-  examples: { where: { deletedAt: null }, orderBy: { sortOrder: 'asc' } },
+  translations: { where: { isActive: true }, orderBy: [{ sortOrder: 'asc' }, { text: 'asc' }] },
+  valencies: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
+  examples: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
   categories: { include: { category: true } },
 } satisfies Prisma.WordInclude;
 
@@ -22,7 +22,7 @@ export type WordWithDetails = Prisma.WordGetPayload<{ include: typeof WORD_DETAI
  */
 export function visibleWordsWhere(userId: string): Prisma.WordWhereInput {
   return {
-    deletedAt: null,
+    isActive: true,
     OR: [{ ownerId: null, reviewStatus: { not: WordReviewStatus.REJECTED } }, { ownerId: userId }],
   };
 }

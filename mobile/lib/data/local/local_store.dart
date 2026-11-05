@@ -523,7 +523,7 @@ class LocalStore {
         'cefr_level': word.cefrLevel,
         'part_of_speech': word.partOfSpeech,
         'has_gender': word.hasGender ? 1 : 0,
-        'deleted': w['deletedAt'] != null ? 1 : 0,
+        'deleted': word.isActive ? 0 : 1,
         ...AppDatabase.wordIndexColumns(w),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -580,7 +580,7 @@ class LocalStore {
           'card_type': c['cardType'],
           'server_version': version,
           'created_at': DateTime.parse(c['createdAt'] as String).millisecondsSinceEpoch,
-          'deleted': c['deletedAt'] != null ? 1 : 0,
+          'deleted': c['isActive'] == false ? 1 : 0,
           if (!hasPendingFlags) 'is_suspended': c['isSuspended'] == true ? 1 : 0,
           if (!hasPendingReviews || local.isEmpty) ..._schedulingColumns(_schedulingFromJson(c)),
         };

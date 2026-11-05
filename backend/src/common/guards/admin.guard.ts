@@ -20,7 +20,7 @@ export class AdminGuard implements CanActivate {
     if (!userId) {
       throw new ForbiddenException('Adminisztrátori jogosultság szükséges');
     }
-    const user = await this.prisma.user.findFirst({ where: { id: userId, deletedAt: null }, select: { role: true } });
+    const user = await this.prisma.user.findFirst({ where: { id: userId, isActive: true }, select: { role: true } });
     if (user?.role !== UserRole.ADMIN) {
       throw new ForbiddenException('Adminisztrátori jogosultság szükséges');
     }

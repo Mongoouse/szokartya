@@ -44,7 +44,7 @@ export class WordsRepository {
         partOfSpeech: true,
         nounAttributes: { select: { gender: true, numberType: true, pluralForm: true } },
         verbAttributes: { select: { wordId: true } },
-        _count: { select: { valencies: { where: { deletedAt: null } } } },
+        _count: { select: { valencies: { where: { isActive: true } } } },
       },
     });
   }
@@ -70,7 +70,7 @@ export class WordsRepository {
       and.push({
         OR: [
           { lemma: { contains: q, mode: 'insensitive' } },
-          { translations: { some: { deletedAt: null, text: { contains: q, mode: 'insensitive' } } } },
+          { translations: { some: { isActive: true, text: { contains: q, mode: 'insensitive' } } } },
         ],
       });
     }
@@ -78,7 +78,7 @@ export class WordsRepository {
   }
 
   findById(id: string, db: DbClient = this.prisma) {
-    return db.word.findUnique({ where: { id }, select: { id: true, ownerId: true, deletedAt: true } });
+    return db.word.findUnique({ where: { id }, select: { id: true, ownerId: true, isActive: true } });
   }
 
   /** A következő szabad homográf-sorszám a felhasználó azonos alakú, azonos szófajú szavai között (törölteket is számolva). */
@@ -108,9 +108,9 @@ export class WordsRepository {
 
   /** Saját szó törlése (tombstone) a hozzá tartozó kártyákkal együtt. @returns false, ha nincs ilyen saját szó. */
   async softDeleteCustom(ownerId: string, id: string, now: Date, db: DbClient): Promise<boolean> {
-    const { count } = await db.word.updateMany({ where: { id, ownerId, deletedAt: null }, data: { deletedAt: now } });
+    const { count } = await db.word.updateMany({ where: { id, ownerId, isActive: true }, data: { isActive: false } });
     if (count === 0) return false;
-    await db.userProgress.updateMany({ where: { wordId: id, userId: ownerId, deletedAt: null }, data: { deletedAt: now } });
+    await db.userProgress.updateMany({ where: { wordId: id, userId: ownerId, isActive: true }, data: { isActive: false } });
     return true;
   }
 }

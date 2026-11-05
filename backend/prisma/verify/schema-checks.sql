@@ -189,7 +189,7 @@ BEGIN
     SELECT id FROM user_progress
      WHERE user_id = '00000000-0000-4000-8000-000000000001'
        AND next_review_at <= now()
-       AND state <> 'NEW' AND NOT is_suspended AND deleted_at IS NULL
+       AND state <> 'NEW' AND NOT is_suspended AND is_active
      ORDER BY next_review_at
      LIMIT 50$q$
   LOOP
