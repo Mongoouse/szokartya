@@ -73,7 +73,10 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          // Fekvő telefonon a függőleges hely szűkös: kisebb felső/alsó margó.
+          padding: MediaQuery.orientationOf(context) == Orientation.landscape
+              ? const EdgeInsets.fromLTRB(16, 8, 16, 8)
+              : const EdgeInsets.all(16),
           child: switch (session.phase) {
             StudyPhase.loading => const Center(child: CircularProgressIndicator()),
             StudyPhase.error => Center(child: Text(session.error ?? 'Ismeretlen hiba')),
@@ -83,57 +86,166 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                 outOfCards: session.outOfCards,
                 endless: session.goal == null,
               ),
-            StudyPhase.question || StudyPhase.answer => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (session.goal != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: LinearProgressIndicator(value: session.answered / session.goal!),
-                    ),
-                  // A kártya, alatta közvetlenül az értékelés és a névelőtáblázat;
-                  // kis kijelzőn együtt görgethető, a Tovább gomb lent marad.
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 200),
-                            child: FlashcardView(
-                              key: ValueKey('${card!.id}-${session.answered}-${session.phase}'),
-                              card: card,
-                              showAnswer: session.phase == StudyPhase.answer,
-                              onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
-                            ),
-                          ),
-                          if (session.phase == StudyPhase.answer) ...[
-                            const SizedBox(height: 12),
-                            _ResultBanner(check: session.check!, typed: session.typed ?? '', word: card.word),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  if (session.error != null)
-                    Text(session.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                  if (session.phase == StudyPhase.question)
-                    ..._questionControls(card, saving: session.saving)
-                  else ...[
-                    FilledButton(
-                      key: const Key('nextCard'),
-                      focusNode: _nextFocus,
-                      autofocus: true,
-                      onPressed: _controller.next,
-                      child: Text(session.remaining == 0 ? 'Lecke vége' : 'Tovább'),
-                    ),
-                  ],
-                ],
+            StudyPhase.question || StudyPhase.answer => LayoutBuilder(
+                builder: (context, constraints) => isLandscapeLayout(constraints)
+                    ? _landscape(session, card!, constraints.maxWidth)
+                    : _portrait(session, card!),
               ),
           },
         ),
       ),
+    );
+  }
+
+  /// Fekvő elrendezés: széles és alacsony terület (elforgatott telefon, böngésző).
+  static bool isLandscapeLayout(BoxConstraints c) => c.maxWidth > c.maxHeight && c.maxWidth >= 560;
+
+  Widget? _progress(StudySessionState session) => session.goal == null
+      ? null
+      : Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: LinearProgressIndicator(value: session.answered / session.goal!),
+        );
+
+  Widget _flashcard(StudySessionState session, StudyCard card, {bool landscape = false}) => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: FlashcardView(
+          key: ValueKey('${card.id}-${session.answered}-${session.phase}'),
+          card: card,
+          showAnswer: session.phase == StudyPhase.answer,
+          showExample: !landscape,
+          dense: landscape,
+          onSpeak: () => ref.read(speakerProvider).speak(card.word.display),
+        ),
+      );
+
+  List<Widget> _errorText(StudySessionState session) => [
+        if (session.error != null)
+          Text(session.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+      ];
+
+  Widget _nextButton(StudySessionState session) => FilledButton(
+        key: const Key('nextCard'),
+        focusNode: _nextFocus,
+        autofocus: true,
+        onPressed: _controller.next,
+        child: Text(session.remaining == 0 ? 'Lecke vége' : 'Tovább'),
+      );
+
+  /// Álló elrendezés: a kártya, alatta közvetlenül az értékelés és a
+  /// névelőtáblázat; kis kijelzőn együtt görgethető, a gombok lent maradnak.
+  Widget _portrait(StudySessionState session, StudyCard card) {
+    final progress = _progress(session);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ?progress,
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _flashcard(session, card),
+                if (session.phase == StudyPhase.answer) ...[
+                  const SizedBox(height: 12),
+                  _ResultBanner(check: session.check!, typed: session.typed ?? '', word: card.word),
+                ],
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        ..._errorText(session),
+        if (session.phase == StudyPhase.question)
+          ..._questionControls(card, saving: session.saving)
+        else
+          _nextButton(session),
+      ],
+    );
+  }
+
+  /// Fekvő elrendezés.
+  ///  - Kérdés: balra a kártya, mellette jobbra a válaszadás (mező / gombok).
+  ///  - Válasz: balra a kártya, alatta a Helyes/Helytelen jelzés, alatta a
+  ///    példamondat; jobbra a tömör névelőtáblázat (csak olyan széles, hogy a
+  ///    cellákban ne legyen sortörés), alatta a Tovább gomb.
+  Widget _landscape(StudySessionState session, StudyCard card, double width) {
+    final progress = _progress(session);
+    final answer = session.phase == StudyPhase.answer;
+    final word = card.word;
+    final example = word.example;
+    final article = example?.article;
+
+    final left = SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _flashcard(session, card, landscape: true),
+          if (answer) ...[
+            const SizedBox(height: 8),
+            _ResultBanner(check: session.check!, typed: session.typed ?? '', word: word, showTable: false),
+            if (example != null) ExampleSentenceView(example: example),
+          ],
+        ],
+      ),
+    );
+
+    final Widget right = answer
+        ? ConstrainedBox(
+            key: const Key('landscapeAnswerPanel'),
+            constraints: BoxConstraints(minWidth: 200, maxWidth: width * 0.45),
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: article == null
+                          ? const SizedBox.shrink()
+                          : ArticleTableView(
+                              article: article,
+                              gender: word.genderColumn,
+                              lemma: word.lemma,
+                              compact: true,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ..._errorText(session),
+                  _nextButton(session),
+                ],
+              ),
+            ),
+          )
+        : SizedBox(
+            key: const Key('landscapeQuestionPanel'),
+            width: width * 0.4,
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [..._errorText(session), ..._questionControls(card, saving: session.saving)],
+                ),
+              ),
+            ),
+          );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ?progress,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: left),
+              const SizedBox(width: 16),
+              right,
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -204,11 +316,14 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
 /// van). Az automatikus értékelés (osztályzat, következő ismétlés) szándékosan
 /// nem látszik – csak naplózódik.
 class _ResultBanner extends StatelessWidget {
-  const _ResultBanner({required this.check, required this.typed, required this.word});
+  const _ResultBanner({required this.check, required this.typed, required this.word, this.showTable = true});
 
   final AnswerCheck check;
   final String typed;
   final Word word;
+
+  /// Fekvő elrendezésben a táblázat külön, jobb oldali oszlopban van.
+  final bool showTable;
 
   @override
   Widget build(BuildContext context) {
@@ -219,11 +334,11 @@ class _ResultBanner extends StatelessWidget {
     };
     final answerText = typed.isEmpty ? '' : ': „$typed”';
     final hint = check.hint == null ? '' : ' – ${check.hint}';
-    final article = word.example?.article;
+    final article = showTable ? word.example?.article : null;
     return Semantics(
       liveRegion: true,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: EdgeInsets.only(bottom: showTable ? 12 : 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

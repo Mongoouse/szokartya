@@ -87,8 +87,11 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
               key: const Key('reportCategory'),
               initialValue: _category,
               decoration: const InputDecoration(labelText: 'Mi a hiba?'),
+              // Keskeny (álló telefonos) párbeszédablakban a hosszú kategórianév ne lógjon ki.
+              isExpanded: true,
               items: [
-                for (final c in ReportCategory.values) DropdownMenuItem(value: c, child: Text(c.label)),
+                for (final c in ReportCategory.values)
+                  DropdownMenuItem(value: c, child: Text(c.label, overflow: TextOverflow.ellipsis)),
               ],
               onChanged: _saving ? null : (c) => setState(() => _category = c ?? _category),
             ),
