@@ -1,0 +1,11 @@
+# Kiegészítés a terheléses méréshez – a fő docker-compose.yml mellé:
+#
+#   docker compose -f docker-compose.yml -f loadtest/docker-compose.loadtest.yml --profile api up --build -d
+#
+# Egyetlen eltérés: az IP-alapú rate limit kikapcsolva. A k6 minden virtuális
+# felhasználója ugyanarról az IP-ről jön, így bekapcsolt korlátnál (300 kérés /
+# perc / IP, bejelentkezésnél 10) a korlátozót mérnénk, nem a rendszert.
+services:
+  api:
+    environment:
+      THROTTLE_ENABLED: "false"

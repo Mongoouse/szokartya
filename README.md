@@ -57,6 +57,7 @@ docs/
   05-tovabbfejlesztes.md   # új funkciók: kártyatípusok, saját szavak, beállítások, GDPR
   06-utemezok-kiserlet.md  # SM-2 ↔ FSRS kísérlet
   07-adminisztracio-es-hibabejelentes.md  # hibabejelentés, admin, szóellenőrzés
+loadtest/                  # válaszidő-mérés terhelés alatt (k6) – lásd loadtest/README.md
 shared/fixtures/           # közös SM-2 golden referencia (TS + Dart tesztek)
 .github/workflows/ci.yml   # CI: backend, mobil, többeszközös szinkron e2e
 docker-compose.yml         # PostgreSQL; --profile api: migráció + seed + API konténerben
@@ -130,3 +131,5 @@ SZOKARTYA_E2E_API=http://localhost:3000/api/v1 flutter test --tags e2e
 $env:SZOKARTYA_E2E_API = "http://localhost:3000/api/v1"
 flutter test --tags e2e
 ```
+
+Válaszidő-mérés terhelés alatt (k6, valószerű adatmennyiséggel): lásd [loadtest/README.md](loadtest/README.md).
